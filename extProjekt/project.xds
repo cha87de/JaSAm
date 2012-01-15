@@ -1,0 +1,892 @@
+{
+    "name": "project.xds",
+    "projectId": "A63AD484-C79C-414F-A356-B0A66106BAD3",
+    "settings": {
+        "urlPrefix": "http://localhost/",
+        "spacesToIndent": 4,
+        "codeGenFormat": "Class",
+        "extPath": "http://extjs.cachefly.net/ext-3.3.1/",
+        "exportPath": ".",
+        "lineEnding": "LF",
+        "instantiateStore": true,
+        "exportXDSFiles": true,
+        "genTimestamps": true
+    },
+    "xdsVersion": "1.1.2",
+    "components": [
+        {
+            "id": "MyPanel",
+            "cid": "window",
+            "jsClass": "PhoneManager",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "PhoneManager",
+                "width": 846,
+                "height": 330,
+                "layout": "border",
+                "autoWidth": "-ext-undefined-",
+                "closable": false,
+                "plain": "-ext-undefined-",
+                "resizable": false,
+                "modal": true,
+                "draggable": false
+            },
+            "cn": [
+                {
+                    "id": "MyToolbar1",
+                    "cid": "toolbar",
+                    "jsClass": "MyToolbar1",
+                    "dock": "tbar",
+                    "snapToGrid": 10,
+                    "cn": [
+                        {
+                            "id": "MyButton10",
+                            "cid": "button",
+                            "jsClass": "MyButton10",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Commander",
+                                "autoRef": "buttonCommander"
+                            }
+                        },
+                        {
+                            "id": "MyButton5",
+                            "cid": "button",
+                            "jsClass": "MyButton5",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "EventListener",
+                                "autoRef": "buttonEventListener"
+                            }
+                        },
+                        {
+                            "id": "MyFill",
+                            "cid": "tbfill",
+                            "jsClass": "MyFill",
+                            "snapToGrid": 10
+                        },
+                        {
+                            "id": "MyButton4",
+                            "cid": "button",
+                            "jsClass": "MyButton4",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Abmelden",
+                                "autoRef": "buttonLogout"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "MyPanel3",
+                    "cid": "panel",
+                    "jsClass": "MyPanel3",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "region": "north",
+                        "border": false,
+                        "height": 30,
+                        "padding": 5
+                    },
+                    "cn": [
+                        {
+                            "id": "MyLabel",
+                            "cid": "label",
+                            "jsClass": "MyLabel",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Willkommen bei PhoneManager. Bitte wählen Sie einen Benutzer!",
+                                "itemId": "statusLabel",
+                                "autoRef": "statusLabel"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "MyPanel1",
+                    "cid": "panel",
+                    "jsClass": "MyPanel1",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "region": "west",
+                        "width": 300,
+                        "border": false,
+                        "padding": 5
+                    },
+                    "cn": [
+                        {
+                            "id": "MyUserComponent",
+                            "cid": "usercomponent",
+                            "jsClass": "ActionChooseUser",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "jsClass": "ActionChooseUser",
+                                "userXType": "ActionChooseUser",
+                                "autoRef": "actionChooseUser"
+                            },
+                            "userComponent": "MyFieldSet"
+                        },
+                        {
+                            "id": "MyUserComponent1",
+                            "cid": "usercomponent",
+                            "jsClass": "ActionStartCall",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "jsClass": "ActionStartCall",
+                                "userXType": "ActionStartCall",
+                                "autoRef": "actionStartCall"
+                            },
+                            "userComponent": "MyFieldSet1"
+                        }
+                    ]
+                },
+                {
+                    "id": "MyPanel2",
+                    "cid": "panel",
+                    "jsClass": "MyPanel2",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "flex": 1,
+                        "region": "center",
+                        "width": 100,
+                        "border": false,
+                        "padding": 5,
+                        "layout": "-ext-undefined-"
+                    },
+                    "cn": [
+                        {
+                            "id": "MyUserComponent3",
+                            "cid": "usercomponent",
+                            "jsClass": "ActionCurrentCalls",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "jsClass": "ActionCurrentCalls",
+                                "userXType": "ActionCurrentCalls",
+                                "autoRef": "actionIncomingCalls"
+                            },
+                            "userComponent": "MyFieldSet4"
+                        },
+                        {
+                            "id": "MyUserComponent2",
+                            "cid": "usercomponent",
+                            "jsClass": "ActionListUsers",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "jsClass": "ActionListUsers",
+                                "userXType": "ActionListUsers",
+                                "autoRef": "actionListUsers"
+                            },
+                            "userComponent": "MyFieldSet3"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MyFieldSet",
+            "cid": "fieldset",
+            "jsClass": "ActionChooseUser",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "Benutzer wählen",
+                "autoWidth": "-ext-undefined-",
+                "padding": "-ext-undefined-"
+            },
+            "userXType": "ActionChooseUser",
+            "cn": [
+                {
+                    "id": "MyTextField",
+                    "cid": "numberfield",
+                    "jsClass": "MyTextField",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "fieldLabel": "Durchwahl-Nr",
+                        "anchor": "100%",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "extensionNumber"
+                    }
+                },
+                {
+                    "id": "MyCheckbox",
+                    "cid": "checkbox",
+                    "jsClass": "MyCheckbox",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "fieldLabel": "Speichern",
+                        "boxLabel": "",
+                        "anchor": "100%",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "saveExtension"
+                    }
+                },
+                {
+                    "id": "MyButton",
+                    "cid": "button",
+                    "jsClass": "MyButton",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "text": "Benutzer festlegen",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "buttonChooseUser"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "MyFieldSet1",
+            "cid": "fieldset",
+            "jsClass": "ActionStartCall",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "Rufnummer wählen"
+            },
+            "userXType": "ActionStartCall",
+            "cn": [
+                {
+                    "id": "MyNumberField",
+                    "cid": "numberfield",
+                    "jsClass": "MyNumberField",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "fieldLabel": "Rufnummer",
+                        "anchor": "100%",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "remoteNumber"
+                    }
+                },
+                {
+                    "id": "MyTextField1",
+                    "cid": "textfield",
+                    "jsClass": "MyTextField1",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "fieldLabel": "Absender",
+                        "anchor": "100%",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "localName"
+                    }
+                },
+                {
+                    "id": "MyButton1",
+                    "cid": "button",
+                    "jsClass": "MyButton1",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "text": "Anruf starten",
+                        "itemId": "-ext-undefined-",
+                        "autoRef": "buttonStartCall"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "MyFieldSet4",
+            "cid": "fieldset",
+            "jsClass": "ActionCurrentCalls",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "Aktive Anrufe"
+            },
+            "userXType": "ActionCurrentCalls",
+            "cn": [
+                {
+                    "id": "MyPanel4",
+                    "cid": "panel",
+                    "jsClass": "MyPanel4",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "border": false
+                    },
+                    "cn": [
+                        {
+                            "id": "MyLabel1",
+                            "cid": "label",
+                            "jsClass": "MyLabel1",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Keine aktiven Anrufe",
+                                "itemId": "-ext-undefined-",
+                                "autoRef": "statusLabel"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MyFieldSet3",
+            "cid": "fieldset",
+            "jsClass": "ActionListUsers",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "Aktive Benutzer",
+                "width": "-ext-undefined-",
+                "height": "-ext-undefined-"
+            },
+            "userXType": "ActionListUsers",
+            "cn": [
+                {
+                    "id": "MyGrid",
+                    "cid": "grid",
+                    "jsClass": "MyGrid",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "store": "UserState",
+                        "height": 138,
+                        "border": false,
+                        "autoRef": "results"
+                    },
+                    "cn": [
+                        {
+                            "id": "MyColumn3",
+                            "cid": "gridcolumn",
+                            "jsClass": "MyColumn3",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "dataIndex": "extension",
+                                "header": "Nr.",
+                                "sortable": true,
+                                "resizable": "-ext-undefined-",
+                                "width": 50
+                            }
+                        },
+                        {
+                            "id": "MyColumn4",
+                            "cid": "gridcolumn",
+                            "jsClass": "MyColumn4",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "dataIndex": "name",
+                                "header": "Benutzer",
+                                "sortable": true,
+                                "resizable": "-ext-undefined-",
+                                "width": "-ext-undefined-",
+                                "align": "-ext-undefined-"
+                            }
+                        },
+                        {
+                            "id": "MyColumn5",
+                            "cid": "gridcolumn",
+                            "jsClass": "MyColumn5",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "dataIndex": "status",
+                                "header": "Status",
+                                "sortable": true,
+                                "resizable": "-ext-undefined-",
+                                "width": 100
+                            }
+                        },
+                        {
+                            "id": "MyToolbar",
+                            "cid": "toolbar",
+                            "jsClass": "MyToolbar",
+                            "dock": "tbar",
+                            "snapToGrid": 10,
+                            "cn": [
+                                {
+                                    "id": "MyButton2",
+                                    "cid": "button",
+                                    "jsClass": "MyButton2",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "text": "aktualisieren",
+                                        "autoRef": "buttonReload"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "LoginWindow",
+            "cid": "window",
+            "jsClass": "LoginWindow",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "PhoneManager Login",
+                "width": 334,
+                "height": 144,
+                "layout": "fit",
+                "closable": false,
+                "resizable": false,
+                "modal": true,
+                "plain": "-ext-undefined-",
+                "draggable": false
+            },
+            "cn": [
+                {
+                    "id": "MyForm",
+                    "cid": "form",
+                    "jsClass": "MyForm",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "border": false,
+                        "padding": 10
+                    },
+                    "cn": [
+                        {
+                            "id": "MyTextField2",
+                            "cid": "textfield",
+                            "jsClass": "MyTextField2",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "fieldLabel": "Username",
+                                "anchor": "100%",
+                                "autoRef": "username"
+                            }
+                        },
+                        {
+                            "id": "MyTextField3",
+                            "cid": "textfield",
+                            "jsClass": "MyTextField3",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "fieldLabel": "Secret",
+                                "anchor": "100%",
+                                "autoRef": "secret"
+                            }
+                        },
+                        {
+                            "id": "MyCheckbox1",
+                            "cid": "checkbox",
+                            "jsClass": "MyCheckbox1",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "fieldLabel": "Speichern",
+                                "boxLabel": "",
+                                "anchor": "100%",
+                                "autoRef": "save"
+                            }
+                        },
+                        {
+                            "id": "MyButton3",
+                            "cid": "button",
+                            "jsClass": "MyButton3",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Anmelden",
+                                "autoRef": "buttonLogin"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MyWindow",
+            "cid": "window",
+            "jsClass": "Commander",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "Commander",
+                "width": 569,
+                "height": 617,
+                "layout": "fit",
+                "padding": "-ext-undefined-",
+                "draggable": false,
+                "modal": true
+            },
+            "cn": [
+                {
+                    "id": "MyPanel5",
+                    "cid": "panel",
+                    "jsClass": "MyPanel5",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "border": false,
+                        "layout": "border",
+                        "padding": 10
+                    },
+                    "cn": [
+                        {
+                            "id": "MyForm1",
+                            "cid": "form",
+                            "jsClass": "MyPanel7",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "title": "Eingabe",
+                                "region": "north",
+                                "height": 234,
+                                "border": false,
+                                "padding": 10
+                            },
+                            "cn": [
+                                {
+                                    "id": "MyCombo",
+                                    "cid": "combobox",
+                                    "jsClass": "MyCombo",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "fieldLabel": "Aktion",
+                                        "anchor": "100%",
+                                        "store": "CommanderAction",
+                                        "displayField": "action",
+                                        "mode": "local",
+                                        "valueField": "action",
+                                        "autoRef": "actionCombo"
+                                    }
+                                },
+                                {
+                                    "id": "MyDisplayField",
+                                    "cid": "displayfield",
+                                    "jsClass": "MyDisplayField",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "value": "Bitte Aktion wählen.",
+                                        "fieldLabel": "",
+                                        "anchor": "100%",
+                                        "autoRef": "actionDescription"
+                                    }
+                                },
+                                {
+                                    "id": "MyEditorGrid",
+                                    "cid": "editorgrid",
+                                    "jsClass": "MyEditorGrid",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "title": "-ext-undefined-",
+                                        "store": "CommanderActionParam",
+                                        "fieldLabel": "Parameter",
+                                        "height": 130,
+                                        "autoRef": "paramsGrid",
+                                        "clicksToEdit": 1
+                                    },
+                                    "cn": [
+                                        {
+                                            "id": "MyColumn",
+                                            "cid": "gridcolumn",
+                                            "jsClass": "MyColumn",
+                                            "snapToGrid": 10,
+                                            "userConfig": {
+                                                "dataIndex": "property",
+                                                "header": "Eigenschaft",
+                                                "sortable": true,
+                                                "resizable": "-ext-undefined-",
+                                                "width": 100,
+                                                "editable": "-ext-undefined-"
+                                            },
+                                            "cn": [
+                                                {
+                                                    "id": "MyTextField4",
+                                                    "cid": "textfield",
+                                                    "jsClass": "MyTextField4",
+                                                    "snapToGrid": 10
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "MyColumn1",
+                                            "cid": "gridcolumn",
+                                            "jsClass": "MyColumn1",
+                                            "snapToGrid": 10,
+                                            "userConfig": {
+                                                "header": "Wert",
+                                                "sortable": true,
+                                                "resizable": "-ext-undefined-",
+                                                "width": 130,
+                                                "dataIndex": "defaultvalue"
+                                            },
+                                            "cn": [
+                                                {
+                                                    "id": "MyTextField5",
+                                                    "cid": "textfield",
+                                                    "jsClass": "MyTextField5",
+                                                    "snapToGrid": 10
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "MyColumn2",
+                                            "cid": "gridcolumn",
+                                            "jsClass": "MyColumn2",
+                                            "snapToGrid": 10,
+                                            "userConfig": {
+                                                "header": "Beschreibung",
+                                                "sortable": true,
+                                                "resizable": "-ext-undefined-",
+                                                "width": 170,
+                                                "dataIndex": "description"
+                                            },
+                                            "cn": [
+                                                {
+                                                    "id": "MyTextField6",
+                                                    "cid": "textfield",
+                                                    "jsClass": "MyTextField6",
+                                                    "snapToGrid": 10
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "MyToolbar2",
+                                            "cid": "toolbar",
+                                            "jsClass": "MyToolbar2",
+                                            "dock": "tbar",
+                                            "snapToGrid": 10,
+                                            "cn": [
+                                                {
+                                                    "id": "MyButton6",
+                                                    "cid": "button",
+                                                    "jsClass": "MyButton7",
+                                                    "snapToGrid": 10,
+                                                    "userConfig": {
+                                                        "text": "Hinzufügen",
+                                                        "autoRef": "buttonPropertyAdd"
+                                                    }
+                                                },
+                                                {
+                                                    "id": "MyButton7",
+                                                    "cid": "button",
+                                                    "jsClass": "MyButton8",
+                                                    "snapToGrid": 10,
+                                                    "userConfig": {
+                                                        "text": "Löschen",
+                                                        "autoRef": "buttonPropertyRemove"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "MyButton8",
+                                    "cid": "button",
+                                    "jsClass": "MyButton6",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "text": "Abfrage starten",
+                                        "autoRef": "buttonExecute"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "MyPanel6",
+                            "cid": "panel",
+                            "jsClass": "MyPanel6",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "title": "Ausgabe",
+                                "region": "center",
+                                "border": false,
+                                "layout": "fit"
+                            },
+                            "cn": [
+                                {
+                                    "id": "MyPanel7",
+                                    "cid": "panel",
+                                    "jsClass": "MyPanel7",
+                                    "snapToGrid": 10,
+                                    "userConfig": {
+                                        "title": "-ext-undefined-",
+                                        "border": false,
+                                        "autoRef": "resultArea",
+                                        "autoScroll": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MyWindow2",
+            "cid": "window",
+            "jsClass": "EventListener",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "EventListener",
+                "width": 569,
+                "height": 617,
+                "layout": "fit",
+                "padding": "-ext-undefined-",
+                "draggable": false,
+                "modal": true
+            },
+            "cn": [
+                {
+                    "id": "MyTabPanel",
+                    "cid": "tabpanel",
+                    "jsClass": "MyPanel8",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "title": "-ext-undefined-",
+                        "border": false,
+                        "autoRef": "resultArea",
+                        "tplWriteMode": "append",
+                        "activeTab": 0
+                    }
+                },
+                {
+                    "id": "MyToolbar3",
+                    "cid": "toolbar",
+                    "jsClass": "MyToolbar3",
+                    "dock": "tbar",
+                    "snapToGrid": 10,
+                    "cn": [
+                        {
+                            "id": "MyButton9",
+                            "cid": "button",
+                            "jsClass": "MyButton9",
+                            "snapToGrid": 10,
+                            "userConfig": {
+                                "text": "Start/Stop",
+                                "enableToggle": true,
+                                "autoRef": "buttonToogleListener"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "MyWindow1",
+            "cid": "window",
+            "jsClass": "WaitingWindow",
+            "snapToGrid": 10,
+            "userConfig": {
+                "title": "-ext-undefined-",
+                "width": 350,
+                "height": 47,
+                "closable": false,
+                "layout": "-ext-undefined-",
+                "padding": 5
+            },
+            "cn": [
+                {
+                    "id": "MyProgressBar",
+                    "cid": "progress",
+                    "jsClass": "MyProgressBar",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "value": 1,
+                        "autoHeight": "-ext-undefined-",
+                        "region": "center",
+                        "height": "-ext-undefined-",
+                        "animate": true,
+                        "text": "bitte warten",
+                        "autoRef": "progressbar"
+                    }
+                }
+            ]
+        }
+    ],
+    "stores": [
+        {
+            "id": "MyStore",
+            "cid": "arraystore",
+            "jsClass": "UserState",
+            "snapToGrid": 10,
+            "userConfig": {
+                "storeId": "UserState"
+            },
+            "cn": [
+                {
+                    "id": "MyField",
+                    "cid": "datafield",
+                    "jsClass": "MyField",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "extension"
+                    }
+                },
+                {
+                    "id": "MyField1",
+                    "cid": "datafield",
+                    "jsClass": "MyField1",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "name"
+                    }
+                },
+                {
+                    "id": "MyField2",
+                    "cid": "datafield",
+                    "jsClass": "MyField2",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "status"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "MyStore2",
+            "cid": "arraystore",
+            "jsClass": "CommanderAction",
+            "snapToGrid": 10,
+            "userConfig": {
+                "storeId": "CommanderAction",
+                "data": "[[\"hangup\", 'Auflegen!']]"
+            },
+            "cn": [
+                {
+                    "id": "MyField3",
+                    "cid": "datafield",
+                    "jsClass": "MyField3",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "action"
+                    }
+                },
+                {
+                    "id": "MyField4",
+                    "cid": "datafield",
+                    "jsClass": "MyField4",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "description"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "MyStore1",
+            "cid": "arraystore",
+            "jsClass": "CommanderActionParam",
+            "snapToGrid": 10,
+            "userConfig": {
+                "storeId": "CommanderActionParam"
+            },
+            "cn": [
+                {
+                    "id": "MyField6",
+                    "cid": "datafield",
+                    "jsClass": "MyField6",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "property"
+                    }
+                },
+                {
+                    "id": "MyField7",
+                    "cid": "datafield",
+                    "jsClass": "MyField7",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "defaultvalue"
+                    }
+                },
+                {
+                    "id": "MyField5",
+                    "cid": "datafield",
+                    "jsClass": "MyField5",
+                    "snapToGrid": 10,
+                    "userConfig": {
+                        "name": "description"
+                    }
+                }
+            ]
+        }
+    ]
+}
