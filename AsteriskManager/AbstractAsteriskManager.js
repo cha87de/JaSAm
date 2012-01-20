@@ -1,11 +1,19 @@
 
 /**
- * AbstractAsteriskManater
- * 
- */
-var AbstractAsteriskManager = function(baseUrlConstruct){
+ * AbstractAsteriskManager
+  */
+var AbstractAsteriskManager = function(){
+    
+    var baseUrl = '/asterisk/mxml';
 
-    var baseUrl = baseUrlConstruct ? baseUrlConstruct : "/asterisk/mxml";
+    /**
+     * setBaseUrl
+     * PUBLIC FUNCTION
+     * @param url <String> Path to XML-AsteriskManager, default: /asterisk/mxml
+     */
+    this.setBaseUrl = function(url){
+        baseUrl = url;
+    };
 
     /**
      * This Function sends an action with an parameter-object to the asterisk-server. 
