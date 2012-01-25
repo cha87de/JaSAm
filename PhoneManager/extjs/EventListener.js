@@ -36,12 +36,14 @@ EventListener = Ext.extend(EventListenerUi, {
 
     startListening: function(){
         // Starte Command!
-        this.eventCounter++;
         this.asteriskManager.executeCommand('waitevent', {}, this.printResult, this);        
     },
     
     printResult: function(results){
-        this.startListening();
+        this.eventCounter++;
+        
+        if(this.listening)
+            this.startListening();        
         
         var htmlOutput = "";
         for(var itemKey in results){
@@ -62,8 +64,9 @@ EventListener = Ext.extend(EventListenerUi, {
         
         var panel = new Ext.Panel({
             title: 'Ev'+this.eventCounter,
-            html: htmlOutput,
-            autoscroll: true
+            autoscroll: true,
+            layout: 'fit',
+            html: htmlOutput
         });
         this.resultArea.add(panel);
     }

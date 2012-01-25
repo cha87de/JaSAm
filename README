@@ -1,0 +1,13 @@
+
+This is a project for accessing the asterisk-pbx-servers http-manager via javascript.
+There are two main parts: JaSAm und PhoneManager
+
+JaSAm (JavaScriptAsteriskManager)
+    provides a object-oriented javascript API for accessing the asterisk's http-xml-manager, called AJAM [1]
+
+PhoneManager
+    is a graphical-user-interface using JaSAm, based on sencha's extJS [2]
+
+
+[1] http://www.asterisk.org/astdocs/node209.html
+[2] http://www.sencha.com/products/extjs/
