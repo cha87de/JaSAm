@@ -452,7 +452,8 @@
                             "userConfig": {
                                 "fieldLabel": "Secret",
                                 "anchor": "100%",
-                                "autoRef": "secret"
+                                "autoRef": "secret",
+                                "inputType": "password"
                             }
                         },
                         {

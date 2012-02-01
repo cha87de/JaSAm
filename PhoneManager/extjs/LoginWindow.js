@@ -20,6 +20,9 @@ LoginWindow = Ext.extend(LoginWindowUi, {
         
         // Registriere Listener für UI-Componenten
         this.buttonLogin.on('click', this.login, this);
+        this.username.addListener('specialkey', function(f,e){if (e.getKey() == e.ENTER) this.login()}, this);
+        this.secret.addListener('specialkey', function(f,e){if (e.getKey() == e.ENTER) this.login()}, this);
+        this.save.addListener('specialkey', function(f,e){if (e.getKey() == e.ENTER) this.login()}, this);
         
         // Lade Zugangsdaten aus Cookie
         this.loadManagerData();
