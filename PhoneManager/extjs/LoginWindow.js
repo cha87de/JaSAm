@@ -66,32 +66,35 @@ LoginWindow = Ext.extend(LoginWindowUi, {
     },
     
     loginManager: function(username, secret){
-        this.asteriskManager = new AsteriskManager(username, secret);
-        this.asteriskManager.enableKeepalive(true);
-        this.asteriskManager.action.login( function(loginState){
-            if(loginState){
-                // Bei Erfolg: starte Programm
-                this.hide();
-                this.startPhoneManager();
-            }else{
-                // Bei Misserfolg: lösche Cookies!
-                Ext.util.Cookies.set('managerUsername', '', new Date());
-                Ext.util.Cookies.set('managerSecret', '', new Date());
-                this.show();
-                Ext.Msg.alert('Zugang nicht möglich', 'Benutzername oder Passwort falsch.');
-                this.reset();
-            }
-        }, this);
+        // Define Manager to login
+        var manager = new Manager(username, secret);
+        manager.addListener(this.managerStateListener, this);
+
+        // Define Asterisk-Server
+        this.asteriskManager = new AsteriskManager(manager);
+        //this.asteriskManager.enableKeepalive(true);
+        
+        manager.login();
     },
     
     logoutManager: function(){
-        this.asteriskManager.action.logout(function(){
-            this.phoneManager.close();
-            this.show();
+        this.asteriskManager.manager.logout();
+    },
+    
+    managerStateListener: function(args){
+        var loginState = args[0];
+        if(loginState){
+            // Bei Erfolg: starte Programm
+            this.hide();
+            this.startPhoneManager();
+        }else{
+            // Bei Misserfolg: lösche Cookies!
             Ext.util.Cookies.set('managerUsername', '', new Date());
-            Ext.util.Cookies.set('managerSecret', '', new Date()); 
+            Ext.util.Cookies.set('managerSecret', '', new Date());
+            this.show();
             this.reset();
-        }, this);        
+            this.phoneManager.close();
+        }
     },
     
     startPhoneManager: function(){

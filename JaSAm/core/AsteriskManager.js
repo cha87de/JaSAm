@@ -1,31 +1,29 @@
-var AsteriskManager = function(username, secret){
+
+var AsteriskManager = function(manager){
+    manager.setAsteriskManager(this);
+        
     /**
      * Private variables
      */
-    var localUser = null;
     var keepalive = false;
     var keepaliveTimer = null;
 
     /**
      * Public variables
      */
-    this.manager = new AsteriskManagerManager(username, secret);    
-    this.actionCollection = new AsteriskManagerActionCollection(this);    
-    this.action = new AsteriskManagerAction(this);
-
-    /**
-     * Public Functions
-     */
-    this.setUser = function(userNumber){
-        localUser = userNumber;
-    };
-
+    this.localUser = null;
+    this.manager = manager; 
+    this.commander = new Commander(this);    
+    this.eventConnector = new EventConnector(this);
+    this.entityManager = new EntityManager(this);
+    
+    
     this.enableKeepalive = function(keepaliveParam){
         keepalive = keepaliveParam;
         if(keepalive){
             var fkt = keepaliveAction;
             var self = this;
-            keepaliveTimer = setInterval(function(){ fkt.call(self); }, 60000); // 2s, später 60s
+            keepaliveTimer = setInterval(function(){fkt.call(self);}, 2000); // 2s, später 60s
         }else{
             clearInterval(keepaliveTimer);
             keepaliveTimer = null;
@@ -33,22 +31,12 @@ var AsteriskManager = function(username, secret){
     };
     
     var keepaliveAction = function(){
-        this.action.ping();
+        try{
+            this.commander.createAction('ping').execute();
+        }catch(o){
+            console.info('exception ping ', o);
+        }
     };
-    
-    this.startCall = function(foreignNumber, outgoingCallerId){
-        var action = 'originate';
-        var param = {
-            exten: foreignNumber,
-            channel: 'SIP/'+localUser,
-            context: 'default',
-            priority: 1,
-            callerid: outgoingCallerId
-        };
-        this.executeCommand(action, param, function(response){
-            // nothing to do here
-        }, this);        
-    };
-    
+
 };
-AsteriskManager.prototype = new AbstractAsteriskManager();
+AsteriskManager.prototype = new BasicManager();

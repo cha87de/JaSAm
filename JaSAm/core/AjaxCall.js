@@ -1,16 +1,13 @@
 /**
- * Singleton-Class AbstractAsteriskManagerAjaxCall for ajax-calls
- * This is based on ExtJS from Sencha
+ * 
  */
-var AsteriskManagerAjaxCall = function(){
+var AjaxCall = function(){
     var activeX = ['Msxml2.XMLHTTP.6.0',
     'Msxml2.XMLHTTP.3.0',
     'Msxml2.XMLHTTP'];
 
     /**
-     * ...
-     * PRIVATE FUNCTION
-     * @param response <object> ...
+     * 
      */
     var createConnection = function(){
         var http;
@@ -28,6 +25,9 @@ var AsteriskManagerAjaxCall = function(){
         }
     };
     
+    /**
+     * 
+     */    
     var serialize = function(obj) {
         var str = [];
         for(var p in obj)
@@ -35,34 +35,31 @@ var AsteriskManagerAjaxCall = function(){
         return str.join("&");
     };
     
-    return {
-        
-        /**
-        * ...
-        * PUBLIC FUNCTION
-        * @param method <string> ...
-        * @param uri <string> ...
-        * @param params <object> ...
-        * @param callbackFunction <function> ...
-        * @param scope <object> ...
-        */        
-        request: function(method, uri, params, callbackFunction, scope){
-            var data = serialize(params);
-            var connection = createConnection();
-            var postData = null;
-            
-            if(method == 'GET')
-                uri += '?' + data;
-            else if(method == 'POST')
-                postData = data;
-            
-            connection.open(method, uri, true);
-            connection.onreadystatechange = function() {
-                if (connection.readyState==4) {
-                    callbackFunction.apply(scope, [connection]);                    
-                }
+    /**
+    * 
+    * @param method <string> ...
+    * @param uri <string> ...
+    * @param params <object> ...
+    * @param callback <function> ...
+    * @param scope <object> ...
+    * @return <void>
+    */        
+    this.request = function(method, uri, params, callback, scope){
+        var data = serialize(params);
+        var connection = createConnection();
+        var postData = null;
+
+        if(method == 'GET')
+            uri += '?' + data;
+        else if(method == 'POST')
+            postData = data;
+
+        connection.open(method, uri, true);
+        connection.onreadystatechange = function() {
+            if (connection.readyState==4) {
+                callback.apply(scope, [connection]);                    
             }
-            connection.send(postData);                 
         }
+        connection.send(postData);                 
     };
-}();
+};

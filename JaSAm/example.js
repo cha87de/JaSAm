@@ -1,26 +1,49 @@
 
-// simple login on asterisk
-var manager = new AsteriskManager('webmanager', 'abc456!');
-manager.setBaseUrl('/asterisk/mxml');
+var asteriskManager = null;
+function main(){
+    // Define Manager to login
+    var manager = new Manager('testmanager', 'sehrsehrgeheim');
+    manager.addListener(managerListener, manager);
+    
+    // Define Asterisk-Server
+    asteriskManager = new AsteriskManager(manager);
+    asteriskManager.setBaseUrl('/asterisk/mxml');
+    
+    // Register EventListener
+    asteriskManager.eventConnector.addListener(eventListener, this);
 
-manager.action.login(function(success){
+    // login manager!
+    manager.login();
+}
 
-    if(success){
-        console.info('login successful');
-    }else{
-        console.info('login failed');
-        return;
-    }
-
-    // Execute Action 'Status'
-    manager.executeCommand('status', {}, function(result){
-        console.info('status: ', result);
+function managerListener(managerStatus){
+    if(managerStatus){
+        console.info('manager logged in');
         
-        // logout
-        manager.action.logout(function(){
-            console.info('logout done');
+        // now you can do some work ...
+
+        // enable keepalive
+        //asteriskManager.enableKeepalive(true);
+        
+        // enable eventhandling on raw-events
+        //asteriskManager.eventConnector.enableListening(true);
+        //setTimeout(function(){asteriskManager.eventConnector.enableListening(false);}, 16000);
+        
+        asteriskManager.entityManager.queryExtensions(function(){
+            console.info(asteriskManager.entityManager.peers);
+            console.info(asteriskManager.entityManager.extensions);
         }, this);
+        
+        // ...
+    }else{
+        console.info('manager NOT logged in!');
+    }
+}
 
-    }, this);
+function eventListener(response){
+    console.info('event fired:', response);
+}
 
-}, window);
+// LETS START! :-D
+// load files, when done start main function
+JaSAmLoader.load(main, '.');

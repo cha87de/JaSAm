@@ -2,10 +2,11 @@
 /**
  * AbstractAsteriskManager
   */
-var AbstractAsteriskManager = function(){
+var BasicManager = function(){
     
     var baseUrl = '/asterisk/mxml';
-
+    var ajaxCall = new AjaxCall();
+    
     /**
      * setBaseUrl
      * PUBLIC FUNCTION
@@ -20,14 +21,14 @@ var AbstractAsteriskManager = function(){
      * PUBLIC FUNCTION
      * @param action <string> name of action to send
      * @param parameter <object> parameters for action
-     * @param callbackFunction <function> callback function to execute whenn call is finished
+     * @param callback <function> callback function to execute whenn call is finished
      * @param scope <object> scope in which to execute callback function
      */
-    this.executeCommand = function(action, parameter, callbackFunction, scope){
-        var command = parameter;
+    var execute = function(action, parameter, callback, scope){
+        var command = parameter ? parameter : {};
         command.action = action;
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        AsteriskManagerAjaxCall.request('GET', baseUrl, command, function(ajaxResponse){
+        ajaxCall.request('GET', baseUrl, command, function(ajaxResponse){
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
@@ -37,9 +38,14 @@ var AbstractAsteriskManager = function(){
                 var str = ajaxResponse.responseText.replace(/\*/g, '');
                 xmlDoc=parser.parseFromString(str,"text/xml");
             }
-            var result = parseResponse(xmlToJson(xmlDoc));
-            callbackFunction.apply(scope, [result]);            
+            var result = parseData(xmlToJson(xmlDoc));
+            var response = parseResponse(result);
+            callback.apply(scope, [response]);
         }, this);      
+    };
+
+    this.execute = function(action){
+        execute(action.name, action.params, action.setResponse, action);
     };
 
     /**
@@ -47,7 +53,7 @@ var AbstractAsteriskManager = function(){
      * PRIVATE FUNCTION
      * @param response <object> ...
      */
-    var parseResponse = function(response){
+    var parseData = function(response){
         var result = [];
         if(!response['ajax-response'] || !response['ajax-response']['response']){
             return result;
@@ -63,6 +69,39 @@ var AbstractAsteriskManager = function(){
         }
         return result;
     };
+    
+    var parseResponse = function(data){
+        var response = new Response();
+        
+        if(data.length > 0){
+            // first part is head
+            response.head = data[0];
+
+            // middle parts are body
+            for(var i = 1; i<data.length-1; i++){
+                if(!response.body)
+                    response.body = new Array();
+                response.body.push(parseResponseItem(data[i]));
+            }
+            
+            // last part is foot
+            if(data.length > 1){
+                response.foot = parseResponseItem(data[data.length-1]);
+            }                
+        }
+        return response;
+    };
+    
+    var parseResponseItem = function(data){
+        var name = data.event ? data.event : null;
+        delete data.event;
+
+        var responseItem = new ResponseItem();
+        responseItem.name = name;
+        responseItem.content = data; 
+        
+        return responseItem;
+    }
     
     /**
      * ...

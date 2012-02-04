@@ -485,7 +485,7 @@
         {
             "id": "MyWindow",
             "cid": "window",
-            "jsClass": "Commander",
+            "jsClass": "CommanderWindow",
             "snapToGrid": 10,
             "userConfig": {
                 "title": "Commander",
@@ -703,7 +703,7 @@
         {
             "id": "MyWindow2",
             "cid": "window",
-            "jsClass": "EventListener",
+            "jsClass": "EventListenerWindow",
             "snapToGrid": 10,
             "userConfig": {
                 "title": "EventListener",

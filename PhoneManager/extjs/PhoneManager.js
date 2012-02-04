@@ -39,7 +39,7 @@ PhoneManager = Ext.extend(PhoneManagerUi, {
     },
     
     updateUser: function(nr){
-        this.asteriskManager.setUser(nr);
+        this.asteriskManager.localUser = nr;
         this.statusLabel.setText('Benutzer auf ' + nr + ' gesetzt! Hallo ;-)');
         this.actionStartCall.updateUserNumber(nr);
     },
@@ -49,13 +49,13 @@ PhoneManager = Ext.extend(PhoneManagerUi, {
     },
     
     startCommander: function(){
-        var commander = new Commander();
-        commander.setAsteriskManager(this.asteriskManager);
-        commander.show();
+        var commanderWindow = new CommanderWindow();
+        commanderWindow.setAsteriskManager(this.asteriskManager);
+        commanderWindow.show();
     },
     
     startEventListener: function(){
-        var eventListener = new EventListener();
+        var eventListener = new EventListenerWindow();
         eventListener.setAsteriskManager(this.asteriskManager);
         eventListener.show();        
     }    

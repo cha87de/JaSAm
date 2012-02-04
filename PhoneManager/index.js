@@ -6,7 +6,8 @@
 Ext.onReady(function() {
     Ext.QuickTips.init();
     
-    var loginWindow = new LoginWindow();
-    loginWindow.show();
-    
+    JaSAmLoader.load(function(){
+        var loginWindow = new LoginWindow();
+        loginWindow.show();
+    }, '../JaSAm/');
 });

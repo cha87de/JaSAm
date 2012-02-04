@@ -10,10 +10,10 @@
 <script type="text/javascript" src="ActionListUsers.js"></script>
 <script type="text/javascript" src="LoginWindow.ui.js"></script>
 <script type="text/javascript" src="LoginWindow.js"></script>
-<script type="text/javascript" src="Commander.ui.js"></script>
-<script type="text/javascript" src="Commander.js"></script>
-<script type="text/javascript" src="EventListener.ui.js"></script>
-<script type="text/javascript" src="EventListener.js"></script>
+<script type="text/javascript" src="CommanderWindow.ui.js"></script>
+<script type="text/javascript" src="CommanderWindow.js"></script>
+<script type="text/javascript" src="EventListenerWindow.ui.js"></script>
+<script type="text/javascript" src="EventListenerWindow.js"></script>
 <script type="text/javascript" src="WaitingWindow.ui.js"></script>
 <script type="text/javascript" src="WaitingWindow.js"></script>
 <script type="text/javascript" src="UserState.js"></script>
