@@ -14,16 +14,19 @@ var ListenerHandler = function(){
     };
 
     this.propagate = function(){
+        var fkts = new Object();
+        var scopes = new Object();
+        var params = arguments;
+        var i = 0;
         for(var key = 0; key<listeners.length; key++){
             var listener = listeners[key];
             if(!listener.callback || !listener.scope)
                 continue;
             
-            var fkt = listener.callback;
-            var scope = listener.scope;
-            var params = arguments;
+            fkts[key] = listener.callback;
+            scopes[key] = listener.scope;
             // use setTimeout to resume for
-            setTimeout(function(){fkt.apply(scope, [params]);}, 0);
+            setTimeout(function(){ fkts[i].apply(scopes[i], [params]); i++;}, 0);
         }
     };
 }

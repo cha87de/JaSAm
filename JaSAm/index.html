@@ -9,9 +9,70 @@
     <body>
 
         <h1>JaSAm Example</h1>
-        <p>
-            See your browser's developer console for output ;-)
-        </p>
+        
+        
+        <div id="loginPanel">
+            <h2>Login</h2>
+            Enter Username and Secret: <br/>
+            <form id="loginForm" action="#" method="post">
+                <input type="text" name="loginUsername" id="loginUsername" value="testmanager"/> 
+                <input type="password" name="loginSecret" id="loginSecret" value="sehrsehrgeheim"/> 
+                <input type="submit" value="login"/>
+            </form>
+        </div>
+        
+        <div id="outputPanel" style="display:none;">
+            <div id="statusPanel"></div>
+            <table>
+                <tr>
+                    <td valign="top">
+                        <h2>Extensions</h2>
+                        <table border="1" id="extensions">
+                            <tr>
+                                <td>ID</td>
+                                <td>Status</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>
+                    </td>
+                    <td width="20"></td>
+                    <td valign="top">
+                        <h2>Peers</h2>
+                        <table border="1" id="peers">
+                            <tr>
+                                <td>ID</td>
+                                <td>IP/PORT</td>
+                                <td>Status</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>                        
+                    </td>
+                    <td width="20"></td>
+                    <td valign="top">
+                        <h2>Channels</h2>
+                        <table border="1" id="channels">
+                            <tr>
+                                <td>ID</td>
+                                <td>...</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>                        
+                    </td>
+                    <td width="20"></td>
+                    <td valign="top">
+                        <h2>Queues</h2>
+                        <table border="1" id="queues">
+                            <tr>
+                                <td>ID</td>
+                                <td>...</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>                        
+                    </td>                    
+                </tr>
+            </table>
+            
+        </div>
         
     </body>
 </html>

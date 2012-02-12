@@ -1,6 +1,9 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
+var Queue = function(){
+    
+    this.type = Entity.Types.Queue;
 
+    // this.id = null    
+    
+};
+Queue.prototype = new Entity();
