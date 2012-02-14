@@ -8,12 +8,12 @@ var EntityManager = function(asteriskManagerParam){
     this.queueManager = new QueueManager(asteriskManager);
 
     // Mapping rules:
-    var ignoreEvents = ['VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent'];
+    var ignoreEvents = ['NewCallerid', 'UserEvent', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived'];
     var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial'];
     var extensionEvents = ['Newexten', 'ExtensionStatus'];
     var peerEvents = ['PeerStatus'];
-    var queueEvents = [];
-    // What about: NewCallerid
+    var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded'];
+    // What about: NewCallerid? UserEvent? NewAccountCode? Join? Leave? QueueCallerAbandon?
 
     this.eventListener = function(response){
         response = response[0];
@@ -77,39 +77,10 @@ var EntityManager = function(asteriskManagerParam){
     this.handleCollectedEvents = function(entityEvent){
         this.propagate(entityEvent);
     };
-    
-    /*this.queryExtensions = function(callback, scope){
-        var action = new Action(asteriskManager);
-        action.name = 'sippeers';
-        
-        action.execute(function(response){
-            this.queryExtensionsCallback(response, callback, scope);
-        }, this);
-    };
-    
-    this.queryExtensionsCallback = function(response, callback, scope){
-        this.extensions = new Array();
-        this.peers = new Array();        
-        for(var peerentryKey in response.body){
-            var peerentry = response.body[peerentryKey].content;
-            var extension = new Extension();
-            extension.extenid = peerentry.objectname;
-            extension.status = peerentry.status;
-            this.extensions.push(extension);
-            
-            if(peerentry.status != 'UNKNOWN'){
-                // create peer
-                var peer = new Peer();
-                peer.type = peerentry.channeltype;
-                peer.name = peerentry.objectname;
-                peer.ipadress = peerentry.ipaddress;
-                peer.ipport = peerentry.ipport;
-                peer.status = peerentry.status; 
-                this.peers.push(peer); 
-           }
-        }
-        callback.apply(scope, []);
-    };    
-    */    
+
 }
 EntityManager.prototype = new ListenerHandler();
+
+var ifDefined = function(value){
+        return value ? value : null;
+};

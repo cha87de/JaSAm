@@ -5,16 +5,60 @@ var PeerManager = function(asteriskManagerParam){
     this.peers = {};
     
     this.handleEvent = function(responseItem){
-        // TODO
-        //console.info('peermanager handleEvent', responseItem);
-        
-        var event = new EntityEvent();
-        //asteriskManager.entityManager.handleCollectedEvents(event);        
+        var peer = null;
+        var eventType = EntityEvent.Types.unknown;
+        if(responseItem.name == 'PeerStatus'){
+            var id = responseItem.content.peer;
+            if(!this.peers[id]){
+                this.peers[id] = new Peer(id);
+                eventType = EntityEvent.Types.New;
+            }else{
+                eventType = EntityEvent.Types.Update;
+            }
+            var status = responseItem.content.peerstatus;
+            status = status.toLowerCase();
+            
+            peer = this.peers[id];
+            peer.status = Peer.State[status];
+            
+            // potentially not set:
+            peer.ipadress = responseItem.content.address ? responseItem.content.address : null;
+            peer.ipport = responseItem.content.port ? responseItem.content.port : null;
+
+            peer = this.peers[id];  
+        }else if(false){
+            // ...
+        }else{
+            console.warn('unknown peer state' , responseItem.name);
+        }
+        var event = new EntityEvent(eventType, peer);
+        asteriskManager.entityManager.handleCollectedEvents(event);
+        this.propagate(event);
     };
     
     this.queryPeers = function(callback, scope){
-        callback.apply(scope, []);
-    };    
+        var action = new Action(asteriskManager);
+        action.name = 'sippeers';
+        action.execute(function(response){
+            this.peers = {};
+            for(var peerentryKey in response.body){
+                var peerentry = response.body[peerentryKey].content;
+                var id = peerentry.channeltype + '/' + peerentry.objectname;
+                var status = peerentry.status;
+                if(status.indexOf("OK") >= 0)
+                    status = 'registered';
+                status = status.toLowerCase();
+                var peer = new Peer(id);
+                peer.status = Peer.State[status];
+                peer.ipadress = peerentry.ipaddress;
+                peer.ipport = peerentry.ipport;
+                peer.name = peerentry.objectname;
+                this.peers[id] = peer;
+            }
+            
+            callback.apply(scope, []);
+        }, this);
+    };  
     
 }
 PeerManager.prototype = new ListenerHandler();

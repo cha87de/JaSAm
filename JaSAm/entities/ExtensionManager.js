@@ -49,7 +49,7 @@ var ExtensionManager = function(asteriskManagerParam){
             
             callback.apply(scope, []);
         }, this);
-    };    
+    };
     
 }
 ExtensionManager.prototype = new ListenerHandler();

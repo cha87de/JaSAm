@@ -64,6 +64,7 @@ var Commander = function(asteriskManagerParam){
                 resultArray.push([command, value]);
             }
             commands = resultArray;*/
+            // TODO
             console.info(response);
         });
     }

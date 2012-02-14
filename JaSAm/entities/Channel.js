@@ -16,3 +16,6 @@ var Channel = function(){
     
 };
 Channel.prototype = new Entity();
+Channel.prototype.toString = function(){
+    return 'From: ' + this.calleridnum + '(' + this.calleridname + '), to extension: ' + this.extension + ', state: ' + this.channelstatedesc;
+};

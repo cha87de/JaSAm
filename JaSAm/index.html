@@ -10,10 +10,13 @@
 
         <h1>JaSAm Example</h1>
         
+        <div id="waitPanel">
+            loading ....
+        </div>
         
-        <div id="loginPanel">
+        <div id="loginPanel" style="display:none;">
             <h2>Login</h2>
-            Enter Username and Secret: <br/>
+            Enter username and secret: <br/>
             <form id="loginForm" action="#" method="post">
                 <input type="text" name="loginUsername" id="loginUsername" value="testmanager"/> 
                 <input type="password" name="loginSecret" id="loginSecret" value="sehrsehrgeheim"/> 
@@ -22,11 +25,42 @@
         </div>
         
         <div id="outputPanel" style="display:none;">
-            <div id="statusPanel"></div>
+            <h2>Control-Panel</h2>
+            <table>
+                <tr>
+                    <td>
+                        Choose extension:<br/>
+                        <form id="controlExtensionForm" action="#" method="post">
+                            <input type="text" name="controlExtensionNumber" id="controlExtensionNumber" value="11" />
+                            <input type="submit" value="set"/>
+                        </form>
+                    </td>
+                    <td width="20"></td>
+                    <td id="controlOriginate" style="display:none;">
+                        Originate call:<br/>
+                        <form id="controlOriginateForm" action="#" method="post">
+                            <input type="text" name="channel" id="controlOriginateChannel" value="" />
+                            <input type="submit" value="originate"/>
+                        </form>                        
+                    </td>
+                    <td width="20"></td>
+                    <td id="controlIncoming" style="display:none;">
+                        Handle incoming call:<br/>
+                        <div id="controlIncomingNothing">
+                            no calls available
+                        </div>
+                        <div id="controlIncomingNewCall" style="display:none;">
+                            <span id="controlIncomingCallInfo"></span>
+                        </div>                        
+                    </td>                    
+                </tr>
+            </table>
+            
             <table>
                 <tr>
                     <td valign="top">
                         <h2>Extensions</h2>
+                        <div id="extensionsStatus"></div>
                         <table border="1" id="extensions">
                             <tr>
                                 <td>ID</td>
@@ -38,6 +72,7 @@
                     <td width="20"></td>
                     <td valign="top">
                         <h2>Peers</h2>
+                        <div id="peersStatus"></div>
                         <table border="1" id="peers">
                             <tr>
                                 <td>ID</td>
@@ -49,26 +84,28 @@
                     </td>
                     <td width="20"></td>
                     <td valign="top">
-                        <h2>Channels</h2>
-                        <table border="1" id="channels">
-                            <tr>
-                                <td>ID</td>
-                                <td>...</td>
-                            </tr>
-                            <!-- ... -->
-                        </table>                        
-                    </td>
-                    <td width="20"></td>
-                    <td valign="top">
                         <h2>Queues</h2>
+                        <div id="queuesStatus"></div>
                         <table border="1" id="queues">
                             <tr>
                                 <td>ID</td>
-                                <td>...</td>
+                                <td>Infos</td>
                             </tr>
                             <!-- ... -->
                         </table>                        
-                    </td>                    
+                    </td>                        
+                    <td width="20"></td>
+                    <td valign="top">
+                        <h2>Channels</h2>
+                        <div id="channelsStatus"></div>
+                        <table border="1" id="channels">
+                            <tr>
+                                <td>ID</td>
+                                <td>Infos</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>                        
+                    </td>               
                 </tr>
             </table>
             
