@@ -1,9 +1,9 @@
 
-var Peer = function(){
+var Peer = function(id){
     
     this.type = Entity.Types.Peer;
 
-    // this.id = null    
+    this.id = id;
     this.peertype = Peer.Types.SIP;
     this.name = null;
     this.ipadress = null;
@@ -12,6 +12,10 @@ var Peer = function(){
     
 };
 Peer.prototype = new Entity();
+
+Peer.prototype.toString = function(){
+    return 'IP: ' + this.ipadress + ':' + this.ipport + ', Status: ' + this.status + '';
+};
 
 Peer.Types = {
     SIP: 'SIP',

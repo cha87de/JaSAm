@@ -1,9 +1,9 @@
 
-var Queue = function(){
+var Queue = function(id){
     
     this.type = Entity.Types.Queue;
 
-    // this.id = null
+    this.id = id;
     this.loggedIn = null;
     this.available = null;
     this.callers = null;

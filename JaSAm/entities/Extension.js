@@ -13,6 +13,10 @@ var Extension = function(id){
 };
 Extension.prototype = new Entity();
 
+Extension.prototype.toString = function(){
+    return 'Status: ' + this.status + '';
+};
+
 Extension.State = {
     unreachable: 'unreachable',
     available: 'available',

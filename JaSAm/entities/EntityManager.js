@@ -6,13 +6,15 @@ var EntityManager = function(asteriskManagerParam){
     this.channelManager = new ChannelManager(asteriskManager);
     this.peerManager = new PeerManager(asteriskManager);
     this.queueManager = new QueueManager(asteriskManager);
+    this.agentManager = new AgentManager(asteriskManager);
 
     // Mapping rules:
-    var ignoreEvents = ['NewCallerid', 'UserEvent', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived'];
+    var ignoreEvents = ['NewCallerid', 'UserEvent', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
     var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial'];
     var extensionEvents = ['Newexten', 'ExtensionStatus'];
     var peerEvents = ['PeerStatus'];
     var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded'];
+    var agentEvents = [];
     // What about: NewCallerid? UserEvent? NewAccountCode? Join? Leave? QueueCallerAbandon?
 
     this.eventListener = function(response){
@@ -36,6 +38,9 @@ var EntityManager = function(asteriskManagerParam){
             }else if(arraySearch(queueEvents, eventName) >= 0){                
                 // Queue-Event
                 this.queueManager.handleEvent(responseItem);
+            }else if(arraySearch(agentEvents, eventName) >= 0){                
+                // Agent-Event
+                this.agentManager.handleEvent(responseItem);                
             }else{
                 // Event unknown!
                 console.warn('Event unknown:', eventName);
@@ -56,7 +61,7 @@ var EntityManager = function(asteriskManagerParam){
 
     this.queryEntities = function(callback, scope){
         var queryCounter = 0;
-        var queryCounterCalls = 4;
+        var queryCounterCalls = 5;
         var callCallback = function(){
             queryCounter++;
             if(queryCounter == queryCounterCalls){
@@ -68,10 +73,12 @@ var EntityManager = function(asteriskManagerParam){
         this.channelManager.queryChannels(callCallback, this);
         // query Extensions
         this.extensionManager.queryExtensions(callCallback, this);
-        // query Peer
+        // query Peers
         this.peerManager.queryPeers(callCallback, this); 
-        // query Queue       
+        // query Queues      
         this.queueManager.queryQueues(callCallback, this);
+        // query Agents
+        this.agentManager.queryAgents(callCallback, this);        
     };
     
     this.handleCollectedEvents = function(entityEvent){

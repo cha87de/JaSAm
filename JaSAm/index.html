@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>JaSAm Example</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="JaSAmLoader.js"></script>
         <script type="text/javascript" src="example.js"></script>
+        
+        <style>
+            body { font-size: 70%; } 
+        </style>        
     </head>
     <body>
 
@@ -31,7 +35,7 @@
                     <td>
                         Choose extension:<br/>
                         <form id="controlExtensionForm" action="#" method="post">
-                            <input type="text" name="controlExtensionNumber" id="controlExtensionNumber" value="11" />
+                            <input type="text" name="controlExtensionNumber" id="controlExtensionNumber" value="47" size="3" />
                             <input type="submit" value="set"/>
                         </form>
                     </td>
@@ -39,13 +43,22 @@
                     <td id="controlOriginate" style="display:none;">
                         Originate call:<br/>
                         <form id="controlOriginateForm" action="#" method="post">
-                            <input type="text" name="channel" id="controlOriginateChannel" value="" />
+                            <input type="text" name="channel" id="controlOriginateChannel" value=""  size="3" />
                             <input type="submit" value="originate"/>
                         </form>                        
                     </td>
                     <td width="20"></td>
+                    <td id="controlQueue" style="display:none;">
+                        Toggle Queue:<br/>
+                        <form id="controlQueueForm" action="#" method="post">
+                            <input type="text" name="controlQueueId" id="controlQueueId" value=""  size="3" />
+                            <input type="text" name="controlQueuePenalty" id="controlQueuePenalty" value="0"  size="1" />
+                            <input type="submit" value="toggle"/>
+                        </form>                        
+                    </td>      
+                    <td width="20"></td>
                     <td id="controlIncoming" style="display:none;">
-                        Handle incoming call:<br/>
+                        Current extension state:<br/>
                         <div id="controlIncomingNothing">
                             no calls available
                         </div>
@@ -64,7 +77,7 @@
                         <table border="1" id="extensions">
                             <tr>
                                 <td>ID</td>
-                                <td>Status</td>
+                                <td>Infos</td>
                             </tr>
                             <!-- ... -->
                         </table>
@@ -76,8 +89,7 @@
                         <table border="1" id="peers">
                             <tr>
                                 <td>ID</td>
-                                <td>IP/PORT</td>
-                                <td>Status</td>
+                                <td>Infos</td>
                             </tr>
                             <!-- ... -->
                         </table>                        
@@ -94,6 +106,18 @@
                             <!-- ... -->
                         </table>                        
                     </td>                        
+                    <td width="20"></td>
+                    <td valign="top">
+                        <h2>Agents</h2>
+                        <div id="agentsStatus"></div>
+                        <table border="1" id="agents">
+                            <tr>
+                                <td>ID</td>
+                                <td>Infos</td>
+                            </tr>
+                            <!-- ... -->
+                        </table>                        
+                    </td>                                            
                     <td width="20"></td>
                     <td valign="top">
                         <h2>Channels</h2>

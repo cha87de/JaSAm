@@ -6,6 +6,7 @@ var Entity = function(){
     
 };
 Entity.Types = {
+    Agent: 'agent',
     Channel: 'channel',
     Extension: 'extension',
     Peer: 'peer',

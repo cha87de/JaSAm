@@ -41,6 +41,7 @@ JaSAmLoader.files = [
     "entities/Entity.js",
     "entities/EntityEvent.js",
     "entities/Agent.js",
+    "entities/AgentManager.js",
     "entities/Channel.js",   
     "entities/ChannelManager.js",
     "entities/Extension.js",

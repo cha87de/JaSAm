@@ -1,9 +1,9 @@
 
-var Channel = function(){
+var Channel = function(id){
     
     this.type = Entity.Types.Channel;
 
-    // this.id = null
+    this.id = id;
     this.uniqueid = null;
     this.context = null;
     this.extension = null;

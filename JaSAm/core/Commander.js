@@ -52,7 +52,7 @@ var Commander = function(asteriskManagerParam){
         if(actions[name])
             return actions[name].clone();
         else
-            throw new Object();
+            throw new Object('Action nicht definiert');
     }
 
     this.queryServerActions = function(){
