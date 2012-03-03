@@ -1,20 +1,42 @@
 
-var Extension = function(id){
+var Extension = function(id, asteriskManagerParam){
+    var asteriskManager = asteriskManagerParam;
     
     this.type = Entity.Types.Extension;
 
     this.id = id;
     this.context = null;
     this.status = null;
-    this.statusDescription = null;
+    //this.statusDescription = null;
     this.channel = null;
     this.hint = null;
+    
+    this.getChannels = function(){
+        var result = [];
+        try{
+            var channels = asteriskManager.entityManager.channelManager.channels;
+            for(var channelKey in channels){
+                var channel = channels[channelKey];
+                if(channel.getExtension() == this)
+                    result.push(channel);
+            }
+        }catch(exc){ }
+        return result;
+    };
+
+    this.getPeer = function(){
+        var result = null;
+        try{
+            result = asteriskManager.entityManager.peerManager.peers[this.hint];
+        }catch(exc){ }
+        return result;
+    };
     
 };
 Extension.prototype = new Entity();
 
 Extension.prototype.toString = function(){
-    return 'Status: ' + this.status + '';
+    return '' + this.status + '';
 };
 
 Extension.State = {

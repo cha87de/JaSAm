@@ -9,11 +9,11 @@ var EntityManager = function(asteriskManagerParam){
     this.agentManager = new AgentManager(asteriskManager);
 
     // Mapping rules:
-    var ignoreEvents = ['NewCallerid', 'UserEvent', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
-    var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial'];
-    var extensionEvents = ['Newexten', 'ExtensionStatus'];
+    var ignoreEvents = ['Newexten', 'UserEvent', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
+    var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial', 'NewCallerid', 'Bridge', 'Unlink'];
+    var extensionEvents = ['ExtensionStatus'];
     var peerEvents = ['PeerStatus'];
-    var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded'];
+    var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded', 'QueueMemberPenalty'];
     var agentEvents = [];
     // What about: NewCallerid? UserEvent? NewAccountCode? Join? Leave? QueueCallerAbandon?
 
@@ -26,6 +26,7 @@ var EntityManager = function(asteriskManagerParam){
             
             if(arraySearch(ignoreEvents, eventName) >= 0){
                 // do nothing
+                //console.warn('ignore event:', eventName, responseItem);
             }else if(arraySearch(channelEvents, eventName) >= 0){
                 // Channel-Event
                 this.channelManager.handleEvent(responseItem);
@@ -43,7 +44,7 @@ var EntityManager = function(asteriskManagerParam){
                 this.agentManager.handleEvent(responseItem);                
             }else{
                 // Event unknown!
-                console.warn('Event unknown:', eventName);
+                console.warn('Event unknown:', eventName, responseItem);
             }                
         }
     };
@@ -90,4 +91,10 @@ EntityManager.prototype = new ListenerHandler();
 
 var ifDefined = function(value){
         return value ? value : null;
+};
+
+var setIfDefined = function(variable, value){
+    if(value)
+        variable = value;
+    return variable;
 };

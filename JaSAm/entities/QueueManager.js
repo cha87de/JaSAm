@@ -8,7 +8,7 @@ var QueueManager = function(asteriskManagerParam){
         var queue = null;
         var id = null;
         var agentId = null
-        var eventType = EntityEvent.Types.unknown;
+        var eventType = EntityEvent.Types.Update;
 
         if(responseItem.name == 'QueueMemberRemoved'){
             id = responseItem.content.queue;
@@ -24,7 +24,8 @@ var QueueManager = function(asteriskManagerParam){
        
             // update agent
             asteriskManager.entityManager.agentManager.handleEvent(responseItem);
-            delete queue.agents[agentId];            
+            delete queue.agents[agentId];
+            delete queue.agentPenalties[agentId];
         }else if(responseItem.name == 'QueueMemberAdded'){
             id = responseItem.content.queue;
             if(!this.queues[id]){
@@ -40,6 +41,16 @@ var QueueManager = function(asteriskManagerParam){
             // update agent
             asteriskManager.entityManager.agentManager.handleEvent(responseItem);
             queue.agents[agentId] = asteriskManager.entityManager.agentManager.agents[agentId];
+            queue.agentPenalties[agentId] = responseItem.content.penalty;
+        }else if(responseItem.name == 'QueueMemberPenalty'){
+            id = responseItem.content.queue;
+            if(!this.queues[id]){
+                // not possible
+                return;
+            }
+            queue = this.queues[id];
+            agentId = responseItem.content.location;
+            queue.agentPenalties[agentId] = responseItem.content.penalty;            
         }else{
             console.warn('unknown queue state' , responseItem.name);
         }
@@ -69,6 +80,14 @@ var QueueManager = function(asteriskManagerParam){
             
             callback.apply(scope, []);
         }, this);
+    };
+    
+    this.addAgent = function(queueId, agent, penalty){
+        if(!this.queues[queueId])
+            this.queues[queueId] = new Queue(queueId);
+        var queue = this.queues[queueId];
+        queue.agents[agent.id] = agent;
+        queue.agentPenalties[agent.id] = ifDefined(penalty);
     };
     
 }

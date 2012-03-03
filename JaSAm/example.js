@@ -49,6 +49,19 @@ function setExtension(){
         document.getElementById('controlOriginate').style.display = 'block';
         document.getElementById('controlQueue').style.display = 'block';
         document.getElementById('controlIncoming').style.display = 'block';
+        
+        // update incoming-info
+        var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
+        var callActive = false;
+        var infotext = "";
+        if(extension.status == Extension.State.incall){
+            callActive = true;
+            infotext = "In call! (" + extension.channel + ")";            
+        }else if(extension.status == Extension.State.ringing){
+            callActive = true;
+            infotext = "Phone Ringing! (" + extension.channel + ")";
+        }
+        listenIncomingCallOutput(callActive, infotext);
     }catch(exc){
         console.info(exc);
     }
@@ -61,11 +74,11 @@ function originateCall(){
         
         var action = asteriskManager.commander.createAction('originate');
         action.params = {
-            exten: remoteNumber,
+            Exten: remoteNumber,
             channel: 'SIP/' + asteriskManager.localUser,
-            context: 'default',
-            priority: 1//,
-            //callerid:  // outgoingCallerId
+            context: 'from-internal',
+            priority: 1,
+            callerid:  remoteNumber
         };
         action.execute(function(response){}, this);
         
@@ -84,8 +97,12 @@ function toggleQueue(){
         var actionCommand;
         
         if(queue.agents[agentId]){
-            // remove agent
-            actionCommand = 'queueremove';
+            if(queue.agentPenalties[agentId] != penalty)
+                // update agent
+                actionCommand = 'queuepenalty';
+            else
+                // remove agent
+                actionCommand = 'queueremove';
         }else{
             // add agent
             actionCommand = 'queueadd';
@@ -107,26 +124,38 @@ function toggleQueue(){
 
 function managerListener(managerStatus){
     if(managerStatus[0] === true){
+        // manager login successful
         showPanel(Panel.Output);
-        
+
+        // register listeners
         asteriskManager.entityManager.extensionManager.addListener(updateExtensions, this);
         asteriskManager.entityManager.peerManager.addListener(updatePeers, this);        
         asteriskManager.entityManager.channelManager.addListener(updateChannels, this);        
         asteriskManager.entityManager.queueManager.addListener(updateQueues, this);        
         asteriskManager.entityManager.agentManager.addListener(updateAgents, this);
-        
-        asteriskManager.entityManager.extensionManager.queryExtensions(updateExtensions, this);
+        asteriskManager.entityManager.channelManager.addListener(listenIncomingCall, this);
+
+        // query entities once
+        asteriskManager.entityManager.queryEntities(updateAll, this);
+        /*asteriskManager.entityManager.extensionManager.queryExtensions(updateExtensions, this);
         asteriskManager.entityManager.peerManager.queryPeers(updatePeers, this);
         asteriskManager.entityManager.channelManager.queryChannels(updateChannels, this);
         asteriskManager.entityManager.queueManager.queryQueues(updateQueues, this);
-        asteriskManager.entityManager.agentManager.queryAgents(updateAgents, this);
-
-        asteriskManager.entityManager.channelManager.addListener(listenIncomingCall, this);
+        asteriskManager.entityManager.agentManager.queryAgents(updateAgents, this);*/   
 
         asteriskManager.eventConnector.enableListening(true);        
     }else{
+        // manager login unsuccessful / logout successful
         showPanel(Panel.Login);
     }
+}
+
+function updateAll(){
+    updateExtensions();
+    updatePeers();
+    updateChannels();
+    updateQueues();
+    updateAgents();
 }
 
 function updateExtensions(){
@@ -234,8 +263,10 @@ function updateQueues(){
     for(var id in queues){
         var queue = queues[id];
         var agents = "";
-        for(var agentKey in queue.agents){
-            agents += queue.agents[agentKey].id + " ";
+        var agentArr = queue.getAgents();
+        for(var agentKey in agentArr){
+            var agent = agentArr[agentKey];
+            agents += agent.id + " (" + queue.agentPenalties[agent.id] + ") ";
         }
         
         var row = document.createElement('tr');
@@ -263,16 +294,17 @@ function updateAgents(){
     
     for(var id in agents){
         var agent = agents[id];
-        var queues = "";
-        for(var queueKey in agent.queues)
-            queues += agent.queues[queueKey].id + " ";        
+        var queuesOutput = "";
+        var queues = agent.getQueues();
+        for(var queueKey in queues)
+            queuesOutput += queues[queueKey].id + " ";        
         
         var row = document.createElement('tr');
         var column1 = document.createElement('td');
         column1.innerHTML = id;
         
         var column2 = document.createElement('td');
-        column2.innerHTML = agent + "<br/>Queues: " + queues;
+        column2.innerHTML = agent + "<br/>Queues: " + queuesOutput;
         
         row.appendChild(column1);
         row.appendChild(column2);
@@ -285,24 +317,32 @@ function updateAgents(){
 function listenIncomingCall(entityEvent){
     entityEvent = entityEvent[0];
     if(entityEvent.entity && entityEvent.entity.calleridnum == asteriskManager.localUser){
-        // local phone ringing or in call!
+        // local phone action!
         if(entityEvent.type == EntityEvent.Types.New || entityEvent.type == EntityEvent.Types.Update){
-            document.getElementById('controlIncomingNothing').style.display = 'none';
-            document.getElementById('controlIncomingNewCall').style.display = 'block';      
-            
+            var output = "";
             if(entityEvent.entity.channelstate == 5)
-                document.getElementById('controlIncomingCallInfo').innerHTML = "Phone Ringing!";
+                output = "Phone Ringing!";
             else
-                document.getElementById('controlIncomingCallInfo').innerHTML = "In call!";
+                output = "In call!";
+            output += " (" + entityEvent.entity.connectedlinenum + ")";
+            listenIncomingCallOutput(true, output);
         }else if(entityEvent.type == EntityEvent.Types.Remove){
+            listenIncomingCallOutput(false, "");
+        }else{
+            listenIncomingCallOutput(true, "unknown!");
+        }
+    }
+}
+
+function listenIncomingCallOutput(showIncoming, output){
+    if(showIncoming){
+            document.getElementById('controlIncomingNothing').style.display = 'none';
+            document.getElementById('controlIncomingNewCall').style.display = 'block';                  
+            document.getElementById('controlIncomingCallInfo').innerHTML = output;
+    }else{
             document.getElementById('controlIncomingNothing').style.display = 'block';
             document.getElementById('controlIncomingNewCall').style.display = 'none';            
             document.getElementById('controlIncomingCallInfo').innerHTML = "";
-        }else{
-            document.getElementById('controlIncomingNothing').style.display = 'none';
-            document.getElementById('controlIncomingNewCall').style.display = 'block';            
-            document.getElementById('controlIncomingCallInfo').innerHTML = "unknown!";
-        }
     }
 }
 

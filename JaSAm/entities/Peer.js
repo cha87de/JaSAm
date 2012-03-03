@@ -1,5 +1,6 @@
 
-var Peer = function(id){
+var Peer = function(id, asteriskManagerParam){
+    var asteriskManager = asteriskManagerParam;
     
     this.type = Entity.Types.Peer;
 
@@ -10,11 +11,23 @@ var Peer = function(id){
     this.ipport = null;
     this.status = null;    
     
+    this.getExtension = function(){
+        try{
+            var extensions = asteriskManager.entityManager.extensionManager.extensions;
+            for(var extensionKey in extensions){
+                var extension = extensions[extensionKey];
+                if(extension.getPeer().id == this.id)
+                    return extension;
+            }
+            return null;
+        }catch(exc){ return null; }
+    }
+    
 };
 Peer.prototype = new Entity();
 
 Peer.prototype.toString = function(){
-    return 'IP: ' + this.ipadress + ':' + this.ipport + ', Status: ' + this.status + '';
+    return '' + this.ipadress + ':' + this.ipport + ', ' + this.status;
 };
 
 Peer.Types = {
@@ -25,7 +38,6 @@ Peer.State = {
     unreachable: 'unreachable',
     unknown: 'unknown',
     registered: 'registered',
-    reachable: 'reachable',
-    unreachable: 'unreachable'
+    reachable: 'reachable'
     // more?
 };

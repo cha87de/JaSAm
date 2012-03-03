@@ -9,26 +9,30 @@ var ChannelManager = function(asteriskManagerParam){
         var id = null;
         var eventType = EntityEvent.Types.unknown;
 
-        if(responseItem.name == 'Newchannel' || responseItem.name == 'Newstate' || responseItem.name == 'Dial'){
+        if(responseItem.name == 'Newchannel' || responseItem.name == 'Newstate' || responseItem.name == 'Dial' || responseItem.name == 'NewCallerid'){
             id = responseItem.content.channel;
             if(!this.channels[id]){
-                this.channels[id] = new Channel(id);
+                this.channels[id] = new Channel(id, asteriskManager);
                 eventType = EntityEvent.Types.New;
             }else{
                 eventType = EntityEvent.Types.Update;
             }
 
             channel = this.channels[id];
-            channel.calleridname = ifDefined(responseItem.content.calleridname);
-            channel.calleridnum = ifDefined(responseItem.content.calleridnum);
-            channel.channelstate = ifDefined(responseItem.content.channelstate);
-            channel.channelstatedesc = ifDefined(responseItem.content.channelstatedesc);
-            channel.uniqueid = ifDefined(responseItem.content.uniqueid);
-            channel.context = ifDefined(responseItem.content.context);
-            channel.extension = ifDefined(responseItem.content.extension);
-            channel.priority  = ifDefined(responseItem.content.priority);
-            channel.duration = ifDefined(responseItem.content.seconds);
-            
+            channel.calleridname = setIfDefined(channel.calleridname, responseItem.content.calleridname);
+            channel.calleridnum = setIfDefined(channel.calleridnum, responseItem.content.calleridnum);
+            channel.uniqueid = setIfDefined(channel.uniqueid, responseItem.content.uniqueid);
+            channel.context = setIfDefined(channel.context, responseItem.content.context);
+            channel.exten = setIfDefined(channel.exten, responseItem.content.exten);
+            channel.priority  = setIfDefined(channel.priority, responseItem.content.priority);
+            channel.duration = setIfDefined(channel.duration, responseItem.content.seconds);
+            channel.connectedlinename = setIfDefined(channel.connectedlinename, responseItem.content.connectedlinename);
+            channel.connectedlinenum = setIfDefined(channel.connectedlinenum, responseItem.content.connectedlinenum);
+
+            if(responseItem.content.channelstate){
+                channel.state = Channel.StateTranslations[responseItem.content.channelstate];
+            }
+
         }else if(responseItem.name == 'Hangup'){
             id = responseItem.content.channel;
             if(!this.channels[id]){
@@ -37,7 +41,20 @@ var ChannelManager = function(asteriskManagerParam){
                 eventType = EntityEvent.Types.Remove;
             }
             channel = this.channels[id];
-            delete this.channels[id];            
+            delete this.channels[id];    
+        }else if(responseItem.name == 'Bridge' || responseItem.name == 'Unlink'){
+            id = responseItem.content.channel1;
+            if(!this.channels[id]){
+                // not possible
+                return;
+            }else{
+                eventType = EntityEvent.Types.Update;
+            }
+            channel = this.channels[id];
+            var channel2 = this.channels[responseItem.content.channel2];
+            
+            // bridge/unlink channel and channel2
+            // TODO
         }else{
             console.warn('unknown channel state' , responseItem.name);
         }
@@ -50,22 +67,38 @@ var ChannelManager = function(asteriskManagerParam){
         var action = new Action(asteriskManager);
         action.name = 'status';
         action.execute(function(response){
-            this.channels = {};
             for(var channelentryKey in response.body){
                 var channelentry = response.body[channelentryKey].content;
                 var id = channelentry.channel;
-                var channel = new Channel(id);
+
+                if(!this.channels[id]){
+                    this.channels[id] = new Channel(id, asteriskManager);
+                }
+                var channel = this.channels[id];
+                
                 channel.calleridname = ifDefined(channelentry.calleridname);
                 channel.calleridnum = ifDefined(channelentry.calleridnum);
-                channel.channelstate = ifDefined(channelentry.channelstate);
-                channel.channelstatedesc = ifDefined(channelentry.channelstatedesc);
                 channel.uniqueid = ifDefined(channelentry.uniqueid);
                 channel.context = ifDefined(channelentry.context);
-                channel.extension = ifDefined(channelentry.extension);
+                channel.exten = ifDefined(channelentry.exten);
                 channel.priority  = ifDefined(channelentry.priority);
                 channel.duration = ifDefined(channelentry.seconds);
-                
-                this.channels[id] = channel;
+                channel.connectedlinename = ifDefined(channelentry.connectedlinename);
+                channel.connectedlinenum = ifDefined(channelentry.connectedlinenum);
+                if(channelentry.channelstate){
+                    channel.state = Channel.StateTranslations[channelentry.channelstate];
+                }else if(channelentry.state){
+                    channel.state = Channel.StateTranslations[channelentry.state.toLowerCase()];
+                }else{
+                    channel.state = Channel.State.unknown;
+                }
+
+                if(channel.getExtension()){
+                    if(channel.state == Channel.State.ringing)
+                        channel.getExtension().status = Extension.State.ringing;
+                    else if(channel.state == Channel.State.up)
+                        channel.getExtension().status = Extension.State.incall
+                }
             }
             
             callback.apply(scope, []);

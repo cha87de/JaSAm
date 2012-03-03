@@ -10,7 +10,7 @@ var PeerManager = function(asteriskManagerParam){
         if(responseItem.name == 'PeerStatus'){
             var id = responseItem.content.peer;
             if(!this.peers[id]){
-                this.peers[id] = new Peer(id);
+                this.peers[id] = new Peer(id, asteriskManager);
                 eventType = EntityEvent.Types.New;
             }else{
                 eventType = EntityEvent.Types.Update;
@@ -25,9 +25,6 @@ var PeerManager = function(asteriskManagerParam){
             peer.ipadress = responseItem.content.address ? responseItem.content.address : null;
             peer.ipport = responseItem.content.port ? responseItem.content.port : null;
 
-            peer = this.peers[id];  
-        }else if(false){
-            // ...
         }else{
             console.warn('unknown peer state' , responseItem.name);
         }
@@ -40,20 +37,24 @@ var PeerManager = function(asteriskManagerParam){
         var action = new Action(asteriskManager);
         action.name = 'sippeers';
         action.execute(function(response){
-            this.peers = {};
             for(var peerentryKey in response.body){
                 var peerentry = response.body[peerentryKey].content;
+                
                 var id = peerentry.channeltype + '/' + peerentry.objectname;
                 var status = peerentry.status;
                 if(status.indexOf("OK") >= 0)
                     status = 'registered';
                 status = status.toLowerCase();
-                var peer = new Peer(id);
+                
+                if(!this.peers[id]){
+                    this.peers[id] = new Peer(id, asteriskManager);
+                }
+                var peer = this.peers[id];                
+                
                 peer.status = Peer.State[status];
                 peer.ipadress = peerentry.ipaddress;
                 peer.ipport = peerentry.ipport;
                 peer.name = peerentry.objectname;
-                this.peers[id] = peer;
             }
             
             callback.apply(scope, []);

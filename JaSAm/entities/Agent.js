@@ -1,5 +1,6 @@
 
-var Agent = function(id){
+var Agent = function(id, asteriskManagerParam){
+    var asteriskManager = asteriskManagerParam;
     
     this.type = Entity.Types.Agent;
     
@@ -7,14 +8,38 @@ var Agent = function(id){
     this.name = null;
     this.status = null;
 
-    this.queues = {};
-    
     this.hasQueues = function(){
-        for(var q in this.queues){
-            return true;
-        }
-        return false;
-    }
+        return this.getQueues().length > 0;
+    };
+    
+    this.getQueues = function(){
+        var result = [];
+        try{
+            var queues = asteriskManager.entityManager.queueManager.queues;
+            for(var queueKey in queues){
+                var queue = queues[queueKey];
+                if(queue.agents[this.id])
+                    result.push(queue);
+            }
+        }catch(exc){ }
+        return result;        
+    };
+    
+    this.getPeer = function(){
+        try{
+            return asteriskManager.entityManager.peerManager.peers[this.id];
+        }catch(exc){
+            return null;
+        }        
+    };
+    
+    this.getPeer = function(){
+        try{
+            return asteriskManager.entityManager.peerManager.peers[this.id];
+        }catch(exc){
+            return null;
+        }        
+    };    
 };
 Agent.prototype = new Entity();
 
