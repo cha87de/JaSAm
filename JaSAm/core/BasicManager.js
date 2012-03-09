@@ -150,3 +150,9 @@ var BasicManager = function(){
         return obj;
     };    
 };
+
+BasicManager.print = function(){
+    if(BasicManager.debugMode){
+        console.info(arguments);
+    }
+}

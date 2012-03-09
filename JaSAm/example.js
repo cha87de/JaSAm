@@ -2,6 +2,8 @@
 var asteriskManager = null;
 // MAIN FUNCTION!
 function main(){
+    BasicManager.debugMode = true;
+    
     // register dom-eventlistener
     document.getElementById('loginForm').onsubmit = doLogin;
     document.getElementById('controlExtensionForm').onsubmit = setExtension;

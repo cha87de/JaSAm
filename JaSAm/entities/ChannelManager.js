@@ -56,7 +56,7 @@ var ChannelManager = function(asteriskManagerParam){
             // bridge/unlink channel and channel2
             // TODO
         }else{
-            console.warn('unknown channel state' , responseItem.name);
+            BasicManager.print('unknown channel state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, channel);
         asteriskManager.entityManager.handleCollectedEvents(event);

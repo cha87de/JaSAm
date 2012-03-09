@@ -44,7 +44,7 @@ var EntityManager = function(asteriskManagerParam){
                 this.agentManager.handleEvent(responseItem);                
             }else{
                 // Event unknown!
-                console.warn('Event unknown:', eventName, responseItem);
+                BasicManager.print('Event unknown:', eventName, responseItem);
             }                
         }
     };

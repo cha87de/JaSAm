@@ -21,7 +21,7 @@ var ExtensionManager = function(asteriskManagerParam){
             extension.hint = responseItem.content.hint;
             extension.context = responseItem.content.context;
         }else{
-            console.warn('unknown extension state' , responseItem.name);
+            BasicManager.print('unknown extension state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, extension);
         asteriskManager.entityManager.handleCollectedEvents(event);

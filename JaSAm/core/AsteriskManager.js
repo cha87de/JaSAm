@@ -34,7 +34,7 @@ var AsteriskManager = function(manager){
         try{
             this.commander.createAction('ping').execute();
         }catch(o){
-            console.info('exception ping ', o);
+            BasicManager.print('exception ping ', o)
         }
     };
 
