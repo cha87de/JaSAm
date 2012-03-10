@@ -11,6 +11,8 @@ var Extension = function(id, asteriskManagerParam){
     this.channel = null;
     this.hint = null;
     
+    this.doNotDisturb = false;
+    
     this.getChannels = function(){
         var result = [];
         try{
@@ -36,7 +38,7 @@ var Extension = function(id, asteriskManagerParam){
 Extension.prototype = new Entity();
 
 Extension.prototype.toString = function(){
-    return '' + this.status + '';
+    return '' + this.status + '' + (this.doNotDisturb ? ' DND' : '');
 };
 
 Extension.State = {

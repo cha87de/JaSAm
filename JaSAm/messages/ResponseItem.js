@@ -5,3 +5,6 @@ var ResponseItem = function(){
     this.content = null;
 
 };
+ResponseItem.prototype.toString = function(){
+    return "[ResponseItem " + this.name + "]: " + this.content;
+}

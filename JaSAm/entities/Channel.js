@@ -13,6 +13,7 @@ var Channel = function(id, asteriskManagerParam){
     this.calleridnum = null;
     this.calleridname = null;
     this.duration = null;
+    this.bridgedChannelId = null;
     
     this.connectedlinename = null;
     this.connectedlinenum = null;
@@ -29,7 +30,7 @@ Channel.prototype = new Entity();
 Channel.prototype.toString = function(){
     return 'Extension: ' + this.calleridnum + '(' + this.calleridname + '), to: ' + 
         this.exten + ' / ' + this.connectedlinenum + '(' + this.connectedlinename + ')' +
-        ' (' + this.state + ')';
+        ' (' + this.state + ') Bridged to channel ' + this.bridgedChannelId;
 };
 
 Channel.State = {

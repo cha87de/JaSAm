@@ -9,6 +9,10 @@ function main(){
     document.getElementById('controlExtensionForm').onsubmit = setExtension;
     document.getElementById('controlOriginateForm').onsubmit = originateCall;
     document.getElementById('controlQueueForm').onsubmit = toggleQueue;
+    document.getElementById('controlIncomingCallHangup').onclick = callHangup;
+    document.getElementById('controlIncomingCallTransferForm').onsubmit = callTransfer;
+    document.getElementById('controlIncomingCallMute').onclick = callMute;
+    
     
     // show login-form
     showPanel(Panel.Login);
@@ -58,10 +62,10 @@ function setExtension(){
         var infotext = "";
         if(extension.status == Extension.State.incall){
             callActive = true;
-            infotext = "In call! (" + extension.channel + ")";            
+            infotext = "In call! (" + extension.getChannels()[0].connectedlinenum + ")";            
         }else if(extension.status == Extension.State.ringing){
             callActive = true;
-            infotext = "Phone Ringing! (" + extension.channel + ")";
+            infotext = "Phone Ringing! (" + extension.getChannels()[0].connectedlinenum + ")";
         }
         listenIncomingCallOutput(callActive, infotext);
     }catch(exc){
@@ -82,12 +86,72 @@ function originateCall(){
             priority: 1,
             callerid:  remoteNumber
         };
-        action.execute(function(response){}, this);
+        action.execute(simpleErrorCallback, this);
         
     }catch(exc){
         console.info(exc);
     }
     return false;
+}
+
+function callHangup(){
+    try{
+        var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
+        var channels = extension.getChannels();
+        for(var channelKey in channels){
+            var channel = channels[channelKey];
+            var action = asteriskManager.commander.createAction('hangup');
+            action.params = {
+                channel: channel.id
+            };
+            action.execute(simpleErrorCallback, this);
+        }
+    }catch(exc){
+        console.info(exc);
+    }
+}
+
+function callTransfer(){
+    try{
+        var remoteNumber = document.getElementById('controlIncomingCallTransferTo').value;
+        
+        var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
+        var channels = extension.getChannels();
+        for(var channelKey in channels){
+            var channel = channels[channelKey];
+            var action = asteriskManager.commander.createAction('redirect');
+            action.params = {
+                channel: channel.bridgedChannelId,
+                Exten: remoteNumber,
+                context: 'from-internal',
+                priority: 1 
+            };
+            action.execute(simpleErrorCallback, this);
+        }
+    }catch(exc){
+        console.info(exc);
+    }
+    return false;
+}
+
+function callMute(){
+    try{
+        var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
+        var channels = extension.getChannels();
+        for(var channelKey in channels){
+            var channel = channels[channelKey];
+            var action = asteriskManager.commander.createAction('MuteAudio');
+            action.params = {
+                channel: channel.bridgedChannelId, // channel to park
+                Direction: 'all',
+                State: channel.muted ? 'off' : 'on'
+            };
+            channel.muted = channel.muted ? false : true;
+            action.execute(simpleErrorCallback, this);
+        }
+    }catch(exc){
+        console.info(exc);
+    }
 }
 
 function toggleQueue(){
@@ -117,7 +181,7 @@ function toggleQueue(){
             'interface': agentId,
             penalty: penalty
         };
-        action.execute(function(response){}, this);
+        action.execute(simpleErrorCallback, this);
     }catch(exc){
         console.info('exception', exc);
     }
@@ -349,6 +413,17 @@ function listenIncomingCallOutput(showIncoming, output){
 }
 
 // utilitiy-functions follows ...
+
+function simpleErrorCallback(response){
+    if(!response.isSuccess()){
+        var msg = "";
+        for(var key in response.head){
+            var value = response.head[key];
+            msg += key + ": " + value + "\n";
+        }
+        alert("SimpleErrorCallback\n\n" + msg);
+    }
+}
 
 function showPanel(id){
     document.getElementById('waitPanel').style.display = (id == 1 ? 'block' : 'none');            

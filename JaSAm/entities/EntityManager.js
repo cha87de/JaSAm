@@ -23,26 +23,34 @@ var EntityManager = function(asteriskManagerParam){
         for(var key in response.body){
             var responseItem = response.body[key];
             var eventName = responseItem.name;
-            
+            var unknown = true;
             if(arraySearch(ignoreEvents, eventName) >= 0){
                 // do nothing
-                //console.warn('ignore event:', eventName, responseItem);
+                unknown = false;
+                BasicManager.print('ignore event:', eventName, responseItem);
             }else if(arraySearch(channelEvents, eventName) >= 0){
                 // Channel-Event
+                unknown = false;
                 this.channelManager.handleEvent(responseItem);
             }else if(arraySearch(extensionEvents, eventName) >= 0){
                 // Extension-Event
+                unknown = false;
                 this.extensionManager.handleEvent(responseItem);
             }else if(arraySearch(peerEvents, eventName) >= 0){                
                 // Peer-Event
+                unknown = false;
                 this.peerManager.handleEvent(responseItem);
             }else if(arraySearch(queueEvents, eventName) >= 0){                
                 // Queue-Event
+                unknown = false;
                 this.queueManager.handleEvent(responseItem);
             }else if(arraySearch(agentEvents, eventName) >= 0){                
                 // Agent-Event
+                unknown = false;
                 this.agentManager.handleEvent(responseItem);                
-            }else{
+            }
+
+            if(unknown){
                 // Event unknown!
                 BasicManager.print('Event unknown:', eventName, responseItem);
             }                

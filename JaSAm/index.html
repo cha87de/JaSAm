@@ -64,6 +64,22 @@
                         </div>
                         <div id="controlIncomingNewCall" style="display:none;">
                             <span id="controlIncomingCallInfo"></span>
+                            <table border="0">
+                                <tr>
+                                    <td>
+                                        <input type="button" value="hangup" id="controlIncomingCallHangup"/>                                        
+                                    </td>
+                                    <td>
+                                        <form id="controlIncomingCallTransferForm" action="#" method="post">
+                                            <input type="text" name="controlQueueId" id="controlIncomingCallTransferTo" value="0"  size="1" />
+                                            <input type="submit" value="transfer"/>
+                                        </form>                                        
+                                    </td>
+                                    <td>
+                                        <input type="button" value="mute" id="controlIncomingCallMute"/>                                        
+                                    </td>                                    
+                                </tr>
+                            </table>
                         </div>                        
                     </td>                    
                 </tr>

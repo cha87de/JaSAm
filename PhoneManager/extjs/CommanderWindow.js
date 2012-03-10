@@ -31,14 +31,16 @@ CommanderWindow = Ext.extend(CommanderWindowUi, {
     
     startup: function(){
         // Lade mögliche Aktionen in ComboBox
-        var commands = this.asteriskManager.commander.getActions();
-        var commandsArray = new Array();
-        
-        for(var cmd in commands){
-            commandsArray.push([cmd, '']);
-        }
-        
-        this.actionCombo.getStore().loadData(commandsArray);
+        this.asteriskManager.commander.queryServerActions(function(actions){
+            var commands = this.asteriskManager.commander.getActions();
+            var commandsArray = new Array();
+
+            for(var cmd in commands){
+                commandsArray.push([cmd, '']);
+            }
+
+            this.actionCombo.getStore().loadData(commandsArray);
+        }, this);
     },
     
     selectAction: function(combo, record, index){
