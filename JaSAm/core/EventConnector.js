@@ -1,3 +1,4 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
 
 var EventConnector = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -31,3 +32,5 @@ var EventConnector = function(asteriskManagerParam){
 
 };
 EventConnector.prototype = new ListenerHandler();
+
+exports.EventConnector = EventConnector;

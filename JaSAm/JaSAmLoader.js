@@ -74,3 +74,9 @@ JaSAmLoader.loadingcallback = function(){
     else // load next file
         JaSAmLoader.loadFile(JaSAmLoader.files[JaSAmLoader.filesLoaded], JaSAmLoader.loadingcallback);
 }
+
+// nodejs implements this, browserjs does not need it.
+function require(){
+    return this;
+}
+exports = {};

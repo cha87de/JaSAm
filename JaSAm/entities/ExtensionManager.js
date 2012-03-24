@@ -1,3 +1,7 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
+var Extension = require('../entities/Extension.js').Extension;
+var Action = require('../messages/Action.js').Action;
 
 var ExtensionManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -56,3 +60,5 @@ var ExtensionManager = function(asteriskManagerParam){
     
 }
 ExtensionManager.prototype = new ListenerHandler();
+
+exports.ExtensionManager = ExtensionManager;

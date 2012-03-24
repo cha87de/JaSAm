@@ -1,3 +1,7 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
+var Agent = require('../entities/Agent.js').Agent;
+var Action = require('../messages/Action.js').Action;
 
 var AgentManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -78,3 +82,5 @@ var AgentManager = function(asteriskManagerParam){
 
 }
 AgentManager.prototype = new ListenerHandler();
+
+exports.AgentManager = AgentManager;

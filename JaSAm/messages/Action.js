@@ -38,3 +38,5 @@ var Action = function(asteriskManagerParam){
     }
     
 };
+
+exports.Action = Action;

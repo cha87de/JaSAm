@@ -13,3 +13,5 @@ Entity.Types = {
     Queue: 'queue',
     unknown: 'unknown' 
 };
+
+exports.Entity = Entity;

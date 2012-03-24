@@ -1,3 +1,7 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
+var Channel = require('../entities/Channel.js').Channel;
+var Action = require('../messages/Action.js').Action;
 
 var ChannelManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -107,3 +111,5 @@ var ChannelManager = function(asteriskManagerParam){
     
 }
 ChannelManager.prototype = new ListenerHandler();
+
+exports.ChannelManager = ChannelManager;

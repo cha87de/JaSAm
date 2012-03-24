@@ -1,3 +1,6 @@
+var AjaxCall = require('../core/AjaxCall.js').AjaxCall;
+var ResponseItem = require('../messages/ResponseItem.js').ResponseItem;
+var Response = require('../messages/Response.js').Response;
 
 /**
  * AbstractAsteriskManager
@@ -6,7 +9,9 @@ var BasicManager = function(){
     
     var baseUrl = '/asterisk/mxml';
     var ajaxCall = new AjaxCall();
-    
+    var sessionId = null;
+    var parser = null;
+
     /**
      * setBaseUrl
      * PUBLIC FUNCTION
@@ -15,7 +20,7 @@ var BasicManager = function(){
     this.setBaseUrl = function(url){
         baseUrl = url;
     };
-
+    
     /**
      * This Function sends an action with an parameter-object to the asterisk-server. 
      * PUBLIC FUNCTION
@@ -28,20 +33,37 @@ var BasicManager = function(){
         var command = parameter ? parameter : {};
         command.action = action;
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        ajaxCall.request('GET', baseUrl, command, function(ajaxResponse){
+        ajaxCall.request('GET', baseUrl, command, sessionId, function(ajaxResponse){
+            //save new sessionid
+            if(typeof(document) == "undefined" && sessionId == null){//called by nodejs
+                var tmp = ajaxResponse.getAllResponseHeaders().split("\n");
+                for(var index in tmp){
+                    if(tmp[index].indexOf("set-cookie") == 0){
+                        sessionId = tmp[index].split("\"")[1];
+                        break;
+                    }
+                }
+            }
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
             }else{
                 // Parse XMLDoc ...
-                var parser=new DOMParser();
+                if(parser == null){
+                    if(typeof(document) == "undefined"){//called by nodejs
+                        parser = require("libxml");
+                    }else{
+                        parser =new DOMParser();    
+                    }
+                }
+                
                 var str = ajaxResponse.responseText.replace(/\*/g, '');
                 xmlDoc=parser.parseFromString(str,"text/xml");
             }
             var result = parseData(xmlToJson(xmlDoc));
             var response = parseResponse(result);
             callback.apply(scope, [response]);
-        }, this);      
+        }, this);
     };
 
     this.execute = function(action){
@@ -120,7 +142,7 @@ var BasicManager = function(){
             if (xml.attributes.length > 0) {
                 obj["@attributes"] = {};
                 for (var j = 0; j < xml.attributes.length; j++) {
-                    var attribute = xml.attributes.item(j);
+                    var attribute = xml.attributes[j];
                     obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
                 }
             }
@@ -129,9 +151,9 @@ var BasicManager = function(){
         }
 
         // do children
-        if (xml.hasChildNodes()) {
+        if (xml.hasChildNodes) {
             for(var i = 0; i < xml.childNodes.length; i++) {
-                var item = xml.childNodes.item(i);
+                var item = xml.childNodes[i];
                 var nodeName = item.nodeName;
                 if (typeof(obj[nodeName]) == "undefined") {
                     obj[nodeName] = xmlToJson(item);
@@ -150,3 +172,5 @@ var BasicManager = function(){
         return obj;
     };    
 };
+
+exports.BasicManager = BasicManager;

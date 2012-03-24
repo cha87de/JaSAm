@@ -11,3 +11,5 @@ EntityEvent.Types = {
     Remove: 'remove',
     unknown: 'unknown' 
 };
+
+exports.EntityEvent = EntityEvent;

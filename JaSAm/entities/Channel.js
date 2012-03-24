@@ -1,3 +1,4 @@
+var Entity = require('../entities/Entity.js').Entity;
 
 var Channel = function(id, asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -44,3 +45,5 @@ Channel.StateTranslations = {
     'ringing': Channel.State.ringing,
     'up': Channel.State.up    
 };
+
+exports.Channel = Channel;

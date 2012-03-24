@@ -1,3 +1,9 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var ExtensionManager = require('../entities/ExtensionManager.js').ExtensionManager;
+var ChannelManager = require('../entities/ChannelManager.js').ChannelManager;
+var PeerManager = require('../entities/PeerManager.js').PeerManager;
+var QueueManager = require('../entities/QueueManager.js').QueueManager;
+var AgentManager = require('../entities/AgentManager.js').AgentManager;
 
 var EntityManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -89,12 +95,14 @@ var EntityManager = function(asteriskManagerParam){
 }
 EntityManager.prototype = new ListenerHandler();
 
-var ifDefined = function(value){
+ifDefined = function(value){
         return value ? value : null;
 };
 
-var setIfDefined = function(variable, value){
+setIfDefined = function(variable, value){
     if(value)
         variable = value;
     return variable;
 };
+
+exports.EntityManager = EntityManager;

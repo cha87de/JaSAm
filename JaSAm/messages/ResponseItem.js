@@ -5,3 +5,5 @@ var ResponseItem = function(){
     this.content = null;
 
 };
+
+exports.ResponseItem = ResponseItem;

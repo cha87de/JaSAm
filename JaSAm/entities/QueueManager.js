@@ -1,4 +1,8 @@
-
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var Queue = require('../entities/Queue.js').Queue;
+var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
+var Action = require('../messages/Action.js').Action;
+    
 var QueueManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
     
@@ -64,18 +68,22 @@ var QueueManager = function(asteriskManagerParam){
         action.name = 'queuesummary';
         action.execute(function(response){
             //this.queues = {};
-            for(var queueentryKey in response.body){
-                var queueentry = response.body[queueentryKey].content;
-                var id = queueentry.queue;
-                if(!this.queues[id]){
-                    this.queues[id] = new Queue(id);
-                }
-                var queue = this.queues[id];                
-                queue.available = queueentry.available;
-                queue.loggedIn = queueentry.loggedin;
-                queue.callers = queueentry.callers;
+            if(response.isSuccess()){
+                for(var queueentryKey in response.body){
+                    var queueentry = response.body[queueentryKey].content;
+                    var id = queueentry.queue;
+                    if(!this.queues[id]){
+                        this.queues[id] = new Queue(id);
+                    }
+                    var queue = this.queues[id];                
+                    queue.available = queueentry.available;
+                    queue.loggedIn = queueentry.loggedin;
+                    queue.callers = queueentry.callers;
 
-                this.queues[id] = queue;
+                    this.queues[id] = queue;
+                }
+            }else{
+                console.warn(response);
             }
             
             callback.apply(scope, []);
@@ -92,3 +100,5 @@ var QueueManager = function(asteriskManagerParam){
     
 }
 QueueManager.prototype = new ListenerHandler();
+
+exports.QueueManager = QueueManager;

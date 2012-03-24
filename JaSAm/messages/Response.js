@@ -15,3 +15,5 @@ var Response = function(){
             return false;
     }
 };
+
+exports.Response = Response;

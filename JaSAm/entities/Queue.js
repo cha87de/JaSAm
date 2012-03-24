@@ -1,3 +1,4 @@
+var Entity = require('../entities/Entity.js').Entity;
 
 var Queue = function(id, asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -34,3 +35,5 @@ Queue.prototype = new Entity();
 Queue.prototype.toString = function(){
     return 'LoggedIn: ' + this.loggedIn + ', Available: ' + this.available + ', callers: ' + this.callers;
 };
+
+exports.Queue = Queue;

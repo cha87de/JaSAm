@@ -1,6 +1,8 @@
 /**
  * 
  */
+ XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 var AjaxCall = function(){
     var activeX = ['Msxml2.XMLHTTP.6.0',
     'Msxml2.XMLHTTP.3.0',
@@ -40,11 +42,12 @@ var AjaxCall = function(){
     * @param method <string> ...
     * @param uri <string> ...
     * @param params <object> ...
+    * @param sessionId <int> ...
     * @param callback <function> ...
     * @param scope <object> ...
     * @return <void>
     */        
-    this.request = function(method, uri, params, callback, scope){
+    this.request = function(method, uri, params, sessionId, callback, scope){
         var data = serialize(params);
         var connection = createConnection();
         var postData = null;
@@ -55,6 +58,8 @@ var AjaxCall = function(){
             postData = data;
 
         connection.open(method, uri, true);
+        if(sessionId != null)
+            connection.setRequestHeader('cookie', 'mansession_id="'+sessionId+'"; Version=1; Max-Age=50');
         connection.onreadystatechange = function() {
             if (connection.readyState==4) {
                 callback.apply(scope, [connection]);                    
@@ -63,3 +68,5 @@ var AjaxCall = function(){
         connection.send(postData);                 
     };
 };
+
+exports.AjaxCall = AjaxCall;

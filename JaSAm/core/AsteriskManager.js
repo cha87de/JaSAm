@@ -1,3 +1,7 @@
+var BasicManager = require('../core/BasicManager.js').BasicManager;
+var Commander = require('../core/Commander.js').Commander;
+var EventConnector = require('../core/EventConnector.js').EventConnector;
+var EntityManager = require('../entities/EntityManager.js').EntityManager;
 
 var AsteriskManager = function(manager){
     manager.setAsteriskManager(this);
@@ -40,3 +44,5 @@ var AsteriskManager = function(manager){
 
 };
 AsteriskManager.prototype = new BasicManager();
+
+exports.AsteriskManager = AsteriskManager;

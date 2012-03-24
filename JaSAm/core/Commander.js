@@ -1,3 +1,4 @@
+var Action = require('../messages/Action.js').Action;
 
 var Commander = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -71,3 +72,5 @@ var Commander = function(asteriskManagerParam){
     
     
 };
+
+exports.Commander = Commander;

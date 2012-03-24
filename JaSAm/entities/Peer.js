@@ -1,4 +1,5 @@
-
+var Entity = require('../entities/Entity.js').Entity;
+    
 var Peer = function(id, asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
     
@@ -41,3 +42,5 @@ Peer.State = {
     reachable: 'reachable'
     // more?
 };
+
+exports.Peer = Peer;

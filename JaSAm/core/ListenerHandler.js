@@ -30,3 +30,5 @@ var ListenerHandler = function(){
         }
     };
 }
+
+exports.ListenerHandler = ListenerHandler;

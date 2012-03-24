@@ -1,3 +1,4 @@
+var Entity = require('../entities/Entity.js').Entity;
 
 var Agent = function(id, asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -52,3 +53,5 @@ Agent.State = {
 Agent.prototype.toString = function(){
     return 'Name: ' + this.name + ', Status: ' + this.status;
 };
+
+exports.Agent = Agent;

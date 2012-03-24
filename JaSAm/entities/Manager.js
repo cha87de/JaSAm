@@ -1,3 +1,4 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
 
 var Manager = function(username, secret){
     var asteriskManager = null;
@@ -34,3 +35,5 @@ var Manager = function(username, secret){
     
 };
 Manager.prototype = new ListenerHandler();
+
+exports.Manager = Manager;

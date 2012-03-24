@@ -1,3 +1,7 @@
+var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var Peer = require('../entities/Peer.js').Peer;
+var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
+var Action = require('../messages/Action.js').Action;
 
 var PeerManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -63,3 +67,5 @@ var PeerManager = function(asteriskManagerParam){
     
 }
 PeerManager.prototype = new ListenerHandler();
+
+exports.PeerManager = PeerManager;

@@ -1,3 +1,4 @@
+var Entity = require('../entities/Entity.js').Entity;
 
 var Extension = function(id, asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
@@ -53,3 +54,5 @@ Extension.StateTranslations = {
     1: Extension.State.incall,
     8: Extension.State.ringing
 };
+
+exports.Extension = Extension;
