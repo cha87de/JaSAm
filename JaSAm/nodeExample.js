@@ -14,17 +14,21 @@ var Action = require('./messages/Action.js').Action;
 var asteriskManager = null;
 // MAIN FUNCTION!
 function main(){
-    console.info("start");
+
     var manager = new Manager("testmanager", "sehrsehrgeheim");
     
     manager.addListener(managerListener, manager);
 
     asteriskManager = new AsteriskManager(manager);
     asteriskManager.setBaseUrl('/asterisk/mxml');
+    var parser = require("libxml");
+    asteriskManager.setParser(parser);
+    var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
+    var ajaxCall = new NodeAjaxCall();
+    asteriskManager.setAjaxCall(ajaxCall);
         
     manager.login();
-    
-    console.info("stop");
+
 }
 
 

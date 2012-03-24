@@ -1,7 +1,7 @@
 /**
  * 
  */
- XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var AjaxCall = function(){
     var activeX = ['Msxml2.XMLHTTP.6.0',
@@ -11,7 +11,7 @@ var AjaxCall = function(){
     /**
      * 
      */
-    var createConnection = function(){
+    this.createConnection = function(){
         var http;
         try {
             http = new XMLHttpRequest();
@@ -30,7 +30,7 @@ var AjaxCall = function(){
     /**
      * 
      */    
-    var serialize = function(obj) {
+    this.serialize = function(obj) {
         var str = [];
         for(var p in obj)
             str.push(p + "=" + encodeURIComponent(obj[p]));
@@ -42,14 +42,13 @@ var AjaxCall = function(){
     * @param method <string> ...
     * @param uri <string> ...
     * @param params <object> ...
-    * @param sessionId <int> ...
     * @param callback <function> ...
     * @param scope <object> ...
     * @return <void>
     */        
-    this.request = function(method, uri, params, sessionId, callback, scope){
-        var data = serialize(params);
-        var connection = createConnection();
+    this.request = function(method, uri, params, callback, scope){
+        var data = this.serialize(params);
+        var connection = this.createConnection();
         var postData = null;
 
         if(method == 'GET')
@@ -58,8 +57,6 @@ var AjaxCall = function(){
             postData = data;
 
         connection.open(method, uri, true);
-        if(sessionId != null)
-            connection.setRequestHeader('cookie', 'mansession_id="'+sessionId+'"; Version=1; Max-Age=50');
         connection.onreadystatechange = function() {
             if (connection.readyState==4) {
                 callback.apply(scope, [connection]);                    

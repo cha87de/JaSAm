@@ -9,7 +9,6 @@ var BasicManager = function(){
     
     var baseUrl = '/asterisk/mxml';
     var ajaxCall = new AjaxCall();
-    var sessionId = null;
     var parser = null;
 
     /**
@@ -19,6 +18,24 @@ var BasicManager = function(){
      */
     this.setBaseUrl = function(url){
         baseUrl = url;
+    };
+    
+    /**
+     * setParser
+     * PUBLIC FUNCTION
+     * @param _parser <Object> Set specific parser
+     */
+    this.setParser = function(_parser){
+        parser = _parser;
+    };
+    
+    /**
+     * setAjaxCall
+     * PUBLIC FUNCTION
+     * @param _ajaxCall <Object> Set specific ajaxCall
+     */
+    this.setAjaxCall = function(_ajaxCall){
+        ajaxCall = _ajaxCall;
     };
     
     /**
@@ -33,28 +50,14 @@ var BasicManager = function(){
         var command = parameter ? parameter : {};
         command.action = action;
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        ajaxCall.request('GET', baseUrl, command, sessionId, function(ajaxResponse){
-            //save new sessionid
-            if(typeof(document) == "undefined" && sessionId == null){//called by nodejs
-                var tmp = ajaxResponse.getAllResponseHeaders().split("\n");
-                for(var index in tmp){
-                    if(tmp[index].indexOf("set-cookie") == 0){
-                        sessionId = tmp[index].split("\"")[1];
-                        break;
-                    }
-                }
-            }
+        ajaxCall.request('GET', baseUrl, command, function(ajaxResponse){
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
             }else{
                 // Parse XMLDoc ...
                 if(parser == null){
-                    if(typeof(document) == "undefined"){//called by nodejs
-                        parser = require("libxml");
-                    }else{
-                        parser =new DOMParser();    
-                    }
+                    parser = new DOMParser();    
                 }
                 
                 var str = ajaxResponse.responseText.replace(/\*/g, '');
