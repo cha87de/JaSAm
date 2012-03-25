@@ -4,6 +4,7 @@ var Action = function(asteriskManagerParam){
     
     this.name = null;
     this.params = null;
+    this.description = null;
     
     var response = null;
     var callback = null;
@@ -31,6 +32,8 @@ var Action = function(asteriskManagerParam){
     this.clone = function(){
         var action = new Action(asteriskManager);
         action.name = this.name;
+        action.description = this.description;
+        action.params = this.params;
         
         // more things to copy?
         

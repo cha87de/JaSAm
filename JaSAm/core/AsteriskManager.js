@@ -27,7 +27,7 @@ var AsteriskManager = function(manager){
         if(keepalive){
             var fkt = keepaliveAction;
             var self = this;
-            keepaliveTimer = setInterval(function(){fkt.call(self);}, 2000); // 2s, später 60s
+            keepaliveTimer = setInterval(function(){fkt.call(self);}, 6000); // 60s
         }else{
             clearInterval(keepaliveTimer);
             keepaliveTimer = null;
@@ -38,7 +38,7 @@ var AsteriskManager = function(manager){
         try{
             this.commander.createAction('ping').execute();
         }catch(o){
-            console.info('exception ping ', o);
+            BasicManager.print('exception ping ', o)
         }
     };
 

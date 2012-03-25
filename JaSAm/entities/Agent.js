@@ -10,7 +10,7 @@ var Agent = function(id, asteriskManagerParam){
     this.status = null;
 
     this.hasQueues = function(){
-        return this.getQueues().length > 0;
+        return this.getQueues().length > 1;
     };
     
     this.getQueues = function(){

@@ -56,7 +56,7 @@ var QueueManager = function(asteriskManagerParam){
             agentId = responseItem.content.location;
             queue.agentPenalties[agentId] = responseItem.content.penalty;            
         }else{
-            console.warn('unknown queue state' , responseItem.name);
+            BasicManager.print('unknown queue state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, queue);
         asteriskManager.entityManager.handleCollectedEvents(event);

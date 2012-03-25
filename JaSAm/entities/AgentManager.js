@@ -46,7 +46,7 @@ var AgentManager = function(asteriskManagerParam){
             agent.name = ifDefined(responseItem.content.membername);
             agent.status = ifDefined(responseItem.content.status);            
         }else{
-            console.warn('unknown agent state' , responseItem.name);
+            BasicManager.print('unknown agent state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, agent);
         asteriskManager.entityManager.handleCollectedEvents(event);

@@ -30,7 +30,7 @@ var PeerManager = function(asteriskManagerParam){
             peer.ipport = responseItem.content.port ? responseItem.content.port : null;
 
         }else{
-            console.warn('unknown peer state' , responseItem.name);
+            BasicManager.print('unknown peer state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, peer);
         asteriskManager.entityManager.handleCollectedEvents(event);

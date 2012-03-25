@@ -176,4 +176,8 @@ var BasicManager = function(){
     };    
 };
 
-exports.BasicManager = BasicManager;
+BasicManager.print = function(){
+    if(BasicManager.debugMode){
+        console.info(arguments);
+    }
+}

@@ -25,7 +25,7 @@ var ExtensionManager = function(asteriskManagerParam){
             extension.hint = responseItem.content.hint;
             extension.context = responseItem.content.context;
         }else{
-            console.warn('unknown extension state' , responseItem.name);
+            BasicManager.print('unknown extension state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, extension);
         asteriskManager.entityManager.handleCollectedEvents(event);
@@ -52,6 +52,24 @@ var ExtensionManager = function(asteriskManagerParam){
                 var extension = this.extensions[id];
                 extension.status = Extension.State[status];
                 extension.hint = peerentry.channeltype + '/' + peerentry.objectname;
+
+                var action2 = new Action(asteriskManager);
+                action2.name = 'dbget';
+                action2.params = {
+                    family: 'DND',
+                    key: id
+                };
+                action2.execute(function(response){
+                    if(response && response.body && response.body[0] && response.body[0].content && response.body[0].content.val == "YES"){
+                        var extension = this.extensions[response.body[0].content.key];
+                        extension.doNotDisturb = true;
+
+                        var event = new EntityEvent(EntityEvent.Types.Update, extension);
+                        asteriskManager.entityManager.handleCollectedEvents(event);
+                        this.propagate(event);                        
+                    }                        
+                }, this);
+
             }
             
             callback.apply(scope, []);

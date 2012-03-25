@@ -56,11 +56,15 @@ var ChannelManager = function(asteriskManagerParam){
             }
             channel = this.channels[id];
             var channel2 = this.channels[responseItem.content.channel2];
-            
-            // bridge/unlink channel and channel2
-            // TODO
+            if(responseItem.name == 'Bridge'){
+                channel.bridgedChannelId = responseItem.content.channel2;
+                channel2.bridgedChannelId = id;                
+            }else{
+                channel.bridgedChannelId = null;
+                channel2.bridgedChannelId = null;                
+            }
         }else{
-            console.warn('unknown channel state' , responseItem.name);
+            BasicManager.print('unknown channel state' , responseItem.name);
         }
         var event = new EntityEvent(eventType, channel);
         asteriskManager.entityManager.handleCollectedEvents(event);
@@ -79,7 +83,7 @@ var ChannelManager = function(asteriskManagerParam){
                     this.channels[id] = new Channel(id, asteriskManager);
                 }
                 var channel = this.channels[id];
-                
+
                 channel.calleridname = ifDefined(channelentry.calleridname);
                 channel.calleridnum = ifDefined(channelentry.calleridnum);
                 channel.uniqueid = ifDefined(channelentry.uniqueid);
@@ -89,6 +93,7 @@ var ChannelManager = function(asteriskManagerParam){
                 channel.duration = ifDefined(channelentry.seconds);
                 channel.connectedlinename = ifDefined(channelentry.connectedlinename);
                 channel.connectedlinenum = ifDefined(channelentry.connectedlinenum);
+                channel.bridgedChannelId = ifDefined(channelentry.bridgedchannel);
                 if(channelentry.channelstate){
                     channel.state = Channel.StateTranslations[channelentry.channelstate];
                 }else if(channelentry.state){
