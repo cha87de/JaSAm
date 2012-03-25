@@ -24,6 +24,18 @@ var ExtensionManager = function(asteriskManagerParam){
             extension.status = Extension.StateTranslations[responseItem.content.status];
             extension.hint = responseItem.content.hint;
             extension.context = responseItem.content.context;
+        }else if(responseItem.name == 'UserEvent' && (responseItem.content.userevent == 'dndOn' || responseItem.content.userevent == 'dndOff')){
+            var id = responseItem.content.header1;
+            if(!this.extensions[id]){
+                this.extensions[id] = new Extension(id, asteriskManager);
+                eventType = EntityEvent.Types.New;
+            }else{
+                eventType = EntityEvent.Types.Update;
+            }
+
+            extension = this.extensions[id];
+            extension.doNotDisturb = (responseItem.content.userevent == "dndOn") ? true : false;
+
         }else{
             BasicManager.print('unknown extension state' , responseItem.name);
         }

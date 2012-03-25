@@ -38,9 +38,10 @@ function managerListener(managerStatus){
         
         asteriskManager.entityManager.agentManager.queryAgents(function(){
             asteriskManager.entityManager.queueManager.queryQueues(function(){
-                asteriskManager.localUser = 47;
-                toggleQueue(40, 0);
-            }, this, 12345);
+                asteriskManager.localUser = 6;
+//                toggleQueue(40, 0);
+                originateCall(47);
+            }, this);
         }, this);
 
     }else{
@@ -80,6 +81,24 @@ function toggleQueue(queueId, penalty){
         console.info('exception ' + exc.message, exc);
     }
     return false;    
+}
+
+function originateCall(remoteNumber){
+    try{
+        var action = asteriskManager.commander.createAction('originate');
+        action.params = {
+            Exten: remoteNumber,
+            channel: 'SIP/' + asteriskManager.localUser,
+            context: 'from-internal',
+            priority: 1,
+            callerid:  remoteNumber
+        };
+        action.execute(function(response){}, this);
+        
+    }catch(exc){
+        console.info(exc);
+    }
+    return false;
 }
 
 main();

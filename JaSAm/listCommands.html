@@ -1,0 +1,56 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JaSAm - List Commands</title>
+        <script type="text/javascript" src="JaSAmLoader.js"></script>
+        <script type="text/javascript">
+            var asteriskManager;
+            
+            JaSAmLoader.load(function(){
+                BasicManager.debugMode = true;
+                
+                // Define Manager to login
+                var manager = new Manager("testmanager", "sehrsehrgeheim");
+                manager.addListener(managerStateListener, manager);
+
+                // Define Asterisk-Server
+                asteriskManager = new AsteriskManager(manager);
+                asteriskManager.setBaseUrl('/asterisk/mxml');  
+
+                manager.login();
+            }, '.');
+            
+            function managerStateListener(managerStatus){
+                if(managerStatus[0] === true){
+                    asteriskManager.commander.queryServerActions(function(actions){
+                        for(var actionKey in actions){
+                            var action = actions[actionKey];
+                            document.writeln(new ActionPresentation(action));
+                        }
+                    }, null);
+                }
+            }
+            
+            var ActionPresentation = function(actionParam){
+                this.action = actionParam;
+            }
+            ActionPresentation.prototype.toString = function(){
+                var str = "<strong>" + this.action.name + "</strong><br/>" + 
+                            this.action.description + "</br>";
+                var params = this.action.params;
+                for(var paramKey in params){
+                    str += "" + paramKey;
+                }
+                str += "<br/><hr/>";
+                return str;
+            };
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

@@ -19,7 +19,7 @@ var EventConnector = function(asteriskManagerParam){
         if(!enableListening)
             return;
         
-        waitEventAction.params = {timeout: 5};
+        waitEventAction.params = {timeout: 60};
         waitEventAction.execute(function(response){
             start(); // restart listening!
             me.propagate(response);

@@ -61,7 +61,12 @@ var BasicManager = function(){
                 }
                 
                 var str = ajaxResponse.responseText.replace(/\*/g, '');
-                xmlDoc=parser.parseFromString(str,"text/xml");
+                try{
+                    xmlDoc=parser.parseFromString(str,"text/xml");
+                }catch(exc){
+                    console.warn(exc);
+                    console.info(str);
+                }
             }
             var result = parseData(xmlToJson(xmlDoc));
             var response = parseResponse(result);
@@ -181,3 +186,5 @@ BasicManager.print = function(){
         console.info(arguments);
     }
 }
+
+exports.BasicManager = BasicManager;

@@ -1,7 +1,6 @@
 /**
  * 
  */
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var AjaxCall = function(){
     var activeX = ['Msxml2.XMLHTTP.6.0',

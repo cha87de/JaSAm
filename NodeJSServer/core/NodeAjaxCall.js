@@ -1,10 +1,18 @@
 /**
  * 
  */
- var AjaxCall = require("./AjaxCall").AjaxCall;
+ var AjaxCall = require("../../JaSAm/core/AjaxCall").AjaxCall;
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var NodeAjaxCall = function(){
     this.sessionId = null;
+    
+    /**
+     *
+     */
+    this.createConnection = function(){
+        return new XMLHttpRequest();
+    };
     
     /**
     * 
