@@ -33,6 +33,9 @@ var Manager = function(username, secret){
         });
     };
     
+    this.isLoggedIn = function(){
+        return loggedIn;
+    };
 };
 Manager.prototype = new ListenerHandler();
 
