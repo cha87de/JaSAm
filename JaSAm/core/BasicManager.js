@@ -64,8 +64,10 @@ var BasicManager = function(){
                 try{
                     xmlDoc=parser.parseFromString(str,"text/xml");
                 }catch(exc){
-                    console.warn(exc);
-                    console.info(str);
+                    console.info("Error parsing repsonse to " + baseUrl + " command: ");
+                    console.info(command);
+                    console.info(exc);
+                    console.info("str = " + str);
                 }
             }
             var result = parseData(xmlToJson(xmlDoc));

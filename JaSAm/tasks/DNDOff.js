@@ -1,7 +1,7 @@
 var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
 var Action = require('../../JaSAm/messages/Action.js').Action;
 
-var DNDOffTask = function(args, callbackParam, scopeParam, asteriskManagerParam){
+var DNDOff = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var callback = callbackParam;
     var scope = scopeParam;
@@ -47,6 +47,8 @@ var DNDOffTask = function(args, callbackParam, scopeParam, asteriskManagerParam)
             var queuePair = value.split(";");
             for(var i in queuePair){
                 var queuePairValues = queuePair[i].split(":");
+                if(queuePairValues.length != 2)
+                    continue;
                 var queueId = queuePairValues[0];
                 var penalty = queuePairValues[1];
                 queuePenalties[queueId] = penalty;
@@ -112,4 +114,4 @@ var DNDOffTask = function(args, callbackParam, scopeParam, asteriskManagerParam)
     
 };
 
-exports.DNDOffTask = DNDOffTask;
+exports.DNDOff = DNDOff;

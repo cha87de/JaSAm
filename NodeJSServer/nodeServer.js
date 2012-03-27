@@ -2,9 +2,9 @@ var http = require('http');
 var url = require('url');
 
 var JaSAmApp = require('./JaSAmApp.js').JaSAmApp;
-var OriginateTask = require('./tasks/OriginateTask.js').OriginateTask;
-var DNDOnTask = require('./tasks/DNDOnTask.js').DNDOnTask;
-var DNDOffTask = require('./tasks/DNDOffTask.js').DNDOffTask;
+var Originate = require('../JaSAm/tasks/Originate.js').Originate;
+var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
+var DNDOff = require('../JaSAm/tasks/DNDOff.js').DNDOff;
 
 
 http.createServer(function (req, httpResponse) {
@@ -26,11 +26,11 @@ http.createServer(function (req, httpResponse) {
             if(remoteNumber === undefined)
                 throw new Error("Param remoteNumber is missing.");
             
-            execute(OriginateTask, httpResponse, {extension: extension, remoteNumber: remoteNumber});
+            execute(Originate, httpResponse, {extension: extension, remoteNumber: remoteNumber});
         }else if(params['pathname'] == "/doNotDisturbOn"){
-            execute(DNDOnTask, httpResponse, {extension: extension});
+            execute(DNDOn, httpResponse, {extension: extension});
         }else if(params['pathname'] == "/doNotDisturbOff"){
-            execute(DNDOffTask, httpResponse, {extension: extension});
+            execute(DNDOff, httpResponse, {extension: extension});
         }
         
     }catch(exc){

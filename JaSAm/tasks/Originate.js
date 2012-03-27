@@ -1,5 +1,5 @@
 
-var OriginateTask = function(args, callbackParam, scopeParam, asteriskManagerParam){
+var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var remoteNumber = args['remoteNumber'];
     var callback = callbackParam;
@@ -31,4 +31,4 @@ var OriginateTask = function(args, callbackParam, scopeParam, asteriskManagerPar
 
 };
 
-exports.OriginateTask = OriginateTask;
+exports.Originate = Originate;

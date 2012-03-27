@@ -1,7 +1,7 @@
 var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
 var Action = require('../../JaSAm/messages/Action.js').Action;
 
-var DNDOnTask = function(args, callbackParam, scopeParam, asteriskManagerParam){
+var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var callback = callbackParam;
     var scope = scopeParam;
@@ -98,4 +98,4 @@ var DNDOnTask = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
 };
 
-exports.DNDOnTask = DNDOnTask;
+exports.DNDOn = DNDOn;
