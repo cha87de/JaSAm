@@ -70,6 +70,8 @@ var QueueManager = function(asteriskManagerParam){
             //this.queues = {};
             if(response.isSuccess()){
                 for(var queueentryKey in response.body){
+                    if(queueentryKey == "remove")
+                        continue;
                     var queueentry = response.body[queueentryKey].content;
                     var id = queueentry.queue;
                     if(!this.queues[id]){

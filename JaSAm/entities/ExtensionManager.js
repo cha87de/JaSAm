@@ -49,6 +49,8 @@ var ExtensionManager = function(asteriskManagerParam){
         action.name = 'sippeers';        
         action.execute(function(response){
             for(var peerentryKey in response.body){
+                if(peerentryKey == "remove")
+                    continue;
                 var peerentry = response.body[peerentryKey].content;
 
                 var id = peerentry.objectname;

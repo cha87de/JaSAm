@@ -76,6 +76,8 @@ var ChannelManager = function(asteriskManagerParam){
         action.name = 'status';
         action.execute(function(response){
             for(var channelentryKey in response.body){
+                if(channelentryKey == "remove")
+                    continue;
                 var channelentry = response.body[channelentryKey].content;
                 var id = channelentry.channel;
 

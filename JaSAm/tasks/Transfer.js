@@ -5,11 +5,20 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
+    var collector = null;
     
     this.run = function (){
+        collector = new CallbackCollector(work, this);
+        asteriskManager.entityManager.extensionManager.queryExtensions(collector.createCallback(), this);
+    };
+
+    var work = function(){
         var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
         var channels = extension.getChannels();
         for(var channelKey in channels){
+            if(typeOf(channelKey) != "number")
+                continue;
+            
             var channel = channels[channelKey];
             var action = asteriskManager.commander.createAction('redirect');
             action.params = {
@@ -21,7 +30,7 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
             action.execute(transferCallback, this);
         }
     };
-    
+
     var transferCallback = function(response){
         var text;
         if(response.isSuccess()){

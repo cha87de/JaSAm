@@ -58,6 +58,8 @@ var AgentManager = function(asteriskManagerParam){
         action.name = 'queuestatus';
         action.execute(function(response){
             for(var agententryKey in response.body){
+                if(agententryKey == "remove")
+                    continue;
                 if(response.body[agententryKey].name == "QueueParams")
                     continue;
                 var agententry = response.body[agententryKey].content;

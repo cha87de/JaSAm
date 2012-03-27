@@ -27,6 +27,8 @@ var EntityManager = function(asteriskManagerParam){
         response = response[0];
         // Try to map entries
         for(var key in response.body){
+            if(key == "remove")
+                continue;
             var responseItem = response.body[key];
             var eventName = responseItem.name;
             var unknown = true;
