@@ -225,8 +225,6 @@ function updateAll(){
 }
 
 function updateExtensions(){
-//    console.info("updateExtensions");
-//    console.info(arguments);
     document.getElementById('extensionsStatus').innerHTML = 'Last Update: ' + getCurrentTime();
     var extensions = asteriskManager.entityManager.extensionManager.extensions;
     var table = document.getElementById('extensions');
@@ -268,8 +266,6 @@ function updateExtensions(){
 }
 
 function updatePeers(){
-//    console.info("updatePeers");
-//    console.info(arguments);
     document.getElementById('peersStatus').innerHTML = 'Last Update: ' + getCurrentTime();
     var peers = asteriskManager.entityManager.peerManager.peers;
     var table = document.getElementById('peers');
@@ -296,8 +292,6 @@ function updatePeers(){
 }
 
 function updateChannels(){
-//    console.info("updateChannels");
-//    console.info(arguments);
     document.getElementById('channelsStatus').innerHTML = 'Last Update: ' + getCurrentTime();
     var channels = asteriskManager.entityManager.channelManager.channels;
     var table = document.getElementById('channels');
@@ -324,8 +318,6 @@ function updateChannels(){
 }
 
 function updateQueues(){
-//    console.info("updateQueues");
-//    console.info(arguments);
     document.getElementById('queuesStatus').innerHTML = 'Last Update: ' + getCurrentTime();
     var queues = asteriskManager.entityManager.queueManager.queues;
     var table = document.getElementById('queues');
@@ -358,8 +350,6 @@ function updateQueues(){
 }
 
 function updateAgents(){
-//    console.info("updateAgents");
-//    console.info(arguments);
     document.getElementById('agentsStatus').innerHTML = 'Last Update: ' + getCurrentTime();
     var agents = asteriskManager.entityManager.agentManager.agents;
     var table = document.getElementById('agents');
@@ -391,8 +381,6 @@ function updateAgents(){
 }
 
 function listenIncomingCall(entityEvent){
-//    console.info("listenIncomingCall");
-//    console.info(arguments);
     entityEvent = entityEvent[0];
     if(entityEvent.entity && entityEvent.entity.calleridnum == asteriskManager.localUser){
         // local phone action!
