@@ -5,18 +5,12 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
-    var collector = null;
-    
-    this.run = function (){
-        collector = new CallbackCollector(work, this);
-        asteriskManager.entityManager.extensionManager.queryExtensions(collector.createCallback(), this);
-    };
 
-    var work = function(){
+    this.run = function(){
         var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
         var channels = extension.getChannels();
         for(var channelKey in channels){
-            if(typeOf(channelKey) != "number")
+            if(channelKey == "remove")
                 continue;
             
             var channel = channels[channelKey];
