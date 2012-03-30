@@ -37,5 +37,6 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
 
 };
+Transfer.prototype = new Task();
 
 exports.Transfer = Transfer;

@@ -113,5 +113,6 @@ var DNDOff = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
     
 };
+DNDOff.prototype = new Task();
 
 exports.DNDOff = DNDOff;

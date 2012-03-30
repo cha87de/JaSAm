@@ -97,5 +97,6 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
     
 };
+DNDOn.prototype = new Task();
 
 exports.DNDOn = DNDOn;

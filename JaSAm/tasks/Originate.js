@@ -30,5 +30,6 @@ var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
 
 };
+Originate.prototype = new Task();
 
 exports.Originate = Originate;
