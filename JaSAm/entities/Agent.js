@@ -34,13 +34,6 @@ var Agent = function(id, asteriskManagerParam){
         }        
     };
     
-    this.getPeer = function(){
-        try{
-            return asteriskManager.entityManager.peerManager.peers[this.id];
-        }catch(exc){
-            return null;
-        }        
-    };    
 };
 Agent.prototype = new Entity();
 

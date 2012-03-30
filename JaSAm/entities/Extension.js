@@ -8,7 +8,6 @@ var Extension = function(id, asteriskManagerParam){
     this.id = id;
     this.context = null;
     this.status = null;
-    //this.statusDescription = null;
     this.channel = null;
     this.hint = null;
     

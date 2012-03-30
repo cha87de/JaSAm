@@ -11,8 +11,9 @@ var ExtensionManager = function(asteriskManagerParam){
     this.handleEvent = function(responseItem){
         var extension = null;
         var eventType = EntityEvent.Types.unknown;
+        var id;
         if(responseItem.name == 'ExtensionStatus'){
-            var id = responseItem.content.exten;
+            id = responseItem.content.exten;
             if(!this.extensions[id]){
                 this.extensions[id] = new Extension(id, asteriskManager);
                 eventType = EntityEvent.Types.New;
@@ -25,7 +26,7 @@ var ExtensionManager = function(asteriskManagerParam){
             extension.hint = responseItem.content.hint;
             extension.context = responseItem.content.context;
         }else if(responseItem.name == 'UserEvent' && (responseItem.content.userevent == 'dndOn' || responseItem.content.userevent == 'dndOff')){
-            var id = responseItem.content.header1;
+            id = responseItem.content.header1;
             if(!this.extensions[id]){
                 this.extensions[id] = new Extension(id, asteriskManager);
                 eventType = EntityEvent.Types.New;
@@ -81,11 +82,9 @@ var ExtensionManager = function(asteriskManagerParam){
                         var event = new EntityEvent(EntityEvent.Types.Update, extension);
                         asteriskManager.entityManager.handleCollectedEvents(event);
                         this.propagate(event);                        
-                    }                        
+                    }
                 }, this);
-
             }
-            
             callback.apply(scope, []);
         }, this);
     };
