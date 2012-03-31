@@ -19,9 +19,11 @@ var Channel = function(id, asteriskManagerParam){
     this.connectedlinename = null;
     this.connectedlinenum = null;
     
-    this.getExtension = function(){
+    this.getPeer = function(){
         try{
-            return asteriskManager.entityManager.extensionManager.extensions[this.calleridnum];
+            //var extensionId = this.calleridnum;
+            var peerId = this.id.split("-")[0];
+            return asteriskManager.entityManager.peerManager.peers[peerId];
         }catch(exc){
             return null;
         }
@@ -29,7 +31,7 @@ var Channel = function(id, asteriskManagerParam){
 };
 Channel.prototype = new Entity();
 Channel.prototype.toString = function(){
-    return 'Extension: ' + this.calleridnum + '(' + this.calleridname + '), to: ' + 
+    return 'Peer: ' + this.getPeer().id + '(' + this.calleridname + '), to: ' + 
         this.exten + ' / ' + this.connectedlinenum + '(' + this.connectedlinename + ')' +
         ' (' + this.state + ') Bridged to channel ' + this.bridgedChannelId;
 };

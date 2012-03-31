@@ -35,7 +35,7 @@ var EntityManager = function(asteriskManagerParam){
             if(arraySearch(ignoreEvents, eventName) >= 0){
                 // do nothing
                 unknown = false;
-                BasicManager.print('ignore event:', eventName, responseItem);
+                //BasicManager.print('ignore event:', eventName, responseItem);
             }else if(arraySearch(channelEvents, eventName) >= 0){
                 // Channel-Event
                 unknown = false;

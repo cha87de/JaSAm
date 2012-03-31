@@ -9,6 +9,8 @@ var ChannelManager = function(asteriskManagerParam){
     this.channels = {};
     
     this.handleEvent = function(responseItem){
+        console.info("ChannelManager handleEvent " , responseItem);
+
         var channel = null;
         var id = null;
         var eventType = EntityEvent.Types.unknown;
@@ -104,12 +106,12 @@ var ChannelManager = function(asteriskManagerParam){
                     channel.state = Channel.State.unknown;
                 }
 
-                if(channel.getExtension()){
+                /*if(channel.getExtension()){
                     if(channel.state == Channel.State.ringing)
                         channel.getExtension().status = Extension.State.ringing;
                     else if(channel.state == Channel.State.up)
                         channel.getExtension().status = Extension.State.incall
-                }
+                }*/
             }
             
             callback.apply(scope, []);
