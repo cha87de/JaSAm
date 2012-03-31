@@ -46,47 +46,54 @@ var ExtensionManager = function(asteriskManagerParam){
     };
     
     this.queryExtensions = function(callback, scope){
+        
+        var callbackCollector = new CallbackCollector(function(){
+            callback.apply(scope, []);
+        }, this);        
+        
         var action = new Action(asteriskManager);
         action.name = 'sippeers';        
-        action.execute(function(response){
+        action.execute(callbackCollector.createCallback(function(response){
             for(var peerentryKey in response.body){
                 if(peerentryKey == "remove")
                     continue;
                 var peerentry = response.body[peerentryKey].content;
 
                 var id = peerentry.objectname;
-                var status = peerentry.status;
-                if(status.indexOf("OK") >= 0)
-                    status = 'available';
-                status = status.toLowerCase();
-                
                 if(!this.extensions[id]){
                      this.extensions[id] = new Extension(id, asteriskManager);
                 }                
 
                 var extension = this.extensions[id];
-                extension.status = Extension.State[status];
                 extension.hint = peerentry.channeltype + '/' + peerentry.objectname;
 
-                var action2 = new Action(asteriskManager);
-                action2.name = 'dbget';
-                action2.params = {
+                // Query Extension-State
+                var actionExtensionState = new Action(asteriskManager);
+                actionExtensionState.name = 'extensionstate';
+                actionExtensionState.params = {
+                    exten: id
+                };
+                actionExtensionState.execute(callbackCollector.createCallback(function(response){
+                    var extension = this.extensions[response.head.exten];
+                    extension.status = Extension.StateTranslations[response.head.status];
+                }, this), this);
+                
+                // Query DoNotDisturb-State
+                var actionDND = new Action(asteriskManager);
+                actionDND.name = 'dbget';
+                actionDND.params = {
                     family: 'DND',
                     key: id
                 };
-                action2.execute(function(response){
+                actionDND.execute(callbackCollector.createCallback(function(response){
                     if(response && response.body && response.body[0] && response.body[0].content && response.body[0].content.val == "YES"){
                         var extension = this.extensions[response.body[0].content.key];
                         extension.doNotDisturb = true;
-
-                        var event = new EntityEvent(EntityEvent.Types.Update, extension);
-                        asteriskManager.entityManager.handleCollectedEvents(event);
-                        this.propagate(event);                        
                     }
-                }, this);
+                }, this), this);
             }
-            callback.apply(scope, []);
-        }, this);
+            
+        }, this), this);
     };
     
 }
