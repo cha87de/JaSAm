@@ -5,13 +5,15 @@ var CallbackCollector = function(callbackParam, scopeParam){
     var count = 0;
     var isSuccess = true;
     
-    this.createCallback = function(){
-        var callback = function(){
-            reduceCallback(callback, arguments);
+    this.createCallback = function(callback, scope){
+        var fakeCallback = function(){
+            if(!(callback === undefined))
+                callback.apply(scope, arguments);
+            reduceCallback(fakeCallback, arguments);
         };
-        callbacks[count] = callback;
+        callbacks[count] = fakeCallback;
         count++;
-        return callback;
+        return fakeCallback;
     };
     
     var reduceCallback = function(callback, args){
