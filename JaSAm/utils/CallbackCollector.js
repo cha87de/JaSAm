@@ -7,7 +7,7 @@ var CallbackCollector = function(callbackParam, scopeParam){
     
     this.createCallback = function(callback, scope){
         var fakeCallback = function(){
-            if(!(callback === undefined))
+            if(callback)
                 callback.apply(scope, arguments);
             reduceCallback(fakeCallback, arguments);
         };
@@ -25,6 +25,10 @@ var CallbackCollector = function(callbackParam, scopeParam){
         if(count == 0)
             callbackParam.apply(scopeParam, [isSuccess]);
     };
+    
+    this.cancel = function(isSuccess){
+        callbackParam.apply(scopeParam, [isSuccess]);
+    }
     
 };
 

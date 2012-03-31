@@ -1,5 +1,6 @@
 var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
-var Action = require('../../JaSAm/messages/Action.js').Action;
+var Action = require('../messages/Action.js').Action;
+var Task = require('./Task.js').Task;
 
 var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
@@ -7,7 +8,7 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
     
-    var agentId = 'SIP/' + asteriskManager.localUser;
+    var agentId = 'SIP/' + args['extension'];
     var taskCollector;
 
     this.run = function (){

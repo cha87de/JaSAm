@@ -5,6 +5,7 @@ var Action = function(asteriskManagerParam){
     this.name = null;
     this.params = null;
     this.description = null;
+    this.differingBaseUrl = null; // overwrites asteriskManagers baseUrl
     
     var response = null;
     var callback = null;

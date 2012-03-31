@@ -4,6 +4,8 @@ var Response = function(){
     this.head = null;
     this.body = null;
     this.foot = null;
+    
+    this.xmlData = null; // xml-code of unparsed asterisk response
 
     this.isSuccess = function(){
         if(this.head && this.head.response && (

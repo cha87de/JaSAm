@@ -4,6 +4,7 @@ var ChannelManager = require('../entities/ChannelManager.js').ChannelManager;
 var PeerManager = require('../entities/PeerManager.js').PeerManager;
 var QueueManager = require('../entities/QueueManager.js').QueueManager;
 var AgentManager = require('../entities/AgentManager.js').AgentManager;
+var BasicManager = require('../core/BasicManager.js').BasicManager;
 
 var EntityManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;

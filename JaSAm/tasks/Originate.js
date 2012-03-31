@@ -1,7 +1,10 @@
+var Action = require('../messages/Action.js').Action;
+var Task = require('./Task.js').Task;
 
 var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var remoteNumber = args['remoteNumber'];
+    var localUser = args['extension'];
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
@@ -10,7 +13,7 @@ var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
         var action = asteriskManager.commander.createAction('originate');
         action.params = {
             Exten: remoteNumber,
-            channel: 'SIP/' + asteriskManager.localUser,
+            channel: 'SIP/' + localUser,
             context: 'from-internal',
             priority: 1,
             callerid:  remoteNumber
@@ -21,7 +24,7 @@ var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var originateCallback = function(response){
         var text;
         if(response.isSuccess()){
-            text = "Call from " +asteriskManager.localUser + " to extension " + remoteNumber + " established.";
+            text = "Call from " +localUser + " to extension " + remoteNumber + " established.";
             callback.apply(scope, [text, 200]);
         }else{
             text = "Error: " + response.head.message;

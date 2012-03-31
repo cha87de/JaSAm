@@ -52,6 +52,7 @@ JaSAmLoader.files = [
     "entities/QueueManager.js",
     "entities/EntityManager.js",       
 
+    "messages/Task.js",   
     "messages/Action.js",   
     "messages/Response.js",   
     "messages/ResponseItem.js",

@@ -49,8 +49,9 @@ var BasicManager = function(){
     var execute = function(action, parameter, callback, scope){
         var command = parameter ? parameter : {};
         command.action = action;
+        var url = (action.differingBaseUrl != null ? action.differingBaseUrl : baseUrl);
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        ajaxCall.request('GET', baseUrl, command, function(ajaxResponse){
+        ajaxCall.request('GET', url, command, function(ajaxResponse){
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
@@ -64,7 +65,7 @@ var BasicManager = function(){
                 try{
                     xmlDoc=parser.parseFromString(str,"text/xml");
                 }catch(exc){
-                    console.info("Error parsing repsonse to " + baseUrl + " command: ");
+                    console.info("Error parsing response from " + url + " command: ");
                     console.info(command);
                     console.info(exc);
                     console.info("str = " + str);
@@ -72,6 +73,7 @@ var BasicManager = function(){
             }
             var result = parseData(xmlToJson(xmlDoc));
             var response = parseResponse(result);
+            response.xmlData = xmlDoc.toString();
             callback.apply(scope, [response]);
         }, this);
     };

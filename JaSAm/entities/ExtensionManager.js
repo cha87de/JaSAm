@@ -2,6 +2,7 @@ var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
 var EntityEvent = require('../entities/EntityEvent.js').EntityEvent;
 var Extension = require('../entities/Extension.js').Extension;
 var Action = require('../messages/Action.js').Action;
+var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
 
 var ExtensionManager = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;

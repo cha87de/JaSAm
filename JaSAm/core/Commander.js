@@ -63,6 +63,10 @@ var Commander = function(asteriskManagerParam){
         return actions;
     };
     
+    this.defineAction = function(action){
+        actions[action.name] = action;
+    };
+    
     this.createAction = function(name){
         if(actions[name]){
             return actions[name].clone();
@@ -71,7 +75,7 @@ var Commander = function(asteriskManagerParam){
             actions[name].name = name;
             actions[name].description = '';
             actions[name].params = {};
-            return actions[name];
+            return actions[name].clone();
         }
     };
 
