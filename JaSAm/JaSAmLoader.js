@@ -52,12 +52,17 @@ JaSAmLoader.files = [
     "entities/QueueManager.js",
     "entities/EntityManager.js",       
 
-    "messages/Task.js",   
     "messages/Action.js",   
     "messages/Response.js",   
     "messages/ResponseItem.js",
     
-    "utils/CallbackCollector.js"
+    "utils/CallbackCollector.js",
+    
+    "tasks/Task.js",
+    "tasks/Originate.js",
+    "tasks/Transfer.js",
+    "tasks/DNDOn.js",
+    "tasks/DNDOff.js"
 ];
 JaSAmLoader.filesLoaded = 0;
 

@@ -46,10 +46,10 @@ var BasicManager = function(){
      * @param callback <function> callback function to execute whenn call is finished
      * @param scope <object> scope in which to execute callback function
      */
-    var execute = function(action, parameter, callback, scope){
+    var execute = function(url, action, parameter, callback, scope){
         var command = parameter ? parameter : {};
         command.action = action;
-        var url = (action.differingBaseUrl != null ? action.differingBaseUrl : baseUrl);
+        
         // execute ajax-call with: method, baseUrl, command (Object?!)
         ajaxCall.request('GET', url, command, function(ajaxResponse){
             var xmlDoc = null;
@@ -79,7 +79,8 @@ var BasicManager = function(){
     };
 
     this.execute = function(action){
-        execute(action.name, action.params, action.setResponse, action);
+        var url = (action.differingBaseUrl != null ? action.differingBaseUrl : baseUrl);
+        execute(url, action.name, action.params, action.setResponse, action);
     };
 
     /**

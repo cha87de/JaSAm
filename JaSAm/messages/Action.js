@@ -35,6 +35,7 @@ var Action = function(asteriskManagerParam){
         action.name = this.name;
         action.description = this.description;
         action.params = this.params;
+        action.differingBaseUrl = this.differingBaseUrl;
         
         // more things to copy?
         
