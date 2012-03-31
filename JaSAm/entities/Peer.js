@@ -22,7 +22,7 @@ var Peer = function(id, asteriskManagerParam){
             }
             return null;
         }catch(exc){ return null; }
-    }
+    };
     
     this.getAgent = function(){
         try{
@@ -31,6 +31,19 @@ var Peer = function(id, asteriskManagerParam){
             return null;
         }        
     };     
+    
+    this.getChannels = function(){
+        var result = [];
+        try{
+            var channels = asteriskManager.entityManager.channelManager.channels;
+            for(var channelKey in channels){
+                var channel = channels[channelKey];
+                if(channel.getPeer() == this)
+                    result.push(channel);
+            }
+        }catch(exc){ }
+        return result;
+    };
     
 };
 Peer.prototype = new Entity();

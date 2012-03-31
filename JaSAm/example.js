@@ -62,10 +62,10 @@ function setExtension(){
         var infotext = "";
         if(extension.status == Extension.State.incall){
             callActive = true;
-            infotext = "In call! (" + extension.getChannels()[0].connectedlinenum + ")";            
+            infotext = "In call! (" + extension.getPeer().getChannels()[0].connectedlinenum + ")";            
         }else if(extension.status == Extension.State.ringing){
             callActive = true;
-            infotext = "Phone Ringing! (" + extension.getChannels()[0].connectedlinenum + ")";
+            infotext = "Phone Ringing! (" + extension.getPeer().getChannels()[0].connectedlinenum + ")";
         }
         listenIncomingCallOutput(callActive, infotext);
     }catch(exc){
@@ -97,7 +97,7 @@ function originateCall(){
 function callHangup(){
     try{
         var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
-        var channels = extension.getChannels();
+        var channels = extension.getPeer().getChannels();
         for(var channelKey in channels){
             var channel = channels[channelKey];
             var action = asteriskManager.commander.createAction('hangup');
@@ -116,7 +116,7 @@ function callTransfer(){
         var remoteNumber = document.getElementById('controlIncomingCallTransferTo').value;
         
         var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
-        var channels = extension.getChannels();
+        var channels = extension.getPeer().getChannels();
         for(var channelKey in channels){
             var channel = channels[channelKey];
             var action = asteriskManager.commander.createAction('redirect');
@@ -137,7 +137,7 @@ function callTransfer(){
 function callMute(){
     try{
         var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
-        var channels = extension.getChannels();
+        var channels = extension.getPeer().getChannels();
         for(var channelKey in channels){
             var channel = channels[channelKey];
             var action = asteriskManager.commander.createAction('MuteAudio');
@@ -382,11 +382,11 @@ function updateAgents(){
 
 function listenIncomingCall(entityEvent){
     entityEvent = entityEvent[0];
-    if(entityEvent.entity && entityEvent.entity.calleridnum == asteriskManager.localUser){
+    if(entityEvent.entity && entityEvent.entity.getPeer().getExtension().id == asteriskManager.localUser){
         // local phone action!
         if(entityEvent.type == EntityEvent.Types.New || entityEvent.type == EntityEvent.Types.Update){
             var output = "";
-            if(entityEvent.entity.state == Channel.State.ringing)
+            if(entityEvent.entity.getPeer().getExtension().status == Extension.State.ringing)
                 output = "Phone Ringing!";
             else
                 output = "In call!";

@@ -13,19 +13,6 @@ var Extension = function(id, asteriskManagerParam){
     
     this.doNotDisturb = false;
     
-    this.getChannels = function(){
-        var result = [];
-        try{
-            var channels = asteriskManager.entityManager.channelManager.channels;
-            for(var channelKey in channels){
-                var channel = channels[channelKey];
-                if(channel.getExtension() == this)
-                    result.push(channel);
-            }
-        }catch(exc){ }
-        return result;
-    };
-
     this.getPeer = function(){
         var result = null;
         try{
