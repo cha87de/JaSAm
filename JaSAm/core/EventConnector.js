@@ -5,6 +5,7 @@ var EventConnector = function(asteriskManagerParam){
     var waitEventAction = asteriskManager.commander.createAction('waitevent');
     var enableListening = false;
     var me = this;
+    this.eventBuffer = null;
 
     this.enableListening = function(enableListeningParam){
         enableListening = enableListeningParam;
@@ -14,15 +15,26 @@ var EventConnector = function(asteriskManagerParam){
             cancel();
         }
     };
-    
-    var start = function(){
+
+    var start = function(lastResponseTime){
         if(!enableListening)
             return;
         
         waitEventAction = asteriskManager.commander.createAction('waitevent');
-        waitEventAction.params = {timeout: 60};
+        waitEventAction.params = {
+            timeout: 60,
+            lastResponseTime: lastResponseTime
+        };
         waitEventAction.execute(function(response){
-            start(); // restart listening!
+            //lese aus response time aus und übergebe start, als lastTime
+            start(response.timestamp); // restart listening!
+
+            if(this.eventBuffer != null){
+                var now = (new Date()).getTime();
+                response.xmlData = response.xmlData.replace("<ajax-response>", "<ajax-response name=\""+now+"\">");
+                this.eventButter.add(now, response.xmlData);
+            }
+            
             me.propagate(response);
         });        
     };
@@ -30,7 +42,7 @@ var EventConnector = function(asteriskManagerParam){
     var cancel = function(){
         // TODO cancel current call
     };
-
+    
 };
 EventConnector.prototype = new ListenerHandler();
 

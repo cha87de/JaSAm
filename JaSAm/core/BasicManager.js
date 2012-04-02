@@ -92,7 +92,7 @@ var BasicManager = function(){
         var result = [];
         if(!response['ajax-response'] || !response['ajax-response']['response']){
             return result;
-        }
+        }       
         if(response['ajax-response']['response'].length > 0){
             for(var i = 0; i < response['ajax-response']['response'].length; i++){
                 if(response['ajax-response']['response'][i]['generic'] && response['ajax-response']['response'][i]['generic']['@attributes'])
@@ -102,6 +102,12 @@ var BasicManager = function(){
             if(response['ajax-response']['response']['generic'] && response['ajax-response']['response']['generic']['@attributes'])
                 result.push(response['ajax-response']['response']['generic']['@attributes']);
         }
+        
+        var timestamp = null;
+        if(response['ajax-response']['@attributes'] !== undefined)
+            timestamp = response['ajax-response']['@attributes'].name;
+        result.push(timestamp);
+        
         return result;
     };
     
@@ -113,16 +119,21 @@ var BasicManager = function(){
             response.head = data[0];
 
             // middle parts are body
-            for(var i = 1; i<data.length-1; i++){
+            for(var i = 1; i<data.length-2; i++){
                 if(!response.body)
                     response.body = new Array();
                 response.body.push(parseResponseItem(data[i]));
             }
             
             // last part is foot
-            if(data.length > 1){
-                response.foot = parseResponseItem(data[data.length-1]);
+            if(data.length > 2){
+                response.foot = parseResponseItem(data[data.length-2]);
             }                
+
+            // last part is foot
+            if(data.length > 2){
+                response.timestamp = data[data.length-1];
+            }
         }
         return response;
     };

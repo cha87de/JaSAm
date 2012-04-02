@@ -14,6 +14,7 @@ config[JaSAmApp.Configuration.baseUrl] =  "http://tel.rsu-hausverwalter.de/aster
 config[JaSAmApp.Configuration.autoLogin] =  true;
 config[JaSAmApp.Configuration.autoQueryEntities] =  true;
 config[JaSAmApp.Configuration.enableEventlistening] =  true;
+config[JaSAmApp.Configuration.enableEventBuffering] =  true;
 jaSAmApp.setConfiguration(config);
 
 var parser = require("libxml");
@@ -39,32 +40,40 @@ function startServer(isSuccess){
             var token = params['query']['token'];
             if(token === undefined || token != 123456)
                 throw new Error("Access denied.");
-    
-            var extension = params['query']['extension'];
-            if(extension === undefined)
-                throw new Error("Param extension is missing.");
         
+            var extension = params['query']['extension'];
+                        
             if(params['pathname'] == "/originateCall"){
             
                 var remoteNumber = params['query']['remoteNumber'];
                 if(remoteNumber === undefined)
                     throw new Error("Param remoteNumber is missing.");
+
+                if(extension === undefined)
+                    throw new Error("Param extension is missing.");
             
                 execute(Originate, httpResponse, {
                     extension: extension, 
                     remoteNumber: remoteNumber
                 });
             }else if(params['pathname'] == "/doNotDisturbOn"){
+                if(extension === undefined)
+                    throw new Error("Param extension is missing.");
+
                 execute(DNDOn, httpResponse, {
                     extension: extension
                 });
             }else if(params['pathname'] == "/doNotDisturbOff"){
+                if(extension === undefined)
+                    throw new Error("Param extension is missing.");
+
                 execute(DNDOff, httpResponse, {
                     extension: extension
                 });
             }else if(params['pathname'] == "/waitEvent"){
+                var lastResponseTime = params['query']['lastResponseTime'];
                 execute(WaitEvent, httpResponse, {
-                    extension: extension
+                    lastResponseTime: lastResponseTime
                 });
             }
         

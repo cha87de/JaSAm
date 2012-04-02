@@ -193,6 +193,10 @@ function managerListener(managerStatus){
         // manager login successful
         showPanel(Panel.Output);
 
+        var waitevent = asteriskManager.commander.createAction('waitevent');
+        waitevent.differingBaseUrl = "/asteriskWait?token=123456";
+        asteriskManager.commander.defineAction(waitevent);
+
         // register listeners
         asteriskManager.entityManager.extensionManager.addListener(updateExtensions, this);
         asteriskManager.entityManager.peerManager.addListener(updatePeers, this);        

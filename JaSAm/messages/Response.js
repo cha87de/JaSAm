@@ -4,6 +4,7 @@ var Response = function(){
     this.head = null;
     this.body = null;
     this.foot = null;
+    this.timestamp = null;
     
     this.xmlData = null; // xml-code of unparsed asterisk response
 

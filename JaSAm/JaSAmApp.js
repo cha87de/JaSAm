@@ -1,6 +1,7 @@
 var Manager = require('./entities/Manager.js').Manager;
 var AsteriskManager = require('./core/AsteriskManager.js').AsteriskManager;
 var CallbackCollector = require('./utils/CallbackCollector.js').CallbackCollector;
+var EventBuffer = require('./core/EventBuffer.js').EventBuffer;
 
 var JaSAmApp = function(username, secret){
     
@@ -36,9 +37,13 @@ var JaSAmApp = function(username, secret){
             asteriskManager.manager.addListener(callbackCollector.createCallback(function(managerStatus){
                 if(managerStatus[0] !== true){
                     callbackCollector.cancel(false);
+                    return;
                 }
                 if(config[JaSAmApp.Configuration.autoQueryEntities]){
                     asteriskManager.entityManager.queryEntities(callbackCollector.createCallback(), this);
+                }
+                if(config[JaSAmApp.Configuration.enableEventBuffering]){
+                    asteriskManager.eventConnector.eventBuffer(new EventBuffer());
                 }
             }, this), this);
             asteriskManager.manager.login();
@@ -58,8 +63,9 @@ JaSAmApp.Configuration = {
     baseUrl: 'baseUrl',
     
     autoLogin: 'autoLogin',
-    enableEventlistening: 'enableEventlistening',
     enableKeepalive: 'enableKeepalive',
+    enableEventlistening: 'enableEventlistening',
+    enableEventBuffering: 'enableEventBuffering',
     
     localUser: 'localUser',
     

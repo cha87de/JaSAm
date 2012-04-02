@@ -9,7 +9,6 @@ var ChannelManager = function(asteriskManagerParam){
     this.channels = {};
     
     this.handleEvent = function(responseItem){
-        console.info("ChannelManager handleEvent " , responseItem);
 
         var channel = null;
         var id = null;
