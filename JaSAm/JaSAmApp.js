@@ -43,7 +43,7 @@ var JaSAmApp = function(username, secret){
                     asteriskManager.entityManager.queryEntities(callbackCollector.createCallback(), this);
                 }
                 if(config[JaSAmApp.Configuration.enableEventBuffering]){
-                    asteriskManager.eventConnector.eventBuffer(new EventBuffer());
+                    asteriskManager.eventConnector.eventBuffer = new EventBuffer();
                 }
             }, this), this);
             asteriskManager.manager.login();
