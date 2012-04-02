@@ -7,6 +7,7 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
+    var localUser = args['extension'];
     
     var agentId = 'SIP/' + args['extension'];
     var taskCollector;
@@ -70,7 +71,7 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
         action.name = 'dbput';
         action.params = {
             family: 'DND',
-            key: asteriskManager.localUser,
+            key: localUser,
             val: 'YES'
         };
         action.execute(taskCollector.createCallback(), this);
@@ -81,7 +82,7 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
         action.name = "UserEvent";
         action.params = {
             UserEvent: 'dndOn',
-            Header1: asteriskManager.localUser
+            Header1: localUser
         };
         action.execute(taskCollector.createCallback(), this);  
     };

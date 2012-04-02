@@ -7,6 +7,7 @@ var DNDOff = function(args, callbackParam, scopeParam, asteriskManagerParam){
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
+    var localUser = args['extension'];
     
     var agentId = 'SIP/' + args['extension'];
     var taskCollector;
@@ -87,7 +88,7 @@ var DNDOff = function(args, callbackParam, scopeParam, asteriskManagerParam){
         action.name = 'dbdel';
         action.params = {
             family: 'DND',
-            key: asteriskManager.localUser
+            key: localUser
         };
         action.execute(taskCollector.createCallback(), this);
     };
@@ -97,7 +98,7 @@ var DNDOff = function(args, callbackParam, scopeParam, asteriskManagerParam){
         action.name = "UserEvent";
         action.params = {
             UserEvent: 'dndOff',
-            Header1: asteriskManager.localUser
+            Header1: localUser
         };
         action.execute(taskCollector.createCallback(), this);  
     };
