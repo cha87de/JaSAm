@@ -19,20 +19,21 @@ var EventConnector = function(asteriskManagerParam){
     var start = function(lastResponseTime){
         if(!enableListening)
             return;
-        
+
         waitEventAction = asteriskManager.commander.createAction('waitevent');
         waitEventAction.params = {
             timeout: 60,
+            token: 123456,
             lastResponseTime: lastResponseTime
         };
         waitEventAction.execute(function(response){
             //lese aus response time aus und übergebe start, als lastTime
             start(response.timestamp); // restart listening!
 
-            if(this.eventBuffer != null){
+            if(me.eventBuffer != null){
                 var now = (new Date()).getTime();
                 response.xmlData = response.xmlData.replace("<ajax-response>", "<ajax-response name=\""+now+"\">");
-                this.eventButter.add(now, response.xmlData);
+                me.eventBuffer.add(now, response.xmlData);
             }
             
             me.propagate(response);
