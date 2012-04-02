@@ -35,6 +35,7 @@ JaSAmLoader.files = [
     "core/AsteriskManager.js",   
     "core/Commander.js",   
     "core/ListenerHandler.js",   
+    "core/EventBuffer.js",   
     "core/EventConnector.js",   
 
     "entities/Manager.js",   
