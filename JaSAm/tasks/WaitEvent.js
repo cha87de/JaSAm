@@ -11,7 +11,7 @@ var WaitEvent = function(args, callbackParam, scopeParam, asteriskManagerParam){
     this.run = function (){
         if(args.lastResponseTime !== undefined){
             //schaue ob zwischenzeitlich events aufgetreten sind, die noch nachgereicht werden müssen.
-            var responseXmlData = asteriskManager.eventConnector.getNext(args.lastResponseTime);
+            var responseXmlData = asteriskManager.eventConnector.next(args.lastResponseTime);
             if(responseXmlData != null){
                 callback.apply(scope, [responseXmlData, 200]);
                 return;
