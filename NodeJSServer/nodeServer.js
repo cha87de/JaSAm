@@ -1,5 +1,6 @@
 var http = require('http');
 var url = require('url');
+var startStopDaemon = require('start-stop-daemon');
 
 var JaSAmApp = require('../JaSAm/JaSAmApp.js').JaSAmApp;
 var Task = require('../JaSAm/tasks/Task.js').Task;
@@ -8,22 +9,26 @@ var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
 var DNDOff = require('../JaSAm/tasks/DNDOff.js').DNDOff;
 var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
 
-var jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
-var config = {};
-config[JaSAmApp.Configuration.baseUrl] =  "http://tel.rsu-hausverwalter.de/asterisk/mxml";
-config[JaSAmApp.Configuration.autoLogin] =  true;
-config[JaSAmApp.Configuration.autoQueryEntities] =  true;
-config[JaSAmApp.Configuration.enableEventlistening] =  true;
-config[JaSAmApp.Configuration.enableEventBuffering] =  true;
-jaSAmApp.setConfiguration(config);
+startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.err"},function() {
 
-var parser = require("libxml");
-jaSAmApp.getAsteriskManager().setParser(parser);
+    var jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
+    var config = {};
+    config[JaSAmApp.Configuration.baseUrl] =  "http://tel.rsu-hausverwalter.de/asterisk/mxml";
+    config[JaSAmApp.Configuration.autoLogin] =  true;
+    config[JaSAmApp.Configuration.autoQueryEntities] =  true;
+    config[JaSAmApp.Configuration.enableEventlistening] =  true;
+    config[JaSAmApp.Configuration.enableEventBuffering] =  true;
+    jaSAmApp.setConfiguration(config);
 
-var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
-var ajaxCall = new NodeAjaxCall();
-jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);
-jaSAmApp.start(startServer, this);
+    var parser = require("libxml");
+    jaSAmApp.getAsteriskManager().setParser(parser);
+
+    var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
+    var ajaxCall = new NodeAjaxCall();
+    jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);
+    jaSAmApp.start(startServer, this);
+
+});
 
 function startServer(isSuccess){
     if(!isSuccess){
