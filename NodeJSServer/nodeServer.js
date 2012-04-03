@@ -13,7 +13,7 @@ startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out"
 
     var jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
     var config = {};
-    config[JaSAmApp.Configuration.baseUrl] =  "http://tel.rsu-hausverwalter.de/asterisk/mxml";
+    config[JaSAmApp.Configuration.baseUrl] =  "http://localhost:8088/asterisk/mxml";
     config[JaSAmApp.Configuration.autoLogin] =  true;
     config[JaSAmApp.Configuration.autoQueryEntities] =  true;
     config[JaSAmApp.Configuration.enableEventlistening] =  true;
