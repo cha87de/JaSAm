@@ -9,9 +9,11 @@ var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
 var DNDOff = require('../JaSAm/tasks/DNDOff.js').DNDOff;
 var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
 
-startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.err"},function() {
+var jaSAmApp = null;
 
-    var jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
+startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.er r"},function() {
+
+    jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
     var config = {};
     config[JaSAmApp.Configuration.baseUrl] =  "http://localhost:8088/asterisk/mxml";
     config[JaSAmApp.Configuration.autoLogin] =  true;
