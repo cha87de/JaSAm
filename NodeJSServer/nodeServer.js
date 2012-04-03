@@ -11,7 +11,7 @@ var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
 
 var jaSAmApp = null;
 
-startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.er r"},function() {
+startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.err"},function() {
 
     jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
     var config = {};
@@ -33,12 +33,12 @@ startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out"
 });
 
 function startServer(isSuccess){
+    var now = new Date();
     if(!isSuccess){
-        console.info("Fehler beim Starten der JaSAmApp!");
+        console.info(now.toString() + ": Fehler beim Starten der JaSAmApp!");
         return;
     }
-    
-    console.info("start server ...");
+    console.info(now.toString() + ": start server ...");
     http.createServer(function (req, httpResponse) {
         try{
 
@@ -85,7 +85,8 @@ function startServer(isSuccess){
             }
         
         }catch(exc){
-            console.info(req.url +' Error: ' + exc.message);
+            now = new Date();
+            console.info(now.toString() + ": " + req.url +' Error: ' + exc.message);
             httpResponse.writeHead(500, {
                 'Content-Type': 'text/plain'
             });
