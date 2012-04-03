@@ -11,7 +11,7 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
 
     this.run = function(){
         var extension = asteriskManager.entityManager.extensionManager.extensions[localUser];
-        var channels = extension.getChannels();
+        var channels = extension.getPeer().getChannels();
         for(var channelKey in channels){
             if(channelKey == "remove")
                 continue;
