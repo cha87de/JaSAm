@@ -28,8 +28,12 @@ var EventConnector = function(asteriskManagerParam){
         };
         waitEventAction.execute(function(response){
             //lese aus response time aus und übergebe start, als lastTime
+            if(!response.isSuccess()){
+                setTimeout(function(){start(response.timestamp);}, 5000);
+                return;
+            }
+            
             start(response.timestamp); // restart listening!
-
             if(me.eventBuffer != null){
                 var now = (new Date()).getTime();
                 response.xmlData = response.xmlData.replace("<ajax-response>", "<ajax-response name=\""+now+"\">");
