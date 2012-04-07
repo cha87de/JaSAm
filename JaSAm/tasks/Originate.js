@@ -1,4 +1,5 @@
 var Action = require('../messages/Action.js').Action;
+var Exception = require('../messages/Exception.js').Exception;
 var Task = require('./Task.js').Task;
 
 var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
@@ -22,14 +23,11 @@ var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
     
     var originateCallback = function(response){
-        var text;
         if(response.isSuccess()){
-            text = "Call from " +localUser + " to extension " + remoteNumber + " established.";
-            callback.apply(scope, [text, 200]);
+            callback.apply(scope, []);
         }else{
-            text = "Error: " + response.head.message;
-            callback.apply(scope, [text, 500]);
-        }
+            callback.apply(scope, [new Exception("Error: " + response.head.message)]);            
+        }        
     };
 
 };
