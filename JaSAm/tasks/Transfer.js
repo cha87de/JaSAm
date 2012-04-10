@@ -1,4 +1,5 @@
 var Action = require('../messages/Action.js').Action;
+var Exception = require('../messages/Exception.js').Exception;
 var Task = require('./Task.js').Task;
 
 var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
@@ -29,13 +30,10 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
 
     var transferCallback = function(response){
-        var text;
         if(response.isSuccess()){
-            text = "Call transferred " +localUser + " to extension " + remoteNumber + ".";
-            callback.apply(scope, [text, 200]);
+            callback.apply(scope, []);
         }else{
-            text = "Error: " + response.head.message;
-            callback.apply(scope, [text, 500]);
+            callback.apply(scope, [new Exception("Error: " + response.head.message)]);            
         }
     };
 

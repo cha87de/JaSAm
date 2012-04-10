@@ -20,7 +20,7 @@ var EntityManager = function(asteriskManagerParam){
     var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial', 'NewCallerid', 'Bridge', 'Unlink'];
     var extensionEvents = ['ExtensionStatus',  'UserEvent'];
     var peerEvents = ['PeerStatus'];
-    var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded', 'QueueMemberPenalty'];
+    var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded', 'QueueMemberPenalty', 'QueueMemberPaused'];
     var agentEvents = [];
     // What about: NewCallerid? UserEvent? NewAccountCode? Join? Leave? QueueCallerAbandon?
 

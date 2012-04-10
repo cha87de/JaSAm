@@ -1,5 +1,6 @@
 var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
 var Action = require('../messages/Action.js').Action;
+var Exception = require('../messages/Exception.js').Exception;
 var Task = require('./Task.js').Task;
 
 var WaitEvent = function(args, callbackParam, scopeParam, asteriskManagerParam){
@@ -22,7 +23,7 @@ var WaitEvent = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var handleEvent = function(response){
         asteriskManager.eventConnector.removeListener(handleEvent);
-        callback.apply(scope, [response[0].xmlData, 200]);
+        callback.apply(scope, [response[0].xmlData]);
     };
     
 };

@@ -3,6 +3,7 @@ var url = require('url');
 var startStopDaemon = require('start-stop-daemon');
 
 var JaSAmApp = require('../JaSAm/JaSAmApp.js').JaSAmApp;
+var Exception = require('../JaSAm/messages/Exception.js').Exception;
 var Task = require('../JaSAm/tasks/Task.js').Task;
 var Originate = require('../JaSAm/tasks/Originate.js').Originate;
 var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
@@ -99,12 +100,20 @@ function startServer(isSuccess){
 }
 
 function execute(Task, httpResponse, args){
-    (new Task(args, function(text, httpstatus){
-        if(httpstatus === undefined)
-            httpstatus = 200;
+    (new Task(args, function(responseObj){
+        var httpstatus = 200;
+        var responseText = "";
+        
+        if(responseObj instanceof Exception){
+            httpstatus = 500;
+            responseText = responseObj.getMessage();
+        }else if(!responseObj){
+            responseText = responseObj;
+        }
+        
         httpResponse.writeHead(httpstatus, {
             'Content-Type': 'text/plain'
         });
-        httpResponse.end(text);
+        httpResponse.end(responseText);
     }, this, jaSAmApp.getAsteriskManager())).run();
 }

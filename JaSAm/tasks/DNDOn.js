@@ -1,5 +1,6 @@
 var CallbackCollector = require('../utils/CallbackCollector.js').CallbackCollector;
 var Action = require('../messages/Action.js').Action;
+var Exception = require('../messages/Exception.js').Exception;
 var Task = require('./Task.js').Task;
 
 var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
@@ -88,13 +89,10 @@ var DNDOn = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
     
     var taskFinished = function(isSuccess){
-        var text;
         if(isSuccess){
-            text = "";
-            callback.apply(scope, [text, 200]);
+            callback.apply(scope, []);
         }else{
-            text = "";
-            callback.apply(scope, [text, 500]);            
+            callback.apply(scope, [new Exception()]);            
         }
     };
     

@@ -1,9 +1,9 @@
 
 var Response = function(){
 
-    this.head = null;
-    this.body = null;
-    this.foot = null;
+    this.head = null; // ResponseItem
+    this.body = null; // Array of ResponseItem
+    this.foot = null; // ResponseItem
     this.timestamp = null;
     
     this.xmlData = null; // xml-code of unparsed asterisk response
