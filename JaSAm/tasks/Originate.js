@@ -6,18 +6,21 @@ var Originate = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var remoteNumber = args['remoteNumber'];
     var localUser = args['extension'];
+    var originatorNumber = args['originatorNumber'];
     var callback = callbackParam;
     var scope = scopeParam;
     var asteriskManager = asteriskManagerParam;
     
     this.run = function (){
+        if(originatorNumber === undefined)
+            originatorNumber = localUser;
         var action = asteriskManager.commander.createAction('originate');
         action.params = {
             Exten: remoteNumber,
             channel: 'SIP/' + localUser,
             context: 'from-internal',
             priority: 1,
-            callerid:  remoteNumber
+            callerid:  originatorNumber
         };
         action.execute(originateCallback, this);
     };
