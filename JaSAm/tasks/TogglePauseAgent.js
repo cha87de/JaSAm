@@ -14,7 +14,7 @@ var TogglePauseAgent = function(args, callbackParam, scopeParam, asteriskManager
     
     this.run = function (){
         var agent = asteriskManager.entityManager.agentManager.agents[agentId];
-        paused = !agent.paused;
+        paused = agent.paused==1 ? 0:1;
         var action = asteriskManager.commander.createAction('queuepause');
         action.params = {
             'interface': agentId,

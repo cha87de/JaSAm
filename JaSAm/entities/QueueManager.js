@@ -55,6 +55,23 @@ var QueueManager = function(asteriskManagerParam){
             queue = this.queues[id];
             agentId = responseItem.content.location;
             queue.agentPenalties[agentId] = responseItem.content.penalty;            
+        }else if(responseItem.name == 'QueueMemberPaused'){
+            id = responseItem.content.queue;
+            if(!this.queues[id]){
+                // not possible
+                return;
+            }
+            queue = this.queues[id];
+            
+            agentId = responseItem.content.location;
+            
+            if(!queue.agents[agentId]){
+                queue.agents[agentId] = new Agent(agentId, asteriskManager);
+                eventType = EntityEvent.Types.New;
+            }else{
+                eventType = EntityEvent.Types.Update;
+            }
+            queue.agents[agentId].paused = ifDefined(responseItem.content.paused);
         }else{
             BasicManager.print('unknown queue state' , responseItem.name);
         }

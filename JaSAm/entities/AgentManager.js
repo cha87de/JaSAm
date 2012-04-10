@@ -45,18 +45,18 @@ var AgentManager = function(asteriskManagerParam){
 
             agent.name = ifDefined(responseItem.content.membername);
             agent.status = ifDefined(responseItem.content.status);            
-        }else if(responseItem.name == 'QueueMemberPaused'){
-            id = responseItem.content.location;
-            if(!this.agents[id]){
-                this.agents[id] = new Agent(id, asteriskManager);
-                eventType = EntityEvent.Types.New;
-            }else{
-                eventType = EntityEvent.Types.Update;
-            }
-
-            agent = this.agents[id];
-
-            agent.paused = ifDefined(responseItem.content.paused);                
+//        }else if(responseItem.name == 'QueueMemberPaused'){
+//            id = responseItem.content.location;
+//            if(!this.agents[id]){
+//                this.agents[id] = new Agent(id, asteriskManager);
+//                eventType = EntityEvent.Types.New;
+//            }else{
+//                eventType = EntityEvent.Types.Update;
+//            }
+//
+//            agent = this.agents[id];
+//
+//            agent.paused = ifDefined(responseItem.content.paused);                
         }else{
             BasicManager.print('unknown agent state' , responseItem.name);
         }
