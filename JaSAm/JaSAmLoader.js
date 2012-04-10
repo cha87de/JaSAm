@@ -56,6 +56,7 @@ JaSAmLoader.files = [
     "messages/Action.js",   
     "messages/Response.js",   
     "messages/ResponseItem.js",
+    "messages/Exception.js",
     
     "utils/CallbackCollector.js",
     
