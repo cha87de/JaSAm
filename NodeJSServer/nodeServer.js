@@ -1,6 +1,7 @@
 var http = require('http');
 var url = require('url');
 var startStopDaemon = require('start-stop-daemon');
+var mysql = require('mysql');
 
 var JaSAmApp = require('../JaSAm/JaSAmApp.js').JaSAmApp;
 var Exception = require('../JaSAm/messages/Exception.js').Exception;
@@ -9,6 +10,7 @@ var Originate = require('../JaSAm/tasks/Originate.js').Originate;
 var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
 var DNDOff = require('../JaSAm/tasks/DNDOff.js').DNDOff;
 var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
+var CallDetailRecord = require('../JaSAm/tasks/CallDetailRecord.js').CallDetailRecord;
 
 var jaSAmApp = null;
 
@@ -82,6 +84,19 @@ function startServer(isSuccess){
                 var lastResponseTime = params['query']['lastResponseTime'];
                 execute(WaitEvent, httpResponse, {
                     lastResponseTime: lastResponseTime
+                });
+            }else if(params['pathname'] == "/cdr"){
+                var start = params['query']['start'];
+                if(start === undefined)
+                    start = 0;
+                var limit = params['query']['limit'];
+                if(limit === undefined)
+                    limit = 10;
+                execute(CallDetailRecord, httpResponse, {
+                    extension: extension,
+                    start: start,
+                    limit: limit,
+                    mysql: mysql
                 });
             }
         
