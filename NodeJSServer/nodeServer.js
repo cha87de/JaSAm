@@ -13,8 +13,18 @@ var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
 var CallDetailRecord = require('../JaSAm/tasks/CallDetailRecord.js').CallDetailRecord;
 
 var jaSAmApp = null;
+var httpServer = null;
+var options = {
+    daemonFile: "log/nodeServer.dmn", 
+    outFile: "log/nodeServer.out",
+    errFile: "log/nodeServer.err",    
+    onCrash: function(e){
+        httpServer.close();
+        this.crashRestart();
+    }
+};
 
-startStopDaemon({daemonFile: "log/nodeServer.dmn", outFile: "log/nodeServer.out", errFile: "log/nodeServer.err"},function() {
+startStopDaemon(options,function() {
 
     jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
     var config = {};
@@ -42,7 +52,7 @@ function startServer(isSuccess){
         return;
     }
     console.info(now.toString() + ": start server ...");
-    http.createServer(function (req, httpResponse) {
+    httpServer = http.createServer(function (req, httpResponse) {
         try{
 
             var params = url.parse(req.url, true);
