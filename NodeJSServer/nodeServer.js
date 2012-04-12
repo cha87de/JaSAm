@@ -122,7 +122,7 @@ function execute(Task, httpResponse, args){
         if(responseObj instanceof Exception){
             httpstatus = 500;
             responseText = responseObj.getMessage();
-        }else if(!responseObj){
+        }else if(responseObj){
             responseText = responseObj;
         }
         
