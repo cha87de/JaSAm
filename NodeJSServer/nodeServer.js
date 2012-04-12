@@ -96,7 +96,7 @@ function startServer(isSuccess){
                 execute(WaitEvent, httpResponse, {
                     lastResponseTime: lastResponseTime
                 });
-            }else if(params['pathname'] == "/cdr"){
+            }else if(params['pathname'] == "/callDetailRecord"){
                 var start = params['query']['start'];
                 if(start === undefined)
                     start = 0;
