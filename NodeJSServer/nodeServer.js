@@ -102,7 +102,7 @@ function startServer(isSuccess){
                     start = 0;
                 var limit = params['query']['limit'];
                 if(limit === undefined)
-                    limit = 10;
+                    limit = 20;
                 execute(CallDetailRecord, httpResponse, {
                     extension: extension,
                     start: start,
