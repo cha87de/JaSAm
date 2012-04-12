@@ -24,7 +24,7 @@ var options = {
     }
 };
 
-startStopDaemon(options,function() {
+startStopDaemon(options, function() {
 
     jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
     var config = {};
@@ -133,7 +133,7 @@ function execute(Task, httpResponse, args){
             httpstatus = 500;
             responseText = responseObj.getMessage();
         }else if(responseObj){
-            responseText = responseObj;
+            responseText = responseObj.toString();
         }
         
         httpResponse.writeHead(httpstatus, {
