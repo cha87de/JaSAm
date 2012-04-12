@@ -53,10 +53,10 @@ function startServer(isSuccess){
         return;
     }
     console.info(now.toString() + ": start server ...");
-    httpServer = http.createServer(function (req, httpResponse) {
+    httpServer = http.createServer(function (request, httpResponse) {
         try{
 
-            var params = url.parse(req.url, true);
+            var params = url.parse(request.url, true);
         
             var token = params['query']['token'];
             if(token === undefined || token != 123456)
@@ -97,10 +97,17 @@ function startServer(isSuccess){
                     lastResponseTime: lastResponseTime
                 });
             }else if(params['pathname'] == "/callDetailRecord"){
-                var start = params['query']['start'];
+                var start;
+                var limit;
+                if (request.method == 'POST') {
+                    start = request.body.start;
+                    limit = request.body.limit;
+                }else{
+                    start = params['query']['start'];
+                    limit = params['query']['limit'];
+                }
                 if(start === undefined)
                     start = 0;
-                var limit = params['query']['limit'];
                 if(limit === undefined)
                     limit = 20;
                 execute(CallDetailRecord, httpResponse, {
@@ -115,7 +122,7 @@ function startServer(isSuccess){
         
         }catch(exc){
             now = new Date();
-            console.info(now.toString() + ": " + req.url +' Error: ' + exc.message);
+            console.info(now.toString() + ": " + request.url +' Error: ' + exc.message);
             httpResponse.writeHead(500, {
                 'Content-Type': 'text/plain'
             });
