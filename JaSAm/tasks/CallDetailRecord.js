@@ -17,13 +17,16 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
             password: 'secret'
         });
         client.query('USE asteriskcdrdb');
-        client.query(
-            'SELECT * FROM `cdr` '+
-            ' WHERE '+
+        var whereStatement = "";
+        if(extension !== undefined)
+            whereStatement = ' WHERE '+
                 ' `src` = "'+extension + '" OR' +
                 ' `dst` = "'+extension + '" OR' +
                 ' `channel` = "'+agentId + '%" OR' +
-                ' `dstchannel` = "'+agentId + '%"' +
+                ' `dstchannel` = "'+agentId + '%"';
+        client.query(
+            'SELECT * FROM `cdr` '+
+            whereStatement + 
             ' LIMIT ' + start + ', ' + limit,
             function selectCb(err, results, fields) {
                 if (err) {
