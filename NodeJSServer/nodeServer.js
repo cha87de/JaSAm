@@ -19,6 +19,7 @@ var options = {
     outFile: "log/nodeServer.out",
     errFile: "log/nodeServer.err",    
     onCrash: function(e){
+        console.info("server crashed! Closing httpserver and restarting nodeServer now ...");
         httpServer.close();
         this.crashRestart();
     }
