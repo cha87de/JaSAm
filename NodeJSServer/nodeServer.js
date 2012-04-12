@@ -109,6 +109,8 @@ function startServer(isSuccess){
                     limit: limit,
                     mysql: mysql
                 });
+            }else{
+                throw new Error("Requested url not found. (404)");
             }
         
         }catch(exc){
