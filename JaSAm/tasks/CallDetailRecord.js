@@ -27,6 +27,7 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
         client.query(
             'SELECT * FROM `cdr` '+
             whereStatement + 
+            ' ORDER BY `calldate` DESC' +
             ' LIMIT ' + start + ', ' + limit,
             function selectCb(err, results, fields) {
                 if (err) {
