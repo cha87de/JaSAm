@@ -29,7 +29,7 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
                 if (err) {
                     callback.apply(scope, [err]);
                 }else{
-                    callback.apply(scope, [results]);
+                    callback.apply(scope, [JSON.stringify(results)]);
                 }
                 client.end();
             }
