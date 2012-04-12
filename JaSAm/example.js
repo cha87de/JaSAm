@@ -194,7 +194,7 @@ function managerListener(managerStatus){
         showPanel(Panel.Output);
 
         var waitevent = asteriskManager.commander.createAction('waitevent');
-        waitevent.differingBaseUrl = "/asteriskWait?token=123456";
+        waitevent.differingBaseUrl = "/asteriskWait";
         asteriskManager.commander.defineAction(waitevent);
 
         // register listeners
