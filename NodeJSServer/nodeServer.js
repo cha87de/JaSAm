@@ -2,6 +2,7 @@ var http = require('http');
 var url = require('url');
 var startStopDaemon = require('start-stop-daemon');
 var mysql = require('mysql');
+var querystring = require('querystring');
 
 var JaSAmApp = require('../JaSAm/JaSAmApp.js').JaSAmApp;
 var Exception = require('../JaSAm/messages/Exception.js').Exception;
@@ -97,24 +98,24 @@ function startServer(isSuccess){
                     lastResponseTime: lastResponseTime
                 });
             }else if(params['pathname'] == "/callDetailRecord"){
-                var start;
-                var limit;
-                if (request.method == 'POST') {
-                    start = request.body.start;
-                    limit = request.body.limit;
-                }else{
-                    start = params['query']['start'];
-                    limit = params['query']['limit'];
-                }
-                if(start === undefined)
-                    start = 0;
-                if(limit === undefined)
-                    limit = 20;
-                execute(CallDetailRecord, httpResponse, {
-                    extension: extension,
-                    start: start,
-                    limit: limit,
-                    mysql: mysql
+                request.setEncoding("utf8");
+                request.addListener("data", function(postDataChunk) {
+                    var postData = querystring.parse(postDataChunk);
+
+                    var start = postData.start;
+                    var limit = postData.limit;
+                    var extension = postData.extension;
+                    if(start === undefined)
+                       start = 0;
+                    if(limit === undefined)
+                        limit = 20;
+                    
+                    execute(CallDetailRecord, httpResponse, {
+                        extension: extension,
+                        start: start,
+                        limit: limit,
+                        mysql: mysql
+                    });
                 });
             }else{
                 throw new Error("Requested url not found. (404)");
