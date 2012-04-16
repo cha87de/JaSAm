@@ -20,10 +20,10 @@ var TogglePauseAgent = function(args, callbackParam, scopeParam, asteriskManager
             'interface': agentId,
             paused: paused
         };
-        action.execute(transferCallback, this);
+        action.execute(togglePauseCallback, this);
     };
     
-    var transferCallback = function(response){
+    var togglePauseCallback = function(response){
         if(response.isSuccess()){
             callback.apply(scope, []);
         }else{
