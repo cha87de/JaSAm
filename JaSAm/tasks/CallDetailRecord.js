@@ -30,11 +30,19 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
             ' ORDER BY `calldate` DESC' +
             ' LIMIT ' + start + ', ' + limit,
             function selectCb(err, results, fields) {
+                var result = null;
                 if (err) {
-                    callback.apply(scope, [err]);
-                }else{
-                    callback.apply(scope, [JSON.stringify(results)]);
+                    result = {
+                        "success": false,
+                        "errorInfo": err
+                    };
+                } else {
+                    result = {
+                        "success": true,
+                        "data": results
+                    };
                 }
+                callback.apply(scope, [JSON.stringify(result)]);
                 client.end();
             }
         );
