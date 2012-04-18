@@ -25,7 +25,7 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
                 ' `channel` = "'+agentId + '%" OR' +
                 ' `dstchannel` = "'+agentId + '%"';
         client.query(
-            'SELECT * FROM `cdr` '+
+            'SELECT SQL_CALC_FOUND_ROWS * FROM `cdr` '+
             whereStatement + 
             ' ORDER BY `calldate` DESC' +
             ' LIMIT ' + start + ', ' + limit,
@@ -36,13 +36,27 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
                         "success": false,
                         "errorInfo": err
                     };
+                    callback.apply(scope, [JSON.stringify(result)]);
                 } else {
-                    result = {
-                        "success": true,
-                        "data": results
-                    };
+                    client.query(
+                        "SELECT FOUND_ROWS()",
+                        function selectCb(err, total, fields) {
+                            if (err) {
+                                result = {
+                                    "success": false,
+                                    "errorInfo": err
+                                };
+                            } else {
+                                result = {
+                                    "success": true,
+                                    "data": results,
+                                    "total": total[0]['FOUND_ROWS()']
+                                };
+                            }
+                            callback.apply(scope, [JSON.stringify(result)]);
+                        }
+                    );
                 }
-                callback.apply(scope, [JSON.stringify(result)]);
                 client.end();
             }
         );
