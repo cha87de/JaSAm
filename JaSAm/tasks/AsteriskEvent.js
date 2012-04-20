@@ -3,7 +3,7 @@ var Action = require('../messages/Action.js').Action;
 var Exception = require('../messages/Exception.js').Exception;
 var Task = require('./Task.js').Task;
 
-var WaitEvent = function(args, callbackParam, scopeParam, asteriskManagerParam){
+var AsteriskEvent= function(args, callbackParam, scopeParam, asteriskManagerParam){
     
     var callback = callbackParam;
     var scope = scopeParam;
@@ -27,6 +27,6 @@ var WaitEvent = function(args, callbackParam, scopeParam, asteriskManagerParam){
     };
     
 };
-WaitEvent.prototype = new Task();
+AsteriskEvent.prototype = new Task();
 
-exports.WaitEvent = WaitEvent;
+exports.AsteriskEvent = AsteriskEvent;

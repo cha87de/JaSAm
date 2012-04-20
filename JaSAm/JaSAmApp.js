@@ -22,7 +22,7 @@ var JaSAmApp = function(username, secret){
         var callbackCollector = new CallbackCollector(callback, scope);
         
         if(config[JaSAmApp.Configuration.baseUrl])
-            asteriskManager.setBaseUrl(config[JaSAmApp.Configuration.baseUrl]);
+            asteriskManager.baseUrl = config[JaSAmApp.Configuration.baseUrl];
         
         if(config[JaSAmApp.Configuration.localUser])
             asteriskManager.localUser = config[JaSAmApp.Configuration.localUser];

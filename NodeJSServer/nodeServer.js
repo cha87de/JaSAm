@@ -10,8 +10,10 @@ var Task = require('../JaSAm/tasks/Task.js').Task;
 var Originate = require('../JaSAm/tasks/Originate.js').Originate;
 var DNDOn = require('../JaSAm/tasks/DNDOn.js').DNDOn;
 var DNDOff = require('../JaSAm/tasks/DNDOff.js').DNDOff;
-var WaitEvent = require('../JaSAm/tasks/WaitEvent.js').WaitEvent;
+var AsteriskEvent = require('../JaSAm/tasks/AsteriskEvent.js').AsteriskEvent;
 var CallDetailRecord = require('../JaSAm/tasks/CallDetailRecord.js').CallDetailRecord;
+var Tunnel = require('../JaSAm/tasks/Tunnel.js').Tunnel;
+var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
 
 var jaSAmApp = null;
 var httpServer = null;
@@ -40,7 +42,6 @@ startStopDaemon(options, function() {
     var parser = require("libxml");
     jaSAmApp.getAsteriskManager().setParser(parser);
 
-    var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
     var ajaxCall = new NodeAjaxCall();
     jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);
     jaSAmApp.start(startServer, this);
@@ -92,10 +93,17 @@ function startServer(isSuccess){
                 execute(DNDOff, httpResponse, {
                     extension: extension
                 });
-            }else if(params['pathname'] == "/waitEvent"){
+            }else if(params['pathname'] == "/asteriskEvent"){
                 var lastResponseTime = params['query']['lastResponseTime'];
-                execute(WaitEvent, httpResponse, {
+                execute(AsteriskEvent, httpResponse, {
                     lastResponseTime: lastResponseTime
+                });
+            }else if(params['pathname'] == "/tunnel"){
+                var urlParams = params['query'];
+                var ajaxCall = new NodeAjaxCall();
+                execute(Tunnel, httpResponse, {
+                    urlParams: urlParams,
+                    ajaxCall: ajaxCall
                 });
             }else if(params['pathname'] == "/callDetailRecord"){
                 request.setEncoding("utf8");

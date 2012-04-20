@@ -7,18 +7,9 @@ var Response = require('../messages/Response.js').Response;
   */
 var BasicManager = function(){
     
-    var baseUrl = '/asterisk/mxml';
+    this.baseUrl = '/asterisk/mxml';
     var ajaxCall = new AjaxCall();
     var parser = null;
-
-    /**
-     * setBaseUrl
-     * PUBLIC FUNCTION
-     * @param url <String> Path to XML-AsteriskManager, default: /asterisk/mxml
-     */
-    this.setBaseUrl = function(url){
-        baseUrl = url;
-    };
     
     /**
      * setParser
@@ -79,7 +70,7 @@ var BasicManager = function(){
     };
 
     this.execute = function(action){
-        var url = (action.differingBaseUrl != null ? action.differingBaseUrl : baseUrl);
+        var url = (action.differingBaseUrl != null ? action.differingBaseUrl : this.baseUrl);
         execute(url, action.name, action.params, action.setResponse, action);
     };
 
