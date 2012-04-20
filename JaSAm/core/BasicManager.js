@@ -8,17 +8,16 @@ var Response = require('../messages/Response.js').Response;
 var BasicManager = function(){
     
     this.baseUrl = '/asterisk/mxml';
-    this.ajaxCall = new AjaxCall();
+    var ajaxCall = new AjaxCall();
     var parser = null;
-    var self = this;
     
     /**
      * setAjaxCall
      * PUBLIC FUNCTION
      * @param ajaxCall <Object> Set specific ajaxCall
      */
-    this.setAjaxCall = function(ajaxCall){
-        this.ajaxCall = ajaxCall;
+    this.setAjaxCall = function(_ajaxCall){
+        ajaxCall = _ajaxCall;
     };
     
     /**
@@ -26,7 +25,7 @@ var BasicManager = function(){
      * PUBLIC FUNCTION
      */
     this.getAjaxCall = function(){
-        return this.ajaxCall;
+        return ajaxCall;
     };
     
     /**
@@ -51,7 +50,7 @@ var BasicManager = function(){
         command.action = action;
         
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        self.ajaxCall.request('GET', url, command, function(ajaxResponse){
+        ajaxCall.request('GET', url, command, function(ajaxResponse){
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
