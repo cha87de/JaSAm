@@ -23,7 +23,6 @@ var EventConnector = function(asteriskManagerParam){
         waitEventAction = asteriskManager.commander.createAction('waitevent');
         waitEventAction.params = {
             timeout: 60,
-            token: 123456,
             lastResponseTime: lastResponseTime
         };
         waitEventAction.execute(function(response){

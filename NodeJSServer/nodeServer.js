@@ -28,6 +28,9 @@ var options = {
     }
 };
 
+var authenticatedSessions = null;
+var acceptableToken = 123456;
+
 startStopDaemon(options, function() {
 
     jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
@@ -43,7 +46,7 @@ startStopDaemon(options, function() {
     jaSAmApp.getAsteriskManager().setParser(parser);
 
     var ajaxCall = new NodeAjaxCall();
-    jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);
+    jaSAmApp.getAsteriskManager().ajaxCall = ajaxCall;
     jaSAmApp.start(startServer, this);
 
 });
@@ -61,12 +64,17 @@ function startServer(isSuccess){
             var params = url.parse(request.url, true);
         
             var token = params['query']['token'];
-            if(token === undefined || token != 123456)
-                throw new Error("Access denied.");
-        
             var extension = params['query']['extension'];
+            
+            var cookies = {};
+            request.headers.cookie && request.headers.cookie.split(';').forEach(function( cookie ) {
+                var parts = cookie.split('=');
+                cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
+            });
                         
             if(params['pathname'] == "/originateCall"){
+                if(token === undefined || token != acceptableToken)
+                    throw new Error("Access denied.");
             
                 var remoteNumber = params['query']['remoteNumber'];
                 if(remoteNumber === undefined)
@@ -80,6 +88,9 @@ function startServer(isSuccess){
                     remoteNumber: remoteNumber
                 });
             }else if(params['pathname'] == "/doNotDisturbOn"){
+                if(token === undefined || token != acceptableToken)
+                    throw new Error("Access denied.");
+                
                 if(extension === undefined)
                     throw new Error("Param extension is missing.");
 
@@ -87,6 +98,9 @@ function startServer(isSuccess){
                     extension: extension
                 });
             }else if(params['pathname'] == "/doNotDisturbOff"){
+                if(token === undefined || token != acceptableToken)
+                    throw new Error("Access denied.");
+                
                 if(extension === undefined)
                     throw new Error("Param extension is missing.");
 
@@ -94,18 +108,27 @@ function startServer(isSuccess){
                     extension: extension
                 });
             }else if(params['pathname'] == "/asteriskEvent"){
+                if(!authenticatedSessions[cookies.nodeSessionId])
+                    throw new Error("Access denied. Authentication needed.");
+                
                 var lastResponseTime = params['query']['lastResponseTime'];
                 execute(AsteriskEvent, httpResponse, {
-                    lastResponseTime: lastResponseTime
+                    lastResponseTime: lastResponseTime,
+                    nodeSessionId: cookies.nodeSessionId
                 });
             }else if(params['pathname'] == "/tunnel"){
+                if(!authenticatedSessions[cookies.nodeSessionId])
+                    throw new Error("Access denied. Authentication needed.");
+                
                 var urlParams = params['query'];
-                var ajaxCall = new NodeAjaxCall();
                 execute(Tunnel, httpResponse, {
                     urlParams: urlParams,
-                    ajaxCall: ajaxCall
+                    nodeSessionId: cookies.nodeSessionId
                 });
             }else if(params['pathname'] == "/callDetailRecord"){
+                if(!authenticatedSessions[cookies.nodeSessionId])
+                    throw new Error("Access denied. Authentication needed.");
+                
                 request.setEncoding("utf8");
                 request.addListener("data", function(postDataChunk) {
                     var postData = querystring.parse(postDataChunk);
@@ -122,9 +145,24 @@ function startServer(isSuccess){
                         extension: extension,
                         start: start,
                         limit: limit,
-                        mysql: mysql
+                        mysql: mysql,
+                        nodeSessionId: cookies.nodeSessionId
                     });
                 });
+            }else if(params['pathname'] == "/login"){
+                var username = params['query'].username;
+                var secret = params['query'].secret;
+                if(username == "testmanager" && secret == "sehrsehrgeheim"){
+                    var nodeSessionId;
+                    do{
+                        nodeSessionId = Math.floor((Math.random()*1000000)+1000);    
+                    }while(authenticatedSessions[nodeSessionId]);
+                    
+                     authenticatedSessions[nodeSessionId] = new Date();
+                    executeCallback("Authentication accepted", httpResponse, {nodeSessionId: nodeSessionId});
+                }else{
+                    throw new Error("Access denied. Wrong username or secret.");
+                }
             }else{
                 throw new Error("Requested url not found. (404)");
             }
@@ -144,7 +182,10 @@ function startServer(isSuccess){
 }
 
 function execute(Task, httpResponse, args){
-    (new Task(args, function(responseObj){
+    (new Task(args, function(responseObj){executeCallback(responseObj, httpResponse, args);}, this, jaSAmApp.getAsteriskManager())).run();
+}
+
+function executeCallback(responseObj, httpResponse, args){
         var httpstatus = 200;
         var responseText = "";
         
@@ -155,9 +196,10 @@ function execute(Task, httpResponse, args){
             responseText = responseObj.toString();
         }
         
+        if(args.nodeSessionId !== undefined)
+            httpResponse.setHeader("Set-Cookie", ["nodeSessionId="+args.nodeSessionId]);
         httpResponse.writeHead(httpstatus, {
             'Content-Type': 'text/plain'
         });
         httpResponse.end(responseText);
-    }, this, jaSAmApp.getAsteriskManager())).run();
 }
