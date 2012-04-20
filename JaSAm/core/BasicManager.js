@@ -10,6 +10,7 @@ var BasicManager = function(){
     this.baseUrl = '/asterisk/mxml';
     this.ajaxCall = new AjaxCall();
     var parser = null;
+    var self = this;
     
     /**
      * setParser
@@ -33,7 +34,7 @@ var BasicManager = function(){
         command.action = action;
         
         // execute ajax-call with: method, baseUrl, command (Object?!)
-        this.ajaxCall.request('GET', url, command, function(ajaxResponse){
+        self.ajaxCall.request('GET', url, command, function(ajaxResponse){
             var xmlDoc = null;
             if(ajaxResponse.responseXML){
                 xmlDoc = ajaxResponse.responseXML;
