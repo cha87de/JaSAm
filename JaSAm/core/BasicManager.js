@@ -13,6 +13,23 @@ var BasicManager = function(){
     var self = this;
     
     /**
+     * setAjaxCall
+     * PUBLIC FUNCTION
+     * @param ajaxCall <Object> Set specific ajaxCall
+     */
+    this.setAjaxCall = function(ajaxCall){
+        this.ajaxCall = ajaxCall;
+    };
+    
+    /**
+     * getAjaxCall
+     * PUBLIC FUNCTION
+     */
+    this.getAjaxCall = function(){
+        return this.ajaxCall;
+    };
+    
+    /**
      * setParser
      * PUBLIC FUNCTION
      * @param _parser <Object> Set specific parser

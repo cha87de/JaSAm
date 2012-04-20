@@ -46,7 +46,7 @@ startStopDaemon(options, function() {
     jaSAmApp.getAsteriskManager().setParser(parser);
 
     var ajaxCall = new NodeAjaxCall();
-    jaSAmApp.getAsteriskManager().ajaxCall = ajaxCall;
+    jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);
     jaSAmApp.start(startServer, this);
 
 });
