@@ -28,7 +28,7 @@ var options = {
     }
 };
 
-var authenticatedSessions = null;
+var authenticatedSessions = {};
 var acceptableToken = 123456;
 
 startStopDaemon(options, function() {
@@ -126,8 +126,8 @@ function startServer(isSuccess){
                     nodeSessionId: cookies.nodeSessionId
                 });
             }else if(params['pathname'] == "/callDetailRecord"){
-                if(!authenticatedSessions[cookies.nodeSessionId])
-                    throw new Error("Access denied. Authentication needed.");
+                if(token === undefined || token != acceptableToken)
+                    throw new Error("Access denied.");
                 
                 request.setEncoding("utf8");
                 request.addListener("data", function(postDataChunk) {
@@ -159,7 +159,8 @@ function startServer(isSuccess){
                     }while(authenticatedSessions[nodeSessionId]);
                     
                      authenticatedSessions[nodeSessionId] = new Date();
-                    executeCallback("Authentication accepted", httpResponse, {nodeSessionId: nodeSessionId});
+                     var successMessage = "<ajax-response><response type='object' id='unknown'><generic response='Success' /></response></ajax-response>";
+                    executeCallback(successMessage, httpResponse, {nodeSessionId: nodeSessionId});
                 }else{
                     throw new Error("Access denied. Wrong username or secret.");
                 }
