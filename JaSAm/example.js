@@ -36,8 +36,8 @@ function doLogin(){
 
         // Define Asterisk-Server
         asteriskManager = new AsteriskManager(manager);
-        asteriskManager.setBaseUrl('/asterisk/mxml');
-
+        asteriskManager.baseUrl = '/asterisk/mxml';
+        
         manager.login();
     }catch(exc){
         console.info(exc);
@@ -194,7 +194,7 @@ function managerListener(managerStatus){
         showPanel(Panel.Output);
 
         var waitevent = asteriskManager.commander.createAction('waitevent');
-        waitevent.differingBaseUrl = "/asteriskWait";
+        waitevent.differingBaseUrl = "/asteriskEvent";
         asteriskManager.commander.defineAction(waitevent);
 
         // register listeners
