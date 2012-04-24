@@ -27,9 +27,6 @@ var JaSAmApp = function(username, secret){
         if(config[JaSAmApp.Configuration.localUser])
             asteriskManager.localUser = config[JaSAmApp.Configuration.localUser];
         
-        if(config[JaSAmApp.Configuration.enableEventlistening])
-            asteriskManager.eventConnector.enableListening(true);
-        
         if(config[JaSAmApp.Configuration.enableEventBuffering])
             asteriskManager.eventConnector.eventBuffer = new EventBuffer();
         
@@ -45,6 +42,8 @@ var JaSAmApp = function(username, secret){
                 if(config[JaSAmApp.Configuration.autoQueryEntities]){
                     asteriskManager.entityManager.queryEntities(callbackCollector.createCallback(), this);
                 }
+                if(config[JaSAmApp.Configuration.enableEventlistening])
+                    asteriskManager.eventConnector.enableListening(true);
             }, this), this);
             asteriskManager.manager.login();
         }        
