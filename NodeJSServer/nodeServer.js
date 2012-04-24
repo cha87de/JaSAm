@@ -117,7 +117,7 @@ function startServer(isSuccess){
                         throw new Error("Page not found.");
                 }
                 
-            }else if(!authenticatedSessions[cookies.nodeSessionId]){
+            }else if(authenticatedSessions[cookies.nodeSessionId]){
                 //update array, for timeout
                 authenticatedSessions[cookies.nodeSessionId] = new Date();
                 
