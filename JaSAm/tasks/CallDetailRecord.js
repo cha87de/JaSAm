@@ -17,10 +17,9 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
             password: 'secret'
         });
         client.query('USE asteriskcdrdb');
-        var whereStatement = "";
+        var whereStatement = 'WHERE `dst` != "s" ';
         if(extension !== undefined)
-            whereStatement = ' WHERE '+
-                ' `dst` != "s" AND ( ' +
+            whereStatement += ' AND ( ' +
                     ' `src` = "'+extension + '" OR' +
                     ' `dst` = "'+extension + '" OR' +
                     ' `channel` = "'+agentId + '%" OR' +
