@@ -87,7 +87,7 @@ function startServer(isSuccess){
                     throw new Error("Access denied. Wrong username or secret.");
                 }
                 
-            }else if(token !== undefined && token != acceptableToken){
+            }else if(token !== undefined && token == acceptableToken){
                 if(extension === undefined)
                     throw new Error("Param extension is missing.");
                 
@@ -96,10 +96,15 @@ function startServer(isSuccess){
                         var remoteNumber = params['query']['remoteNumber'];
                         if(remoteNumber === undefined)
                             throw new Error("Param remoteNumber is missing.");
+                        var originatorNumber = params['query']['originatorNumber'];
                         execute(Originate, httpResponse, {
                             extension: extension, 
-                            remoteNumber: remoteNumber
+                            remoteNumber: remoteNumber,
+                            originatorNumber: originatorNumber
                         });
+                        var doNotWait = params['query']['doNotWait'];
+                        if(doNotWait !== undefined)
+                            executeCallback("",httpResponse, {});
                         break;
                         
                     case "/doNotDisturbOn":
@@ -179,7 +184,7 @@ function startServer(isSuccess){
     
     }).listen(5859);
     console.log('Server running at http://anyway:5859/');    
-        
+
 }
 
 function execute(Task, httpResponse, args){
