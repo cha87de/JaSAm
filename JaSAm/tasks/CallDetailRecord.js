@@ -20,10 +20,12 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
         var whereStatement = "";
         if(extension !== undefined)
             whereStatement = ' WHERE '+
-                ' `src` = "'+extension + '" OR' +
-                ' `dst` = "'+extension + '" OR' +
-                ' `channel` = "'+agentId + '%" OR' +
-                ' `dstchannel` = "'+agentId + '%"';
+                ' `dst` != "s" AND ( ' +
+                    ' `src` = "'+extension + '" OR' +
+                    ' `dst` = "'+extension + '" OR' +
+                    ' `channel` = "'+agentId + '%" OR' +
+                    ' `dstchannel` = "'+agentId + '%"' + 
+                ' ) ';
         client.query(
             'SELECT SQL_CALC_FOUND_ROWS * FROM `cdr` '+
             whereStatement + 
