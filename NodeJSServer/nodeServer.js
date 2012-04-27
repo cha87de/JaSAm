@@ -104,7 +104,7 @@ function startServer(isSuccess){
                         });
                         var doNotWait = params['query']['doNotWait'];
                         if(doNotWait !== undefined)
-                            executeCallback("",httpResponse, {});
+                            executeCallback("", httpResponse, {});
                         break;
                         
                     case "/doNotDisturbOn":
