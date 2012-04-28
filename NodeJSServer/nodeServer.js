@@ -62,7 +62,6 @@ function startServer(isSuccess){
         try{
 
             var params = url.parse(request.url, true);
-        
             var token = params['query']['token'];
             var extension = params['query']['extension'];
             
@@ -71,85 +70,8 @@ function startServer(isSuccess){
                 var parts = cookie.split('=');
                 cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
             });
-                        
-            if(params['pathname'] == "/originateCall"){
-                if(token === undefined || token != acceptableToken)
-                    throw new Error("Access denied.");
-            
-                var remoteNumber = params['query']['remoteNumber'];
-                if(remoteNumber === undefined)
-                    throw new Error("Param remoteNumber is missing.");
 
-                if(extension === undefined)
-                    throw new Error("Param extension is missing.");
-            
-                execute(Originate, httpResponse, {
-                    extension: extension, 
-                    remoteNumber: remoteNumber
-                });
-            }else if(params['pathname'] == "/doNotDisturbOn"){
-                if(token === undefined || token != acceptableToken)
-                    throw new Error("Access denied.");
-                
-                if(extension === undefined)
-                    throw new Error("Param extension is missing.");
-
-                execute(DNDOn, httpResponse, {
-                    extension: extension
-                });
-            }else if(params['pathname'] == "/doNotDisturbOff"){
-                if(token === undefined || token != acceptableToken)
-                    throw new Error("Access denied.");
-                
-                if(extension === undefined)
-                    throw new Error("Param extension is missing.");
-
-                execute(DNDOff, httpResponse, {
-                    extension: extension
-                });
-            }else if(params['pathname'] == "/asteriskEvent"){
-                if(!authenticatedSessions[cookies.nodeSessionId])
-                    throw new Error("Access denied. Authentication needed.");
-                
-                var lastResponseTime = params['query']['lastResponseTime'];
-                execute(AsteriskEvent, httpResponse, {
-                    lastResponseTime: lastResponseTime,
-                    nodeSessionId: cookies.nodeSessionId
-                });
-            }else if(params['pathname'] == "/tunnel"){
-                if(!authenticatedSessions[cookies.nodeSessionId])
-                    throw new Error("Access denied. Authentication needed.");
-                
-                var urlParams = params['query'];
-                execute(Tunnel, httpResponse, {
-                    urlParams: urlParams,
-                    nodeSessionId: cookies.nodeSessionId
-                });
-            }else if(params['pathname'] == "/callDetailRecord"){
-                if(token === undefined || token != acceptableToken)
-                    throw new Error("Access denied.");
-                
-                request.setEncoding("utf8");
-                request.addListener("data", function(postDataChunk) {
-                    var postData = querystring.parse(postDataChunk);
-
-                    var start = postData.start;
-                    var limit = postData.limit;
-                    var extension = postData.extension;
-                    if(start === undefined)
-                       start = 0;
-                    if(limit === undefined)
-                        limit = 20;
-                    
-                    execute(CallDetailRecord, httpResponse, {
-                        extension: extension,
-                        start: start,
-                        limit: limit,
-                        mysql: mysql,
-                        nodeSessionId: cookies.nodeSessionId
-                    });
-                });
-            }else if(params['pathname'] == "/login"){
+            if(params['pathname'] == "/login"){
                 var username = params['query'].username;
                 var secret = params['query'].secret;
                 if(username == "testmanager" && secret == "sehrsehrgeheim"){
@@ -164,10 +86,93 @@ function startServer(isSuccess){
                 }else{
                     throw new Error("Access denied. Wrong username or secret.");
                 }
+                
+            }else if(token !== undefined && token == acceptableToken){
+                if(extension === undefined)
+                    throw new Error("Param extension is missing.");
+                
+                switch(params['pathname']){
+                    case "/originateCall":
+                        var remoteNumber = params['query']['remoteNumber'];
+                        if(remoteNumber === undefined)
+                            throw new Error("Param remoteNumber is missing.");
+                        var originatorNumber = params['query']['originatorNumber'];
+                        execute(Originate, httpResponse, {
+                            extension: extension, 
+                            remoteNumber: remoteNumber,
+                            originatorNumber: originatorNumber
+                        });
+                        var doNotWait = params['query']['doNotWait'];
+                        if(doNotWait !== undefined)
+                            executeCallback("", httpResponse, {});
+                        break;
+                        
+                    case "/doNotDisturbOn":
+                        execute(DNDOn, httpResponse, {
+                            extension: extension
+                        });
+                        break;
+                        
+                    case "/doNotDisturbOff":
+                        execute(DNDOff, httpResponse, {
+                            extension: extension
+                        });
+                        break;
+                    default:
+                        throw new Error("Page not found.");
+                }
+                
+            }else if(authenticatedSessions[cookies.nodeSessionId]){
+                //update array, for timeout
+                authenticatedSessions[cookies.nodeSessionId] = new Date();
+                
+                switch(params['pathname']){
+                    case "/asteriskEvent":
+                        var lastResponseTime = params['query']['lastResponseTime'];
+                        execute(AsteriskEvent, httpResponse, {
+                            lastResponseTime: lastResponseTime,
+                            nodeSessionId: cookies.nodeSessionId
+                        });
+                        break;
+                        
+                    case "/tunnel":
+                        var urlParams = params['query'];
+                        execute(Tunnel, httpResponse, {
+                            urlParams: urlParams,
+                            nodeSessionId: cookies.nodeSessionId
+                        });
+                        break;
+                        
+                    case "/callDetailRecord":
+                        request.setEncoding("utf8");
+                        request.addListener("data", function(postDataChunk) {
+                            var postData = querystring.parse(postDataChunk);
+
+                            var start = postData.start;
+                            var limit = postData.limit;
+                            var extension = postData.extension;
+                            if(start === undefined)
+                            start = 0;
+                            if(limit === undefined)
+                                limit = 20;
+
+                            execute(CallDetailRecord, httpResponse, {
+                                extension: extension,
+                                start: start,
+                                limit: limit,
+                                mysql: mysql,
+                                nodeSessionId: cookies.nodeSessionId
+                            });
+                        });
+                        break;
+                        
+                    default:
+                        throw new Error("Page not found.");
+                }
             }else{
-                throw new Error("Requested url not found. (404)");
+                throw new Error("Access denied.");
             }
-        
+                    
         }catch(exc){
             now = new Date();
             console.info(now.toString() + ": " + request.url +' Error: ' + exc.message);
@@ -179,7 +184,7 @@ function startServer(isSuccess){
     
     }).listen(5859);
     console.log('Server running at http://anyway:5859/');    
-        
+
 }
 
 function execute(Task, httpResponse, args){
@@ -204,3 +209,17 @@ function executeCallback(responseObj, httpResponse, args){
         });
         httpResponse.end(responseText);
 }
+
+function deleteSessions(){
+    for(var i in authenticatedSessions){
+        var lastRequestTime = authenticatedSessions[i];
+        var timeout = 5*60*1000;// 5 minutes
+        if(lastRequestTime.getTime() < (new Date()).getTime()-timeout ){
+            delete authenticatedSessions[i];
+        }
+    }
+    
+    //restart after 60 seconds
+    setTimeout(deleteSessions, 60 * 1000);
+}
+deleteSessions();
