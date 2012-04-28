@@ -18,9 +18,9 @@ var Transfer = function(args, callbackParam, scopeParam, asteriskManagerParam){
                 continue;
             
             var channel = channels[channelKey];
-            var action = asteriskManager.commander.createAction('redirect');
+            var action = asteriskManager.commander.createAction('atxfer');
             action.params = {
-                channel: channel.bridgedChannelId,
+                channel: channel.id,
                 Exten: remoteNumber,
                 context: 'from-internal',
                 priority: 1 

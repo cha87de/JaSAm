@@ -119,9 +119,10 @@ function callTransfer(){
         var channels = extension.getPeer().getChannels();
         for(var channelKey in channels){
             var channel = channels[channelKey];
-            var action = asteriskManager.commander.createAction('redirect');
+            var action = asteriskManager.commander.createAction('atxfer');
             action.params = {
-                channel: channel.bridgedChannelId,
+                //channel: channel.bridgedChannelId,
+                channel: channel.id,
                 Exten: remoteNumber,
                 context: 'from-internal',
                 priority: 1 

@@ -72,7 +72,7 @@ var AgentManager = function(asteriskManagerParam){
             for(var agententryKey in response.body){
                 if(agententryKey == "remove")
                     continue;
-                if(response.body[agententryKey].name == "QueueParams")
+                if(response.body[agententryKey].name != "QueueMember")
                     continue;
                 var agententry = response.body[agententryKey].content;
                 var id = agententry.location;
