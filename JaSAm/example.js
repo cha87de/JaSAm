@@ -12,6 +12,7 @@ function main(){
     document.getElementById('controlIncomingCallHangup').onclick = callHangup;
     document.getElementById('controlIncomingCallTransferForm').onsubmit = callTransfer;
     document.getElementById('controlIncomingCallMute').onclick = callMute;
+    document.getElementById('controlIncomingGetCall').onclick = getCall;
     
     
     // show login-form
@@ -149,6 +150,33 @@ function callMute(){
             };
             channel.muted = channel.muted ? false : true;
             action.execute(simpleErrorCallback, this);
+        }
+    }catch(exc){
+        console.info(exc);
+    }
+}
+
+function getCall(){
+    try{
+        var extension = asteriskManager.entityManager.extensionManager.extensions[asteriskManager.localUser];
+        var channels = asteriskManager.entityManager.channelManager.channels;
+        for(var channelKey in channels){
+            var channel = channels[channelKey];
+            
+            // nur ersten offenen anruf
+            if(channel.bridgedChannelId != null)
+                continue;
+            
+            var action = asteriskManager.commander.createAction('redirect');
+            action.params = {
+                channel: channel.id, // channel to park
+                Exten: extension.id,
+                context: 'from-internal',
+                priority: 1 
+            };
+            action.execute(simpleErrorCallback, this);
+            
+            return;
         }
     }catch(exc){
         console.info(exc);
@@ -388,10 +416,10 @@ function updateAgents(){
 
 function listenIncomingCall(entityEvent){
     entityEvent = entityEvent[0];
+    var output = "";
     if(entityEvent.entity && entityEvent.entity.getPeer().getExtension().id == asteriskManager.localUser){
         // local phone action!
         if(entityEvent.type == EntityEvent.Types.New || entityEvent.type == EntityEvent.Types.Update){
-            var output = "";
             if(entityEvent.entity.getPeer().getExtension().status == Extension.State.ringing)
                 output = "Phone Ringing!";
             else
@@ -403,18 +431,46 @@ function listenIncomingCall(entityEvent){
         }else{
             listenIncomingCallOutput(true, "unknown!");
         }
+    }else{
+        // other phone ringing!
+        if(entityEvent.type == EntityEvent.Types.New || entityEvent.type == EntityEvent.Types.Update){
+            output += " (Incoming Call on other Extension from " + entityEvent.entity.connectedlinenum + ")";
+            console.info(output);
+            listenIncomingCallOutputOtherExtension(true, output);
+        }else if(entityEvent.type == EntityEvent.Types.Remove){
+            listenIncomingCallOutputOtherExtension(false, "");
+        }else{
+            listenIncomingCallOutputOtherExtension(true, "unknown!");
+        }
+
     }
 }
 
 function listenIncomingCallOutput(showIncoming, output){
     if(showIncoming){
-            document.getElementById('controlIncomingNothing').style.display = 'none';
             document.getElementById('controlIncomingNewCall').style.display = 'block';                  
             document.getElementById('controlIncomingCallInfo').innerHTML = output;
+            document.getElementById('controlIncomingNothing').style.display = 'none';
     }else{
-            document.getElementById('controlIncomingNothing').style.display = 'block';
             document.getElementById('controlIncomingNewCall').style.display = 'none';            
             document.getElementById('controlIncomingCallInfo').innerHTML = "";
+            
+            if(document.getElementById('controlIncomingNewCallOtherExtension').style.display == 'none')
+                document.getElementById('controlIncomingNothing').style.display = 'block';
+    }
+}
+
+function listenIncomingCallOutputOtherExtension(showIncoming, output){
+    if(showIncoming){
+            document.getElementById('controlIncomingNothing').style.display = 'none';
+            document.getElementById('controlIncomingNewCallOtherExtension').style.display = 'block';                  
+            document.getElementById('controlIncomingCallInfoOtherExtension').innerHTML = output;
+    }else{
+            document.getElementById('controlIncomingNewCallOtherExtension').style.display = 'none';            
+            document.getElementById('controlIncomingCallInfoOtherExtension').innerHTML = "";
+            
+            if(document.getElementById('controlIncomingNewCall').style.display == 'none')
+                document.getElementById('controlIncomingNothing').style.display = 'block';            
     }
 }
 
