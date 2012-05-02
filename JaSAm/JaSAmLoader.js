@@ -67,8 +67,7 @@ JaSAmLoader.files = [
     "tasks/DNDOn.js",
     "tasks/DNDOff.js",
     "tasks/TogglePauseAgent.js",
-    "tasks/ChangePenalty.js",
-    "tasks/CallDetailRecord.js"
+    "tasks/ChangePenalty.js"
 ];
 JaSAmLoader.filesLoaded = 0;
 

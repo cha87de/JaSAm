@@ -48,7 +48,7 @@ var BasicManager = function(){
     var execute = function(url, action, parameter, callback, scope){
         var command = parameter ? parameter : {};
         command.action = action;
-        
+
         // execute ajax-call with: method, baseUrl, command (Object?!)
         ajaxCall.request('GET', url, command, function(ajaxResponse){
             var xmlDoc = null;
@@ -59,7 +59,7 @@ var BasicManager = function(){
                 if(parser == null){
                     parser = new DOMParser();    
                 }
-                
+
                 var str = ajaxResponse.responseText.replace(/\*/g, '');
                 try{
                     xmlDoc=parser.parseFromString(str,"text/xml");
@@ -68,6 +68,7 @@ var BasicManager = function(){
                     console.info(command);
                     console.info(exc);
                     console.info("str = " + str);
+                    return;
                 }
             }
             var result = parseData(xmlToJson(xmlDoc));

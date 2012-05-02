@@ -1,4 +1,5 @@
-var Task = require('./Task.js').Task;
+var Task = require('../../JaSAm/tasks/Task.js').Task;
+var mysql = require('mysql');
 
 var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManagerParam){
     
@@ -9,7 +10,6 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
     var extension = args['extension'];
     var start = args['start'];
     var limit = args['limit'];
-    var mysql = args['mysql'];
     
     this.run = function (){
         var client = mysql.createClient({
