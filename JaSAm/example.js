@@ -14,7 +14,6 @@ function main(){
     document.getElementById('controlIncomingCallMute').onclick = callMute;
     document.getElementById('controlIncomingGetCall').onclick = getCall;
     
-    
     // show login-form
     showPanel(Panel.Login);
     
@@ -37,7 +36,10 @@ function doLogin(){
 
         // Define Asterisk-Server
         asteriskManager = new AsteriskManager(manager);
-        asteriskManager.baseUrl = '/asterisk/mxml';
+        asteriskManager.baseUrl = 'ws://localhost:5859/';
+        
+        var wsCall = new WsCall();
+        asteriskManager.setAjaxCall(wsCall);
         
         manager.login();
     }catch(exc){

@@ -58,132 +58,120 @@ function startServer(isSuccess){
         return;
     }
     console.info(now.toString() + ": start server ...");
-    httpServer = http.createServer(function (request, httpResponse) {
-        try{
+    httpServer = http.createServer(serverWork).listen(5859);
+    console.log('Server running at Port 5859');    
+}
 
-            var params = url.parse(request.url, true);
-            var token = params['query']['token'];
-            var extension = params['query']['extension'];
-            
-            var cookies = {};
-            request.headers.cookie && request.headers.cookie.split(';').forEach(function( cookie ) {
-                var parts = cookie.split('=');
-                cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
-            });
+function serverWork(request, httpResponse) {
+    try{
+        var params = url.parse(request.url, true);
+        var token = params['query']['token'];
+        var extension = params['query']['extension'];
 
-            if(params['pathname'] == "/login"){
-                var username = params['query'].username;
-                var secret = params['query'].secret;
-                if(username == "testmanager" && secret == "sehrsehrgeheim"){
-                    var nodeSessionId;
-                    do{
-                        nodeSessionId = Math.floor((Math.random()*1000000)+1000);    
-                    }while(authenticatedSessions[nodeSessionId]);
-                    
-                     authenticatedSessions[nodeSessionId] = new Date();
-                     var successMessage = "<ajax-response><response type='object' id='unknown'><generic response='Success' /></response></ajax-response>";
-                    executeCallback(successMessage, httpResponse, {nodeSessionId: nodeSessionId});
-                }else{
-                    throw new Error("Access denied. Wrong username or secret.");
-                }
-                
-            }else if(token !== undefined && token == acceptableToken){
-                if(extension === undefined)
-                    throw new Error("Param extension is missing.");
-                
-                switch(params['pathname']){
-                    case "/originateCall":
-                        var remoteNumber = params['query']['remoteNumber'];
-                        if(remoteNumber === undefined)
-                            throw new Error("Param remoteNumber is missing.");
-                        var originatorNumber = params['query']['originatorNumber'];
-                        execute(Originate, httpResponse, {
-                            extension: extension, 
-                            remoteNumber: remoteNumber,
-                            originatorNumber: originatorNumber
-                        });
-                        var doNotWait = params['query']['doNotWait'];
-                        if(doNotWait !== undefined)
-                            executeCallback("", httpResponse, {});
-                        break;
-                        
-                    case "/doNotDisturbOn":
-                        execute(DNDOn, httpResponse, {
-                            extension: extension
-                        });
-                        break;
-                        
-                    case "/doNotDisturbOff":
-                        execute(DNDOff, httpResponse, {
-                            extension: extension
-                        });
-                        break;
-                    default:
-                        throw new Error("Page not found.");
-                }
-                
-            }else if(authenticatedSessions[cookies.nodeSessionId]){
-                //update array, for timeout
-                authenticatedSessions[cookies.nodeSessionId] = new Date();
-                
-                switch(params['pathname']){
-                    case "/asteriskEvent":
-                        var lastResponseTime = params['query']['lastResponseTime'];
-                        execute(AsteriskEvent, httpResponse, {
-                            lastResponseTime: lastResponseTime,
-                            nodeSessionId: cookies.nodeSessionId
-                        });
-                        break;
-                        
-                    case "/tunnel":
-                        var urlParams = params['query'];
-                        execute(Tunnel, httpResponse, {
-                            urlParams: urlParams,
-                            nodeSessionId: cookies.nodeSessionId
-                        });
-                        break;
-                        
-                    case "/callDetailRecord":
-                        request.setEncoding("utf8");
-                        request.addListener("data", function(postDataChunk) {
-                            var postData = querystring.parse(postDataChunk);
+        var cookies = {};
+        request.headers.cookie && request.headers.cookie.split(';').forEach(function( cookie ) {
+            var parts = cookie.split('=');
+            cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
+        });
 
-                            var start = postData.start;
-                            var limit = postData.limit;
-                            var extension = postData.extension;
-                            if(start === undefined)
-                            start = 0;
-                            if(limit === undefined)
-                                limit = 20;
+        if(params['pathname'] == "/login"){
+            var username = params['query'].username;
+            var secret = params['query'].secret;
+            if(username == "testmanager" && secret == "sehrsehrgeheim"){
+                var nodeSessionId;
+                do{
+                    nodeSessionId = Math.floor((Math.random()*1000000)+1000);    
+                }while(authenticatedSessions[nodeSessionId]);
 
-                            execute(CallDetailRecord, httpResponse, {
-                                extension: extension,
-                                start: start,
-                                limit: limit,
-                                mysql: mysql,
-                                nodeSessionId: cookies.nodeSessionId
-                            });
-                        });
-                        break;
-                        
-                    default:
-                        throw new Error("Page not found.");
-                }
+                    authenticatedSessions[nodeSessionId] = new Date();
+                    var successMessage = "<ajax-response><response type='object' id='unknown'><generic response='Success' /></response></ajax-response>";
+                executeCallback(successMessage, httpResponse, {nodeSessionId: nodeSessionId});
             }else{
-                throw new Error("Access denied.");
+                throw new Error("Access denied. Wrong username or secret.");
             }
-                    
-        }catch(exc){
-            now = new Date();
-            console.info(now.toString() + ": " + request.url +' Error: ' + exc.message);
-            httpResponse.writeHead(500, {
-                'Content-Type': 'text/plain'
-            });
-            httpResponse.end('Error\n' + exc.message);
+
+        }else if(token !== undefined && token == acceptableToken){
+            if(extension === undefined)
+                throw new Error("Param extension is missing.");
+
+            switch(params['pathname']){
+                case "/originateCall":
+                    var remoteNumber = params['query']['remoteNumber'];
+                    if(remoteNumber === undefined)
+                        throw new Error("Param remoteNumber is missing.");
+                    var originatorNumber = params['query']['originatorNumber'];
+                    execute(Originate, httpResponse, {
+                        extension: extension, 
+                        remoteNumber: remoteNumber,
+                        originatorNumber: originatorNumber
+                    });
+                    var doNotWait = params['query']['doNotWait'];
+                    if(doNotWait !== undefined)
+                        executeCallback("", httpResponse, {});
+                    break;
+                default:
+                    throw new Error("Page not found.");
+            }
+
+        }else if(authenticatedSessions[cookies.nodeSessionId]){
+            //update array, for timeout
+            authenticatedSessions[cookies.nodeSessionId] = new Date();
+
+            switch(params['pathname']){
+                case "/asteriskEvent":
+                    var lastResponseTime = params['query']['lastResponseTime'];
+                    execute(AsteriskEvent, httpResponse, {
+                        lastResponseTime: lastResponseTime,
+                        nodeSessionId: cookies.nodeSessionId
+                    });
+                    break;
+
+                case "/tunnel":
+                    var urlParams = params['query'];
+                    execute(Tunnel, httpResponse, {
+                        urlParams: urlParams,
+                        nodeSessionId: cookies.nodeSessionId
+                    });
+                    break;
+
+                case "/callDetailRecord":
+                    request.setEncoding("utf8");
+                    request.addListener("data", function(postDataChunk) {
+                        var postData = querystring.parse(postDataChunk);
+
+                        var start = postData.start;
+                        var limit = postData.limit;
+                        var extension = postData.extension;
+                        if(start === undefined)
+                        start = 0;
+                        if(limit === undefined)
+                            limit = 20;
+
+                        execute(CallDetailRecord, httpResponse, {
+                            extension: extension,
+                            start: start,
+                            limit: limit,
+                            mysql: mysql,
+                            nodeSessionId: cookies.nodeSessionId
+                        });
+                    });
+                    break;
+
+                default:
+                    throw new Error("Page not found.");
+            }
+        }else{
+            throw new Error("Access denied.");
         }
-    
-    }).listen(5859);
-    console.log('Server running at http://anyway:5859/');    
+
+    }catch(exc){
+        now = new Date();
+        console.info(now.toString() + ": " + request.url +' Error: ' + exc.message);
+        httpResponse.writeHead(500, {
+            'Content-Type': 'text/plain'
+        });
+        httpResponse.end('Error\n' + exc.message);
+    }
 
 }
 

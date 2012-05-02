@@ -31,6 +31,7 @@ JaSAmLoader.basePath = '.';
 JaSAmLoader.rev = 5;
 JaSAmLoader.files = [
     "core/AjaxCall.js",
+    "core/WsCall.js",
     "core/BasicManager.js",   
     "core/AsteriskManager.js",   
     "core/Commander.js",   
