@@ -22,8 +22,8 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
             whereStatement += ' AND ( ' +
                     ' `src` = "'+extension + '" OR' +
                     ' `dst` = "'+extension + '" OR' +
-                    ' `channel` = "'+agentId + '%" OR' +
-                    ' `dstchannel` = "'+agentId + '%"' + 
+                    ' `channel` LIKE "'+agentId + '%" OR' +
+                    ' `dstchannel` LIKE "'+agentId + '%"' + 
                 ' ) ';
         client.query(
             'SELECT SQL_CALC_FOUND_ROWS * FROM `cdr` '+
