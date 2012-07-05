@@ -70,7 +70,7 @@ function startServer(isSuccess){
 }
 
 function startClassicHttpServer(){
-    var worker = new ClassicWorker(jaSAmApp);
+    var worker = new ClassicWorker(jaSAmApp, socketServerWorker);
     classicHttpServer = http.createServer(worker.work).listen(classicHttpServerPort);
     console.info((new Date()) + ": ClassicHttpServer listening on port " + classicHttpServerPort);
 }

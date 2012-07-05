@@ -5,8 +5,9 @@ var Task = require('../../JaSAm/tasks/Task.js').Task;
 var Originate = require('../../JaSAm/tasks/Originate.js').Originate;
 var CallDetailRecord = require('../tasks/CallDetailRecord.js').CallDetailRecord;
 
-var ClassicWorker = function(jaSAmAppParam){
+var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
     var jaSAmApp = jaSAmAppParam;
+    var socketServerWorker = socketServerWorkerParam;
     
     var workerUris = { }; // String URI -> function
     var validToken = 123456;
