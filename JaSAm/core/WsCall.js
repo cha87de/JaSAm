@@ -29,7 +29,6 @@ var WsCall = function(){
      * Handle incoming message
      */
     var onmessage = function(message){
-        console.info('message:', message);
         var responseObj = JSON.parse(message.data);
         var requestId = responseObj.requestId;
         
