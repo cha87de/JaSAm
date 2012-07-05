@@ -59,6 +59,12 @@ var EntityManager = function(asteriskManagerParam){
                 this.agentManager.handleEvent(responseItem);                
             }
 
+            if(eventName == 'Message'){
+                // Special-Event: Message! Print on Screen!
+                console.info('incoming message: ', responseItem);
+                alert(responseItem.message);
+            }
+
             if(unknown){
                 // Event unknown!
                 BasicManager.print('Event unknown:', eventName, responseItem);
