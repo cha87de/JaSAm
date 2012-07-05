@@ -36,7 +36,7 @@ var WsCall = function(){
         
         var callback = callbackQueue[requestId].callback;
         var scope = callbackQueue[requestId].scope;
-        console.info(response);
+        
         callback.apply(scope, [response]);
         
         delete callbackQueue[requestId];
