@@ -91,6 +91,24 @@ var ClassicWorker = function(jaSAmAppParam){
         });
     };
     
+    workerUris['sendMessage'] = function(request, response, params){
+        var password = params['query']['password'];
+        if(password === undefined || password != "123geheim")
+            throw new Error("Param password is wrong.");
+
+        var message = params['query']['message'];
+        if(message === undefined)
+            throw new Error("Param message is missing.");
+
+        // Send Message through SocketServer
+        for(var i = 0; i<socketServerWorker.length; i++){
+            var worker = socketServerWorker[i];
+            worker.sendMessage(message);
+        }
+
+        executeCallback("", response);
+    };    
+    
     var executeCallback = function (responseObj, httpResponse){
         var httpstatus = 200;
         var responseText = "";

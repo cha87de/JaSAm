@@ -13,6 +13,7 @@ var jaSAmApp = null;
 var classicHttpServer = null;
 var socketHttpServer = null;
 var socketServer = null;
+var socketServerWorker = new Array();
 
 var socketServerPort = 5859;
 var classicHttpServerPort = 5860;
@@ -84,7 +85,14 @@ function startSocketServer(){
 
         var connection = request.accept(null, request.origin);
         var worker = new SocketWorker(jaSAmApp, connection);
+        var workerPosition = socketServerWorker.length;
+        socketServerWorker.push(worker);
+        
         connection.on('message', worker.work);
+        connection.on('close', function(connection) {
+            // delete worker from array
+            socketServerWorker.splice(workerPosition, 1);
+        });
     });    
     console.info((new Date()) + ": SocketHttpServer listening on port " + socketServerPort);    
 }

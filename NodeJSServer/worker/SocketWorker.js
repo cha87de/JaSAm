@@ -77,6 +77,10 @@ var SocketWorker = function(jaSAmAppParam, connectionParam){
         }
     };
     
+    this.sendMessage = function(message){
+        send(message);
+    };
+    
     var executeCallback = function (taskResponse, wsResponse){
         var responseText = "";
         if(taskResponse instanceof Exception){
