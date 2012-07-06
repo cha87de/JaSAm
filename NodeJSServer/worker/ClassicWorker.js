@@ -93,21 +93,19 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
     };
     
     workerUris['sendMessage'] = function(request, response, params){
-        var password = params['query']['password'];
-        if(password === undefined || password != "123geheim")
-            throw new Error("Param password is wrong.");
-
         var message = params['query']['message'];
         if(message === undefined)
             throw new Error("Param message is missing.");
 
-        // Send Message through SocketServer
-        for(var i = 0; i<socketServerWorker.length; i++){
-            var worker = socketServerWorker[i];
-            worker.sendMessage(message);
-        }
-
         executeCallback("", response);
+
+        var action = new Action(jaSAmApp.getAsteriskManager());
+        action.name = "UserEvent";
+        action.params = {
+            UserEvent: 'message',
+            Header1: message
+        };
+        action.execute(function(){}, this);
     };    
     
     var executeCallback = function (responseObj, httpResponse){

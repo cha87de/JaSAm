@@ -18,7 +18,7 @@ var EntityManager = function(asteriskManagerParam){
     // Mapping rules:
     var ignoreEvents = ['Newexten', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
     var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial', 'NewCallerid', 'Bridge', 'Unlink'];
-    var extensionEvents = ['ExtensionStatus',  'UserEvent'];
+    var extensionEvents = ['ExtensionStatus'];
     var peerEvents = ['PeerStatus'];
     var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded', 'QueueMemberPenalty', 'QueueMemberPaused'];
     var agentEvents = [];
@@ -59,10 +59,11 @@ var EntityManager = function(asteriskManagerParam){
                 this.agentManager.handleEvent(responseItem);                
             }
 
-            if(eventName == 'Message'){
+            // Message UserEvent
+            if(eventName == 'UserEvent' && responseItem.UserEvent == 'message'){
                 // Special-Event: Message! Print on Screen!
                 console.info('incoming message: ', responseItem);
-                alert(responseItem.message);
+                alert(responseItem.Header1);
             }
 
             if(unknown){
