@@ -60,10 +60,9 @@ var EntityManager = function(asteriskManagerParam){
             }
 
             // Message UserEvent
-            if(eventName == 'UserEvent' && responseItem.UserEvent == 'message'){
+            if(eventName == 'UserEvent' && responseItem.content.userevent == 'message'){
                 // Special-Event: Message! Print on Screen!
-                console.info('incoming message: ', responseItem);
-                alert(responseItem.Header1);
+                alert(responseItem.content.header1);
             }
 
             if(unknown){
