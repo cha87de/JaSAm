@@ -104,7 +104,10 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
             UserEvent: 'message',
             Header1: message
         };
-        action.execute(function(){}, this);
+        
+        action.execute(function(){
+            executeCallback("", response);
+        }, this);
     };    
     
     var executeCallback = function (responseObj, httpResponse){
