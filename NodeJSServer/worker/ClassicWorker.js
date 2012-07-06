@@ -4,6 +4,7 @@ var Exception = require('../../JaSAm/messages/Exception.js').Exception;
 var Task = require('../../JaSAm/tasks/Task.js').Task;
 var Originate = require('../../JaSAm/tasks/Originate.js').Originate;
 var CallDetailRecord = require('../tasks/CallDetailRecord.js').CallDetailRecord;
+var Action = require('../../JaSAm/messages/Action.js').Action;
 
 var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
     var jaSAmApp = jaSAmAppParam;
@@ -96,8 +97,6 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
         var message = params['query']['message'];
         if(message === undefined)
             throw new Error("Param message is missing.");
-
-        executeCallback("", response);
 
         var action = new Action(jaSAmApp.getAsteriskManager());
         action.name = "UserEvent";
