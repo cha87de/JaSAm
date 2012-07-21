@@ -28,6 +28,14 @@ var Channel = function(id, asteriskManagerParam){
             return null;
         }
     };
+    
+    this.getBrigedChannel = function(){
+        try{
+            return asteriskManager.entityManager.channelManager.channels[this.bridgedChannelId];
+        }catch(exc){
+            return null;
+        }
+    }
 };
 Channel.prototype = new Entity();
 Channel.prototype.toString = function(){
