@@ -18,7 +18,6 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
             
             var params = url.parse(request.url, true);
             var path = params['pathname'].replace(/\//gi, "");
-            console.info("incoming http request for path " + path);
             
             var token = params['query']['token'];
 
