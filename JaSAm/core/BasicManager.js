@@ -1,6 +1,7 @@
 var AjaxCall = require('../core/AjaxCall.js').AjaxCall;
 var ResponseItem = require('../messages/ResponseItem.js').ResponseItem;
 var Response = require('../messages/Response.js').Response;
+var XmlToJson = require('../utils/XmlToJson.js').XmlToJson;
 
 /**
  * AbstractAsteriskManager
@@ -71,7 +72,8 @@ var BasicManager = function(){
                     return;
                 }
             }
-            var result = parseData(xmlToJson(xmlDoc));
+            var jsonDoc = (new XmlToJson()).xml2json(xmlDoc);
+            var result = parseData(jsonDoc);
             var response = parseResponse(result);
             response.xmlData = xmlDoc.toString();
             callback.apply(scope, [response]);
@@ -92,7 +94,7 @@ var BasicManager = function(){
         var result = [];
         if(!response['ajax-response'] || !response['ajax-response']['response']){
             return result;
-        }       
+        }
         if(response['ajax-response']['response'].length > 0){
             for(var i = 0; i < response['ajax-response']['response'].length; i++){
                 if(response['ajax-response']['response'][i]['generic'] && response['ajax-response']['response'][i]['generic']['@attributes'])
@@ -194,7 +196,7 @@ var BasicManager = function(){
             }
         }
         return obj;
-    };    
+    };
 };
 
 BasicManager.print = function(){

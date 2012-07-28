@@ -28,7 +28,7 @@ JaSAmLoader.loadFile = function (filename, callback){
 }
 
 JaSAmLoader.basePath = '.';
-JaSAmLoader.rev = 6;
+JaSAmLoader.rev = 7;
 JaSAmLoader.files = [
     "core/AjaxCall.js",
     "core/WsCall.js",
@@ -60,6 +60,7 @@ JaSAmLoader.files = [
     "messages/Exception.js",
     
     "utils/CallbackCollector.js",
+    "utils/XmlToJson.js",
     
     "tasks/Task.js",
     "tasks/Originate.js",

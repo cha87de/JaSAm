@@ -20,7 +20,6 @@ var EventConnector = function(asteriskManagerParam){
         if(!enableListening)
             return;
 
-        waitEventAction = asteriskManager.commander.createAction('waitevent');
         waitEventAction.params = {
             timeout: 60,
             lastResponseTime: lastResponseTime
@@ -40,7 +39,7 @@ var EventConnector = function(asteriskManagerParam){
             }
             
             me.propagate(response);
-        });        
+        });
     };
     
     var cancel = function(){

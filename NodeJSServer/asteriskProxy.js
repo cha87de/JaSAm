@@ -57,7 +57,7 @@ startStopDaemon(options, function() {
 
 function startServer(isSuccess){
     // if JaSAmApp successfully startet, start server!
-    
+
     if(!isSuccess){
         console.info((new Date()) + ": Fehler beim Starten der JaSAmApp!");
         return;
@@ -71,12 +71,14 @@ function startServer(isSuccess){
 
 function startClassicHttpServer(){
     var worker = new ClassicWorker(jaSAmApp, socketServerWorker);
-    classicHttpServer = http.createServer(worker.work).listen(classicHttpServerPort);
+    classicHttpServer = http.createServer(worker.work);
+    classicHttpServer.listen(classicHttpServerPort);
     console.info((new Date()) + ": ClassicHttpServer listening on port " + classicHttpServerPort);
 }
 
 function startSocketServer(){
-    socketHttpServer = http.createServer().listen(socketServerPort);
+    socketHttpServer = http.createServer();
+    socketHttpServer.listen(socketServerPort);
     socketServer = new WebSocketServer({
         httpServer: socketHttpServer
     });

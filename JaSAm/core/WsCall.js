@@ -20,9 +20,15 @@ var WsCall = function(){
         connection = new WebSocket(connectionUri);
         connection.onmessage = onmessage;
         connection.onopen = function(){
-            callback.apply(scope, []);
+                callback.apply(scope, []);
         };
         connection.onerror = onerror;
+        connection.onclose = onclose;
+    };
+    
+    var onclose = function(closeObj){
+        if(closeObj.code == 1006)
+            alert("Telefon-TCP Problem, bitte Seite neuladen.");
     };
     
     /**
