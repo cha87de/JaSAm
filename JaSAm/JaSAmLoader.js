@@ -32,6 +32,7 @@ JaSAmLoader.rev = 7;
 JaSAmLoader.files = [
     "core/AjaxCall.js",
     "core/WsCall.js",
+    "utils/XmlToJson.js",
     "core/BasicManager.js",   
     "core/AsteriskManager.js",   
     "core/Commander.js",   
@@ -60,7 +61,6 @@ JaSAmLoader.files = [
     "messages/Exception.js",
     
     "utils/CallbackCollector.js",
-    "utils/XmlToJson.js",
     
     "tasks/Task.js",
     "tasks/Originate.js",
