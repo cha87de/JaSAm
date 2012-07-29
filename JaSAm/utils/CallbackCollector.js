@@ -27,6 +27,7 @@ var CallbackCollector = function(callbackParam, scopeParam){
     };
     
     this.cancel = function(isSuccess){
+        count = -1;
         callbackParam.apply(scopeParam, [isSuccess]);
     }
     
