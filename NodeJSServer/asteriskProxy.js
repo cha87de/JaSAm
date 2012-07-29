@@ -44,8 +44,8 @@ startStopDaemon(options, function() {
     config[JaSAmApp.Configuration.enableEventBuffering] =  true;
     jaSAmApp.setConfiguration(config);
 
-    var parser = require("libxml");
-    jaSAmApp.getAsteriskManager().setParser(parser);
+    var jsonParser = require("xml2json");
+    jaSAmApp.getAsteriskManager().setJsonParser(jsonParser);
 
     var ajaxCall = new NodeAjaxCall();
     jaSAmApp.getAsteriskManager().setAjaxCall(ajaxCall);

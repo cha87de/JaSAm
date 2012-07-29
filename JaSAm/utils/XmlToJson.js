@@ -80,11 +80,10 @@ var XmlToJson = function() {
             }
             
             // Attributes
-            result['@attributes'] = new Array();
             for(var aidx=0; aidx <node.attributes.length; aidx++) {
                 var attr = node.attributes[aidx]; // [aidx];
                 result.__cnt++;
-                result['@attributes'][attr.name]=attr.value;
+                result[attr.name]=attr.value;
             }
             
             // Node namespace prefix
@@ -233,20 +232,6 @@ var XmlToJson = function() {
 
     this.xml2json = function (xmlDoc) {
         return parseDOMChildren ( xmlDoc );
-    };
-    
-    this.xml_str2json = function (xmlDocStr) {
-        var xmlDoc = this.parseXmlString(xmlDocStr);    
-        return this.xml2json(xmlDoc);
-    };
-
-    this.json2xml_str = function (jsonObj) {
-        return parseJSONObject ( jsonObj );
-    };
-
-    this.json2xml = function (jsonObj) {
-        var xmlDocStr = this.json2xml_str (jsonObj);
-        return this.parseXmlString(xmlDocStr);
     };
 };
 

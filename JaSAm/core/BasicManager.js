@@ -11,7 +11,9 @@ var BasicManager = function(){
     this.baseUrl = '/asterisk/mxml';
     var ajaxCall = new AjaxCall();
     var parser = null;
-    
+    var jsonParser = null;
+    var xml2json = (new XmlToJson()).xml2json;
+
     /**
      * setAjaxCall
      * PUBLIC FUNCTION
@@ -30,12 +32,12 @@ var BasicManager = function(){
     };
     
     /**
-     * setParser
+     * setJsonParser
      * PUBLIC FUNCTION
-     * @param _parser <Object> Set specific parser
+     * @param _jsonParser <Object> Set specific parser
      */
-    this.setParser = function(_parser){
-        parser = _parser;
+    this.setJsonParser = function(_jsonParser){
+        jsonParser = _jsonParser;
     };
     
     /**
@@ -52,30 +54,42 @@ var BasicManager = function(){
 
         // execute ajax-call with: method, baseUrl, command (Object?!)
         ajaxCall.request('GET', url, command, function(ajaxResponse){
-            var xmlDoc = null;
-            if(ajaxResponse.responseXML){
-                xmlDoc = ajaxResponse.responseXML;
-            }else{
-                // Parse XMLDoc ...
-                if(parser == null){
-                    parser = new DOMParser();    
-                }
+            var str, xmlData, jsonDoc;
+            if(jsonParser === null){
+                var xmlDoc = null;
+                if(ajaxResponse.responseXML){
+                    xmlDoc = ajaxResponse.responseXML;
+                }else{
+                    // Parse XMLDoc ...
+                    if(parser == null){
+                        parser = new DOMParser();    
+                    }
 
-                var str = ajaxResponse.responseText.replace(/\*/g, '');
-                try{
-                    xmlDoc=parser.parseFromString(str,"text/xml");
-                }catch(exc){
-                    console.info("Error parsing response from " + url + " command: ");
-                    console.info(command);
-                    console.info(exc);
-                    console.info("str = " + str);
-                    return;
+                    str = ajaxResponse.responseText.replace(/\*/g, '');
+                    try{
+                        xmlDoc=parser.parseFromString(str,"text/xml");
+                    }catch(exc){
+                        console.info("Error parsing response from " + url + " command: ");
+                        console.info(command);
+                        console.info(exc);
+                        console.info("str = " + str);
+                        return;
+                    }
                 }
+                jsonDoc = xml2json(xmlDoc);
+                xmlData = xmlDoc.toString();
+            }else{
+                if(ajaxResponse.responseXML)
+                    str = ajaxResponse.responseXML;
+                else
+                    str = ajaxResponse.responseText.replace(/\*/g, '');    
+                jsonDoc = jsonParser.toJson(str);
+                jsonDoc = JSON.parse(jsonDoc);
+                xmlData = str;
             }
-            var jsonDoc = (new XmlToJson()).xml2json(xmlDoc);
             var result = parseData(jsonDoc);
             var response = parseResponse(result);
-            response.xmlData = xmlDoc.toString();
+            response.xmlData = xmlData;
             callback.apply(scope, [response]);
         }, this);
     };
@@ -97,17 +111,26 @@ var BasicManager = function(){
         }
         if(response['ajax-response']['response'].length > 0){
             for(var i = 0; i < response['ajax-response']['response'].length; i++){
-                if(response['ajax-response']['response'][i]['generic'] && response['ajax-response']['response'][i]['generic']['@attributes'])
-                    result.push(response['ajax-response']['response'][i]['generic']['@attributes']);
+                if(response['ajax-response']['response'][i]['generic']){
+                    var tmp =  [];
+                    for(var attribute in response['ajax-response']['response'][i]['generic']){
+                        tmp[attribute] = response['ajax-response']['response'][i]['generic'][attribute];
+                    }
+                    result.push(tmp);
+                }      
             }
         }else{
-            if(response['ajax-response']['response']['generic'] && response['ajax-response']['response']['generic']['@attributes'])
-                result.push(response['ajax-response']['response']['generic']['@attributes']);
-        }
-        
+            if(response['ajax-response']['response']['generic'])
+                var tmp =  [];
+                for(var attribute in response['ajax-response']['response']['generic']){
+                    tmp[attribute] = response['ajax-response']['response']['generic'][attribute];
+                }
+                result.push(tmp);
+            }
+
         var timestamp = null;
-        if(response['ajax-response']['@attributes'] !== undefined)
-            timestamp = response['ajax-response']['@attributes'].name;
+        if(response['ajax-response'] !== undefined)
+            timestamp = response['ajax-response'].name;
         result.push(timestamp);
         
         return result;
@@ -150,53 +173,6 @@ var BasicManager = function(){
         
         return responseItem;
     }
-    
-    /**
-     * ...
-     * PRIVATE FUNCTION
-     * @param xml <object> ...
-     */    
-    var xmlToJson = function(xml) {
-        // Create the return object
-        var obj = {};
-
-        if(xml == null)
-            return obj;
-
-        if (xml.nodeType == 1) { // element
-            // do attributes
-            if (xml.attributes.length > 0) {
-                obj["@attributes"] = {};
-                for (var j = 0; j < xml.attributes.length; j++) {
-                    var attribute = xml.attributes[j];
-                    obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-                }
-            }
-        } else if (xml.nodeType == 3) { // text
-            obj = xml.nodeValue;
-        }
-
-        // do children
-        if (xml.hasChildNodes) {
-            for(var i = 0; i < xml.childNodes.length; i++) {
-                var item = xml.childNodes[i];
-                var nodeName = item.nodeName;
-                if (typeof(obj[nodeName]) == "undefined") {
-                    obj[nodeName] = xmlToJson(item);
-                } else {
-                    if (typeof(obj[nodeName].length) == "undefined") {
-                        var old = obj[nodeName];
-                        obj[nodeName] = [];
-                        obj[nodeName].push(old);
-                    }
-                    if(!(typeof(obj[nodeName]) == "string" && 
-                        obj[nodeName].replace(/^\s\s*/, '').replace(/\s\s*$/, '') == ""))
-                        obj[nodeName].push(xmlToJson(item));
-                }
-            }
-        }
-        return obj;
-    };
 };
 
 BasicManager.print = function(){

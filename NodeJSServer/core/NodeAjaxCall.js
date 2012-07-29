@@ -6,7 +6,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var NodeAjaxCall = function(){
     this.sessionId = null;
-    
+
     /**
      *
      */
@@ -39,15 +39,19 @@ var NodeAjaxCall = function(){
             connection.setRequestHeader('cookie', 'mansession_id="'+this.sessionId+'"; Version=1; Max-Age=50');
         connection.onreadystatechange = function() {
             if (connection.readyState==4) {
-                callback.apply(scope, [connection]);                    
+                var response = {
+                    responseText: connection.responseText,
+                    responseXML: connection.responseXML
+                };
+                callback.apply(scope, [response]);                    
                 self.onResponse(connection.getAllResponseHeaders());
             }
         }
-        connection.send(postData);                 
+        connection.send(postData);     
     };
     
     this.onResponse = function(headers){
-        //save sessionId after first ajaxCall
+        //save sessionId for first ajaxCall
         if(this.sessionId == null){
             var tmp = headers.split("\n");
             for(var index in tmp){

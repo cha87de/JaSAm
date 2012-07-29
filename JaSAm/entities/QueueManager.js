@@ -103,6 +103,7 @@ var QueueManager = function(asteriskManagerParam){
                 }
             }else{
                 console.warn(response);
+                console.warn(response.xmlData);
             }
             
             callback.apply(scope, []);
