@@ -13,14 +13,27 @@ var GetCall = function(args, callbackParam, scopeParam, asteriskManagerParam){
     this.run = function (){
         var extension = asteriskManager.entityManager.extensionManager.extensions[localUser];
         var channels = asteriskManager.entityManager.channelManager.channels;
+        var connectedlinenum = null;
+
+        //get channel of ringingExtension
         for(var channelKey in channels){
             var channel = channels[channelKey];
             if(channelKey == "remove" || channelKey == "indexOf")
                 continue;
             // channel muss von übergebener extension sein
-            if(channel.connectedlinenum != ringingExtension)
+            if(channel.calleridnum == ringingExtension){
+                connectedlinenum = channel.connectedlinenum;
+                break;
+            }
+        }
+
+        //get outgoing channel
+        for(var channelKey in channels){
+            var channel = channels[channelKey];
+            if(channelKey == "remove" || channelKey == "indexOf")
                 continue;
-            
+            if(channel.calleridnum != connectedlinenum)
+                continue;
             var action = asteriskManager.commander.createAction('redirect');
             action.params = {
                 channel: channel.id, // channel to park
