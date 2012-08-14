@@ -10,6 +10,7 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
     var extension = args['extension'];
     var start = args['start'];
     var limit = args['limit'];
+    var since = args['since'];
     
     this.run = function (){
         var client = mysql.createClient({
@@ -17,19 +18,27 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
             password: 'secret'
         });
         client.query('USE asteriskcdrdb');
-        var whereStatement = 'WHERE `dst` != "s" ';
+        
+        /*
+         * build sqlquery depending on given params
+         */
+        var query = 'SELECT SQL_CALC_FOUND_ROWS * FROM `cdr` ';
+        query += ' WHERE `dst` != "s" ';
+        if(since !== undefined)
+            query += " AND UNIX_TIMESTAMP(`calldate`) >= " + since;
         if(extension !== undefined)
-            whereStatement += ' AND ( ' +
+            query += ' AND ( ' +
                     ' `src` = "'+extension + '" OR' +
                     ' `dst` = "'+extension + '" OR' +
                     ' `channel` LIKE "'+agentId + '%" OR' +
                     ' `dstchannel` LIKE "'+agentId + '%"' + 
                 ' ) ';
+        query += ' ORDER BY `calldate` DESC';
+        if(start !== undefined && limit !== undefined)
+            query +=' LIMIT ' + start + ', ' + limit;
+        
         client.query(
-            'SELECT SQL_CALC_FOUND_ROWS * FROM `cdr` '+
-            whereStatement + 
-            ' ORDER BY `calldate` DESC' +
-            ' LIMIT ' + start + ', ' + limit,
+            query,
             function selectCb(err, results, fields) {
                 var result = null;
                 if (err) {
