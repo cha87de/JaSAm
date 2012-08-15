@@ -57,12 +57,12 @@ var ChannelManager = function(asteriskManagerParam){
             }
             channel = this.channels[id];
             var channel2 = this.channels[responseItem.content.channel2];
-            if(responseItem.name == 'Bridge'){
+            if(channel2 !== undefined && responseItem.name == 'Bridge'){
                 channel.bridgedChannelId = responseItem.content.channel2;
-                channel2.bridgedChannelId = id;                
-            }else{
+                channel2.bridgedChannelId = id;
+            }else if(channel2 !== undefined){
                 channel.bridgedChannelId = null;
-                channel2.bridgedChannelId = null;                
+                channel2.bridgedChannelId = null;
             }
         }else{
             BasicManager.print('unknown channel state' , responseItem.name);
