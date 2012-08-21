@@ -16,8 +16,8 @@ var EntityManager = function(asteriskManagerParam){
     this.agentManager = new AgentManager(asteriskManager);
 
     // Mapping rules:
-    var ignoreEvents = ['Newexten', 'VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
-    var channelEvents = ['Newstate', 'Hangup', 'Newchannel', 'Dial', 'NewCallerid', 'Bridge', 'Unlink'];
+    var ignoreEvents = ['VarSet', 'RTPReceiverStat', 'RTPSenderStat', 'RTPSenderStat', 'RTPReceiverStat', 'RTPSenderStat', 'RTCPSent', 'RTCPReceived', 'Registry'];
+    var channelEvents = ['Newexten', 'Newstate', 'Hangup', 'Newchannel', 'Dial', 'NewCallerid', 'Bridge', 'Unlink'];
     var extensionEvents = ['ExtensionStatus'];
     var peerEvents = ['PeerStatus'];
     var queueEvents = ['QueueMemberRemoved', 'QueueMemberAdded', 'QueueMemberPenalty', 'QueueMemberPaused'];
