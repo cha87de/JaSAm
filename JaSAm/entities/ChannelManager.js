@@ -38,6 +38,20 @@ var ChannelManager = function(asteriskManagerParam){
                 channel.state = Channel.StateTranslations[responseItem.content.channelstate];
             }
 
+        }else if(responseItem.name == 'Newexten'){
+
+            id = responseItem.content.channel;
+            if(!this.channels[id]){
+                this.channels[id] = new Channel(id, asteriskManager);
+                eventType = EntityEvent.Types.New;
+            }else{
+                eventType = EntityEvent.Types.Update;
+            }
+
+            channel = this.channels[id];
+            channel.context = setIfDefined(channel.context, responseItem.content.context);
+            channel.exten = setIfDefined(channel.exten, responseItem.content.extension);
+
         }else if(responseItem.name == 'Hangup'){
             id = responseItem.content.channel;
             if(!this.channels[id]){
