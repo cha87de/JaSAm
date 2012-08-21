@@ -74,7 +74,7 @@ var ChannelManager = function(asteriskManagerParam){
     
     this.queryChannels = function(callback, scope){
         var action = new Action(asteriskManager);
-        action.name = 'status';
+        action.name = 'coreshowchannels';
         action.execute(function(response){
             for(var channelentryKey in response.body){
                 if(channelentryKey == "remove")
@@ -91,8 +91,8 @@ var ChannelManager = function(asteriskManagerParam){
                 channel.calleridnum = ifDefined(channelentry.calleridnum);
                 channel.uniqueid = ifDefined(channelentry.uniqueid);
                 channel.context = ifDefined(channelentry.context);
-                channel.exten = ifDefined(channelentry.exten);
-                channel.priority  = ifDefined(channelentry.priority);
+                channel.exten = ifDefined(channelentry.extension);
+                channel.priority  = ifDefined(channelentry.priority); 
                 channel.duration = ifDefined(channelentry.seconds);
                 channel.connectedlinename = ifDefined(channelentry.connectedlinename);
                 channel.connectedlinenum = ifDefined(channelentry.connectedlinenum);
