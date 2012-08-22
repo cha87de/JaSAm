@@ -29,7 +29,7 @@ var Channel = function(id, asteriskManagerParam){
         }
     };
     
-    this.getBrigedChannel = function(){
+    this.getBridgedChannel = function(){
         try{
             return asteriskManager.entityManager.channelManager.channels[this.bridgedChannelId];
         }catch(exc){
