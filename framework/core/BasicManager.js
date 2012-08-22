@@ -1,4 +1,4 @@
-var AjaxCall = require('../core/AjaxCall.js').AjaxCall;
+var AjaxCall = require('./AjaxCall.js').AjaxCall;
 var ResponseItem = require('../messages/ResponseItem.js').ResponseItem;
 var Response = require('../messages/Response.js').Response;
 var XmlToJson = require('../utils/XmlToJson.js').XmlToJson;

@@ -1,4 +1,4 @@
-var Response = require('../../JaSAm/messages/Response.js').Response;
+var Response = require('../messages/Response.js').Response;
 
 var CallbackCollector = function(callbackParam, scopeParam){
     var callbacks = {};

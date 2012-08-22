@@ -75,21 +75,6 @@ var SocketWorker = function(jaSAmAppParam, connectionParam, validToken){
         }
     };
     
-    this.sendMessage = function(message){
-        /*
-            <?xml version="1.0" encoding="UTF-8"?>
-            <ajax-response name="0">
-            <response type="object" id="unknown"><generic response="Success"/></response>
-            <response type="object" id="unknown"><generic event="Message" message="XXXX message XXXX"/></response>
-            <response type="object" id="unknown"><generic event="WaitEventComplete"/></response>
-            </ajax-response>
-         **/
-
-        var xmlMessage = '<?xml version="1.0" encoding="UTF-8"?><ajax-response name="0"><response type="object" id="unknown"><generic response="Success"/></response><response type="object" id="unknown"><generic event="Message" message="' + message + '"/></response><response type="object" id="unknown"><generic event="WaitEventComplete"/></response></ajax-response>';
-        
-        send(xmlMessage);
-    };
-    
     var executeCallback = function (taskResponse, wsResponse){
         var responseText = "";
         if(taskResponse instanceof Exception){

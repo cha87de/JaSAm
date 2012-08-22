@@ -102,8 +102,8 @@ var QueueManager = function(asteriskManagerParam){
                     this.queues[id] = queue;
                 }
             }else{
-                console.warn(response);
-                console.warn(response.xmlData);
+                //console.warn(response);
+                //console.warn(response.xmlData);
             }
             
             callback.apply(scope, []);

@@ -3,9 +3,9 @@ var WebSocketServer = require('websocket').server;
 var startStopDaemon = require('start-stop-daemon');
 var jsonParser = require("xml2json");
 
-var configuration = require('./configuration.js');
+var configuration = require('./configuration');
 
-var JaSAmApp = require('../../framework/JaSAm/JaSAmApp.js').JaSAmApp;
+var JaSAmApp = require('../../framework/JaSAmApp.js').JaSAmApp;
 var Exception = require('../../framework/messages/Exception.js').Exception;
 var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
 var ClassicWorker = require("./worker/ClassicWorker.js").ClassicWorker;
@@ -32,10 +32,9 @@ var options = {
 };
 
 startStopDaemon(options, function() {
-    
+
     // initialize JaSAmApp
     console.info((new Date()) + ': initialize JaSAmApp');
-    
     jaSAmApp = new JaSAmApp(configuration.username, configuration.password);
     var config = {};
     config[JaSAmApp.Configuration.baseUrl] =  configuration.baseUrl;
@@ -43,6 +42,7 @@ startStopDaemon(options, function() {
     config[JaSAmApp.Configuration.autoQueryEntities] =  true;
     config[JaSAmApp.Configuration.enableEventlistening] =  true;
     config[JaSAmApp.Configuration.enableEventBuffering] =  true;
+    config[JaSAmApp.Configuration.enableKeepalive] = true;
     jaSAmApp.setConfiguration(config);
 
     
@@ -60,7 +60,7 @@ function startServer(isSuccess){
     // if JaSAmApp successfully startet, start server!
 
     if(!isSuccess){
-        console.info((new Date()) + ": Fehler beim Starten der JaSAmApp!");
+        console.info((new Date()) + ": Error! Could not start JaSAmApp!");
         return;
     }
     

@@ -1,4 +1,4 @@
-var ListenerHandler = require('../core/ListenerHandler.js').ListenerHandler;
+var ListenerHandler = require('./ListenerHandler.js').ListenerHandler;
 
 var EventConnector = function(asteriskManagerParam){
     var asteriskManager = asteriskManagerParam;
