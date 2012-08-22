@@ -1,14 +1,13 @@
-var Exception = require('../../JaSAm/messages/Exception.js').Exception;
-var Task = require('../../JaSAm/tasks/Task.js').Task;
-var AsteriskEvent = require('../../JaSAm/tasks/AsteriskEvent.js').AsteriskEvent;
-var Tunnel = require('../../JaSAm/tasks/Tunnel.js').Tunnel;
+var Exception = require('../../../framework/messages/Exception.js').Exception;
+var Task = require('../../../framework/tasks/Task.js').Task;
+var AsteriskEvent = require('../../../framework/tasks/AsteriskEvent.js').AsteriskEvent;
+var Tunnel = require('../../../framework/tasks/Tunnel.js').Tunnel;
 
-var SocketWorker = function(jaSAmAppParam, connectionParam){
+var SocketWorker = function(jaSAmAppParam, connectionParam, validToken){
     var jaSAmApp = jaSAmAppParam;
     var connection = connectionParam;
 
     var authenticated = false;
-    var validLogin = {username: 'testmanager', secret: 'sehrsehrgeheim'};
     
     this.work = function(message){
         try{
@@ -27,10 +26,9 @@ var SocketWorker = function(jaSAmAppParam, connectionParam){
             if(requestObj.params.action == "login"){
                 // check username and secret
 
-                var username = requestObj.params.username;
-                var secret = requestObj.params.secret;
+                var token = requestObj.params.username;
 
-                if(username == validLogin.username && secret == validLogin.secret){
+                if(token == validToken){
                     authenticated = true;
                     responseObj.response = "<ajax-response><response type='object' id='unknown'><generic response='Success' /></response></ajax-response>";
                     send(responseObj);

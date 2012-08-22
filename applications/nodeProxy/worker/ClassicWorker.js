@@ -1,21 +1,18 @@
 var url = require('url');
 var querystring = require('querystring');
-var Exception = require('../../JaSAm/messages/Exception.js').Exception;
-var Task = require('../../JaSAm/tasks/Task.js').Task;
-var Originate = require('../../JaSAm/tasks/Originate.js').Originate;
+var Exception = require('../../../framework/messages/Exception.js').Exception;
+var Task = require('../../../framework/tasks/Task.js').Task;
+var Originate = require('../../../framework/tasks/Originate.js').Originate;
 var CallDetailRecord = require('../tasks/CallDetailRecord.js').CallDetailRecord;
-var Action = require('../../JaSAm/messages/Action.js').Action;
+var Action = require('../../../framework/messages/Action.js').Action;
 
-var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
+var ClassicWorker = function(jaSAmAppParam, validToken, mysqlLogin){
     var jaSAmApp = jaSAmAppParam;
-    var socketServerWorker = socketServerWorkerParam;
     
     var workerUris = { }; // String URI -> function
-    var validToken = 123456;
     
     this.work = function(request, response){
         try{
-            
             var params = url.parse(request.url, true);
             var path = params['pathname'].replace(/\//gi, "");
             
@@ -35,6 +32,7 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
             response.writeHead(500, {
                 'Content-Type': 'text/plain'
             });
+            
             response.end('Error\n' + exc.message);
         }
     };
@@ -64,6 +62,7 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
             executeCallback("", response);
     };
 
+    // extracts call history of freepbx mysql database
     workerUris['callDetailRecord'] = function(request, response, params){
         request.setEncoding("utf8");
         // HTTP-Method POST! Get incoming data
@@ -81,7 +80,8 @@ var ClassicWorker = function(jaSAmAppParam, socketServerWorkerParam){
             var taskParams = {
                 extension: extension,
                 start: start,
-                limit: limit
+                limit: limit,
+                mysqlLogin: mysqlLogin
             };
             var taskCallback = function(responseObj){
                 executeCallback(responseObj, response);

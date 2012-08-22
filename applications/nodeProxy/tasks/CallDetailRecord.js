@@ -1,4 +1,4 @@
-var Task = require('../../JaSAm/tasks/Task.js').Task;
+var Task = require('../../../framework/tasks/Task.js').Task;
 var mysql = require('mysql');
 
 var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManagerParam){
@@ -11,12 +11,10 @@ var CallDetailRecord = function(args, callbackParam, scopeParam, asteriskManager
     var start = args['start'];
     var limit = args['limit'];
     var since = args['since'];
+    var mysqlLogin = args['mysqlLogin'];
     
     this.run = function (){
-        var client = mysql.createClient({
-            user: 'nodejs',
-            password: 'secret'
-        });
+        var client = mysql.createClient(mysqlLogin);
         client.query('USE asteriskcdrdb');
         
         /*

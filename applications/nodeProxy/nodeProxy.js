@@ -1,12 +1,16 @@
 var http = require('http');
 var WebSocketServer = require('websocket').server;
 var startStopDaemon = require('start-stop-daemon');
+var jsonParser = require("xml2json");
 
-var JaSAmApp = require('../JaSAm/JaSAmApp.js').JaSAmApp;
-var Exception = require('../JaSAm/messages/Exception.js').Exception;
+var configuration = require('./configuration.js');
+
+var JaSAmApp = require('../../framework/JaSAm/JaSAmApp.js').JaSAmApp;
+var Exception = require('../../framework/messages/Exception.js').Exception;
 var NodeAjaxCall = require("./core/NodeAjaxCall.js").NodeAjaxCall;
 var ClassicWorker = require("./worker/ClassicWorker.js").ClassicWorker;
 var SocketWorker = require("./worker/SocketWorker.js").SocketWorker;
+
 
 var jaSAmApp = null;
 
@@ -14,9 +18,6 @@ var classicHttpServer = null;
 var socketHttpServer = null;
 var socketServer = null;
 var socketServerWorker = new Array();
-
-var socketServerPort = 5859;
-var classicHttpServerPort = 5860;
 
 var options = {
     daemonFile: "log/nodeServer.dmn", 
@@ -35,16 +36,16 @@ startStopDaemon(options, function() {
     // initialize JaSAmApp
     console.info((new Date()) + ': initialize JaSAmApp');
     
-    jaSAmApp = new JaSAmApp("testmanager", "sehrsehrgeheim");
+    jaSAmApp = new JaSAmApp(configuration.username, configuration.password);
     var config = {};
-    config[JaSAmApp.Configuration.baseUrl] =  "http://tel.rsu-hausverwalter.de:8088/asterisk/mxml";
+    config[JaSAmApp.Configuration.baseUrl] =  configuration.baseUrl;
     config[JaSAmApp.Configuration.autoLogin] =  true;
     config[JaSAmApp.Configuration.autoQueryEntities] =  true;
     config[JaSAmApp.Configuration.enableEventlistening] =  true;
     config[JaSAmApp.Configuration.enableEventBuffering] =  true;
     jaSAmApp.setConfiguration(config);
 
-    var jsonParser = require("xml2json");
+    
     jaSAmApp.getAsteriskManager().setJsonParser(jsonParser);
 
     var ajaxCall = new NodeAjaxCall();
@@ -70,15 +71,15 @@ function startServer(isSuccess){
 }
 
 function startClassicHttpServer(){
-    var worker = new ClassicWorker(jaSAmApp, socketServerWorker);
+    var worker = new ClassicWorker(jaSAmApp, configuration.classicHttpServer.token, configuration.classicHttpServer.mysqlLogin);
     classicHttpServer = http.createServer(worker.work);
-    classicHttpServer.listen(classicHttpServerPort);
-    console.info((new Date()) + ": ClassicHttpServer listening on port " + classicHttpServerPort);
+    classicHttpServer.listen(configuration.classicHttpServer.port);
+    console.info((new Date()) + ": ClassicHttpServer listening on port " + configuration.classicHttpServer.port);
 }
 
 function startSocketServer(){
     socketHttpServer = http.createServer();
-    socketHttpServer.listen(socketServerPort);
+    socketHttpServer.listen(configuration.socketServer.port);
     socketServer = new WebSocketServer({
         httpServer: socketHttpServer
     });
@@ -86,7 +87,7 @@ function startSocketServer(){
         // accept incoming request, add message worker!
 
         var connection = request.accept(null, request.origin);
-        var worker = new SocketWorker(jaSAmApp, connection);
+        var worker = new SocketWorker(jaSAmApp, connection, configuration.socketServer.token);
         var workerPosition = socketServerWorker.length;
         socketServerWorker.push(worker);
         
@@ -96,5 +97,5 @@ function startSocketServer(){
             socketServerWorker.splice(workerPosition, 1);
         });
     });    
-    console.info((new Date()) + ": SocketHttpServer listening on port " + socketServerPort);    
+    console.info((new Date()) + ": SocketHttpServer listening on port " + configuration.socketServer.port);    
 }

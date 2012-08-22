@@ -18,7 +18,7 @@ function main(){
     showPanel(Panel.Login);
     
     // for testing: auto-login
-    doLogin();    
+    //doLogin();    
 }
 
 // event-listener-functions follows ...
@@ -36,10 +36,11 @@ function doLogin(){
 
         // Define Asterisk-Server
         asteriskManager = new AsteriskManager(manager);
-        asteriskManager.baseUrl = 'ws://localhost:5859/';
-        
-        var wsCall = new WsCall();
-        asteriskManager.setAjaxCall(wsCall);
+        asteriskManager.baseUrl = '/asterisk/mxml';
+
+        // for use with nodejs-server and websocket-communication:
+        //asteriskManager.baseUrl = 'ws://localhost:5859/'; // 'ws://tel.rsu-hausverwalter.de:5859/';
+        //asteriskManager.setAjaxCall(new WsCall());
         
         manager.login();
     }catch(exc){
@@ -338,7 +339,7 @@ function updateChannels(){
     
     for(var id in channels){
         var channel = channels[id];
-
+        
         var row = document.createElement('tr');
         var column1 = document.createElement('td');
         column1.innerHTML = id;
@@ -503,4 +504,4 @@ function getCurrentTime(){
 
 // LETS START! :-D
 // load files, when done start main function
-JaSAmLoader.load(main, '.');
+JaSAmLoader.load(main, "../../framework/");

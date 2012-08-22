@@ -1,7 +1,4 @@
-/**
- * 
- */
- var AjaxCall = require("../../JaSAm/core/AjaxCall").AjaxCall;
+var AjaxCall = require("../../../framework/core/AjaxCall").AjaxCall;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var NodeAjaxCall = function(){
