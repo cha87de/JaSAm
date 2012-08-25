@@ -88,7 +88,7 @@ var ChannelManager = function(asteriskManagerParam){
     
     this.queryChannels = function(callback, scope){
         var action = new Action(asteriskManager);
-        action.name = 'coreshowchannels';
+        action.name = 'status';
         action.execute(function(response){
             for(var channelentryKey in response.body){
                 if(channelentryKey == "remove")

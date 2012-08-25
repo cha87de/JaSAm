@@ -17,10 +17,10 @@ var BasicManager = function(){
     /**
      * setAjaxCall
      * PUBLIC FUNCTION
-     * @param ajaxCall <Object> Set specific ajaxCall
+     * @param ajaxCallParam <Object> Set specific ajaxCall
      */
-    this.setAjaxCall = function(_ajaxCall){
-        ajaxCall = _ajaxCall;
+    this.setAjaxCall = function(ajaxCallParam){
+        ajaxCall = ajaxCallParam;
     };
     
     /**
@@ -34,10 +34,10 @@ var BasicManager = function(){
     /**
      * setJsonParser
      * PUBLIC FUNCTION
-     * @param _jsonParser <Object> Set specific parser
+     * @param jsonParserParam <Object> Set specific parser
      */
-    this.setJsonParser = function(_jsonParser){
-        jsonParser = _jsonParser;
+    this.setJsonParser = function(jsonParserParam){
+        jsonParser = jsonParserParam;
     };
     
     /**

@@ -39,9 +39,13 @@ var Channel = function(id, asteriskManagerParam){
 };
 Channel.prototype = new Entity();
 Channel.prototype.toString = function(){
-    return 'Peer: ' + (this.getPeer() != null ? this.getPeer().id : 'undefined ') + '(' + this.calleridname + '), to: ' + 
-        this.exten + ' / ' + this.connectedlinenum + '(' + this.connectedlinename + ')' +
-        ' (' + this.state + ') Bridged to channel ' + this.bridgedChannelId;
+    
+    return 'Peer: ' + this.getPeer() + ' | ' 
+        + 'Exten: ' + this.exten + ' | '     
+        + 'CallerID (Name/Num): ' + this.calleridname + '/' + this.calleridnum + ' | ' 
+        + 'ConnectedLine (Name/Num): ' + this.connectedlinename + '/' + this.connectedlinenum + ' | ' 
+        + 'State: ' + this.state + ' | '
+        + 'Bridged to channel: ' + this.bridgedChannelId;
 };
 
 Channel.State = {

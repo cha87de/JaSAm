@@ -22,8 +22,8 @@
             <h2>Login</h2>
             Enter username and secret: <br/>
             <form id="loginForm" action="#" method="post">
-                <input type="text" name="loginUsername" id="loginUsername" value=""/> 
-                <input type="password" name="loginSecret" id="loginSecret" value=""/> 
+                <input type="text" name="loginUsername" id="loginUsername" value="testmanager"/> 
+                <input type="password" name="loginSecret" id="loginSecret" value="sehrsehrgeheim"/> 
                 <input type="submit" value="login"/>
             </form>
         </div>
@@ -35,7 +35,7 @@
                     <td>
                         Choose extension:<br/>
                         <form id="controlExtensionForm" action="#" method="post">
-                            <input type="text" name="controlExtensionNumber" id="controlExtensionNumber" value="47" size="3" />
+                            <input type="text" name="controlExtensionNumber" id="controlExtensionNumber" value="" size="3" />
                             <input type="submit" value="set"/>
                         </form>
                     </td>
@@ -43,7 +43,8 @@
                     <td id="controlOriginate" style="display:none;">
                         Originate call:<br/>
                         <form id="controlOriginateForm" action="#" method="post">
-                            <input type="text" name="channel" id="controlOriginateChannel" value=""  size="7" />
+                            to <input type="text" name="channel" id="controlOriginateChannelTo" value=""  size="7" />
+                            as <input type="text" name="channel" id="controlOriginateChannelAs" value=""  size="7" />
                             <input type="submit" value="originate"/>
                         </form>                        
                     </td>

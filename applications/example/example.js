@@ -18,7 +18,7 @@ function main(){
     showPanel(Panel.Login);
     
     // for testing: auto-login
-    //doLogin();    
+    doLogin();    
 }
 
 // event-listener-functions follows ...
@@ -80,7 +80,8 @@ function setExtension(){
 
 function originateCall(){
     try{
-        var remoteNumber = document.getElementById('controlOriginateChannel').value;
+        var remoteNumber = document.getElementById('controlOriginateChannelTo').value;
+        var localNumber = document.getElementById('controlOriginateChannelAs').value;
         
         var action = asteriskManager.commander.createAction('originate');
         action.params = {
@@ -88,7 +89,7 @@ function originateCall(){
             channel: 'SIP/' + asteriskManager.localUser,
             context: 'from-internal',
             priority: 1,
-            callerid:  remoteNumber
+            callerid:  localNumber
         };
         action.execute(simpleErrorCallback, this);
         
@@ -340,9 +341,13 @@ function updateChannels(){
     for(var id in channels){
         var channel = channels[id];
         
+        var channelExtensionState = "EXT.||TRUNK";
+        console.info(channel.getPeer());
+        console.info(channel.getPeer().getExtension());
+        
         var row = document.createElement('tr');
         var column1 = document.createElement('td');
-        column1.innerHTML = id;
+        column1.innerHTML = id + channelExtensionState;
         
         var column2 = document.createElement('td');
         column2.innerHTML = channel;
