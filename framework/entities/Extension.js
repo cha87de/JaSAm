@@ -31,14 +31,14 @@ var Extension = function(id, asteriskManagerParam){
         var currentLength = tmpId.length;
         while(currentLength > 0){
             // remove last digit
-            tmpId = tmpId.substr(0, currentLength-2);
+            currentLength--;
+            tmpId = tmpId.substr(0, currentLength);
             
             // if extension exists, return it!
             var tmpExtension = asteriskManager.entityManager.extensionManager.extensions[tmpId];
-            if(tmpExtension)
+            if(tmpExtension){
                 return tmpExtension;
-            
-            currentLength = tmpId.length
+            }
         }
         // No Basic-Extension found? This is one! ;-)
         return this;
