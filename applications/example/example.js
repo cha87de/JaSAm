@@ -86,7 +86,8 @@ function originateCall(){
         var action = asteriskManager.commander.createAction('originate');
         action.params = {
             Exten: remoteNumber,
-            channel: 'SIP/' + asteriskManager.localUser,
+            //channel: 'SIP/' + asteriskManager.localUser,
+            channel: 'LOCAL/' + asteriskManager.localUser,
             context: 'from-internal',
             priority: 1,
             callerid:  localNumber

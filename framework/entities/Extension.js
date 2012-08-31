@@ -21,11 +21,34 @@ var Extension = function(id, asteriskManagerParam){
         return result;
     };
     
+    /*
+     * Having multiple SIP-phones for one single main-did, append digits for each additional SIP-login 
+     * Example: BasicExtension 27. Logins are 27, 270, 271, 272, ...
+     * (Dial-Option in 27 must be set on SIP/27&SIP/270&...)
+     */
+    this.getBasicExtension = function(){
+        var tmpId = this.id;
+        var currentLength = tmpId.length;
+        while(currentLength > 0){
+            // remove last digit
+            tmpId = tmpId.substr(0, currentLength-2);
+            
+            // if extension exists, return it!
+            var tmpExtension = asteriskManager.entityManager.extensionManager.extensions[tmpId];
+            if(tmpExtension)
+                return tmpExtension;
+            
+            currentLength = tmpId.length
+        }
+        // No Basic-Extension found? This is one! ;-)
+        return this;
+    };
+    
 };
 Extension.prototype = new Entity();
 
 Extension.prototype.toString = function(){
-    return '' + this.status + '' + (this.doNotDisturb ? ' DND' : '');
+    return '' + this.status;
 };
 
 Extension.State = {

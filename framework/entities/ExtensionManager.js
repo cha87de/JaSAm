@@ -24,7 +24,7 @@ var ExtensionManager = function(asteriskManagerParam){
 
             extension = this.extensions[id];
             extension.status = Extension.StateTranslations[responseItem.content.status];
-            extension.hint = responseItem.content.hint;
+            //extension.hint = responseItem.content.hint;
             extension.context = responseItem.content.context;
 
         }else{
@@ -36,7 +36,7 @@ var ExtensionManager = function(asteriskManagerParam){
     };
     
     this.queryExtensions = function(callback, scope){
-        
+               
         var callbackCollector = new CallbackCollector(function(){
             callback.apply(scope, []);
         }, this);        
