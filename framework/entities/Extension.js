@@ -68,7 +68,7 @@ Extension.StateTranslations = {
     4: Extension.State.unreachable,    
     8: Extension.State.ringing,
     9: Extension.State.ringing, // AND incall!
-    16: Extension.State.hold
+    16: Extension.State.incall
 };
 
 exports.Extension = Extension;
