@@ -342,13 +342,9 @@ function updateChannels(){
     for(var id in channels){
         var channel = channels[id];
         
-        var channelExtensionState = "EXT.||TRUNK";
-        console.info(channel.getPeer());
-        console.info(channel.getPeer().getExtension());
-        
         var row = document.createElement('tr');
         var column1 = document.createElement('td');
-        column1.innerHTML = id + channelExtensionState;
+        column1.innerHTML = id;
         
         var column2 = document.createElement('td');
         column2.innerHTML = channel;
