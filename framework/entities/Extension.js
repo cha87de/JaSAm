@@ -56,14 +56,19 @@ Extension.State = {
     available: 'available',
     incall: 'incall',
     ringing: 'ringing',
-    unknown: 'unknown'
+    unknown: 'unknown',
+    busy: 'busy',
+    hold: 'hold'
     // more?
 };
 Extension.StateTranslations = {
-    4: Extension.State.unreachable,
     0: Extension.State.available,
     1: Extension.State.incall,
-    8: Extension.State.ringing
+    2: Extension.State.busy,
+    4: Extension.State.unreachable,    
+    8: Extension.State.ringing,
+    9: Extension.State.ringing, // AND incall!
+    16: Extension.State.hold
 };
 
 exports.Extension = Extension;
